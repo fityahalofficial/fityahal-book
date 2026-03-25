@@ -569,7 +569,8 @@ const CONFIG={
 };
 
 // ══ STATE ═══════════════════════════════════════════════════════════════════
-let ACCESS_TOKEN=null, SHEET_ID=localStorage.getItem('bft_sheet_id')||null;
+let ACCESS_TOKEN=null, SHEET_ID='1_bEe_QbRq02bbJ_gHpw5DiGjXE_2rmznJpo98h5-cac';
+localStorage.setItem('bft_sheet_id',SHEET_ID);
 let MEM=[],PAY={},COSTS={};
 let ACTIVITY=JSON.parse(localStorage.getItem('bft_activity')||'[]');
 let CURRENT_ROLE='viewer', syncTimer=null;
@@ -735,7 +736,7 @@ function handleToken(resp){
   ACCESS_TOKEN=resp.access_token;
   document.getElementById('tb-em').textContent=sessionStorage.getItem('bft_email')||'';
   if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
-  if(SHEET_ID)bootApp();else document.getElementById('picker-screen').style.display='flex';
+  bootApp();
 }
 
 // ══ SHEETS API ════════════════════════════════════════════════════════════════
@@ -777,10 +778,10 @@ async function saveToSheet(){
     await sheetsClear(`${CONFIG.SHEET_COSTS}!A2:C1000`);
     const cR=Object.entries(COSTS).filter(([,v])=>v>0).map(([k,v])=>[k,v,'']);
     if(cR.length)await sheetsUpdate(`${CONFIG.SHEET_COSTS}!A2:C${1+cR.length}`,cR);
-    setSyncStatus('ok','Saved ✓');setTimeout(()=>setSyncStatus('ok','Synced'),2000);
+    setSyncStatus('ok','Saved ✓');setTimeout(()=>setSyncStatus('ok','Synced'),1500);
   }catch(e){setSyncStatus('err','Save failed');toast('Save failed','t-err');console.error(e);}
 }
-function flush(){if(CURRENT_ROLE!=='admin')return;setSyncStatus('ing','Pending…');if(syncTimer)clearTimeout(syncTimer);syncTimer=setTimeout(()=>saveToSheet(),1500);}
+function flush(){if(CURRENT_ROLE!=='admin')return;if(syncTimer)clearTimeout(syncTimer);syncTimer=setTimeout(()=>{syncTimer=null;saveToSheet();},800);}
 async function syncNow(){if(syncTimer){clearTimeout(syncTimer);syncTimer=null;}showLoad('Syncing…');await loadFromSheet();hideLoad();setupMthFilter();renderAll();toast('Synced!');}
 function openSheetInBrowser(){window.open(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`,'_blank');}
 
@@ -803,6 +804,7 @@ async function connectSheetById(){
 }
 
 // ══ BOOT ══════════════════════════════════════════════════════════════════════
+let _autoSyncInterval=null;
 async function bootApp(){
   showLoad('Loading Account Book data…');
   document.getElementById('picker-screen').style.display='none';
@@ -816,6 +818,13 @@ async function bootApp(){
     b.innerHTML=`📊 Synced with Google Sheets — <a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank">Open Sheet ↗</a>`;
     main.prepend(b);
   }
+  // Auto-sync every 60 seconds
+  if(_autoSyncInterval)clearInterval(_autoSyncInterval);
+  _autoSyncInterval=setInterval(async()=>{
+    if(syncTimer)return; // skip if a save is already pending
+    await loadFromSheet();
+    setupMthFilter();renderAll();
+  },30000);
 }
 
 // ══ TABS ══════════════════════════════════════════════════════════════════════
