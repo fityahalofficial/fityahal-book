@@ -312,7 +312,176 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
 .act-txt{font-size:13px;color:var(--tx);flex:1;line-height:1.5;}
 .act-time{font-size:11px;color:var(--tx3);flex-shrink:0;}
 
-@media print{.topbar,.nav,.fb,.btn,.mc-ac,.sh-a,#readonly-banner,#undo-bar,.sheet-banner{display:none!important;}.main{padding:0;max-width:100%;}.tw{box-shadow:none;}}
+/* ══ PAYMENT HISTORY ITEMS ══ */
+.pay-hist-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--r);background:var(--sf2);border:1px solid var(--br);}
+.pay-hist-key{font-size:13px;font-weight:600;flex:1;}
+.pay-hist-amt{font-size:12px;font-family:var(--mo);color:var(--gn-t);}
+.pay-hist-del{padding:3px 9px;border:1px solid rgba(255,92,108,.3);background:var(--rd-s);color:var(--rd-t);border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fn);transition:all .15s;}
+.pay-hist-del:hover{background:var(--rd);color:#fff;}
+
+/* ══ PROJECT CARD ══ */
+.proj-card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh);}
+.proj-hd{padding:1rem 1.15rem;border-bottom:1px solid var(--br);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.proj-name{font-size:15px;font-weight:700;}
+.proj-status{padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;}
+.ps-active{background:var(--gn-s);color:var(--gn-t);border:1px solid rgba(16,212,142,.2);}
+.ps-done{background:var(--ac-s);color:var(--ac-t);border:1px solid rgba(91,141,238,.2);}
+.proj-meta{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--br);}
+.proj-m{padding:.85rem 1.15rem;text-align:center;}
+.proj-ml{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--tx3);margin-bottom:4px;font-weight:700;}
+.proj-mv{font-size:16px;font-weight:700;font-family:var(--mo);}
+.proj-progress{height:4px;background:var(--sf3);margin:0 1.15rem;}
+.proj-progress-fill{height:100%;background:var(--g2);border-radius:99px;transition:width .4s ease;}
+.proj-sect{padding:.85rem 1.15rem;border-top:1px solid var(--br);}
+.proj-sl{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;}
+.proj-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--br);font-size:12px;gap:8px;}
+.proj-row:last-child{border-bottom:none;}
+.proj-row-del{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:11px;padding:1px 4px;transition:color .15s;}
+.proj-row-del:hover{color:var(--rd-t);}
+
+/* ══ CHAT MESSAGES ══ */
+.chat-msg{display:flex;flex-direction:column;max-width:75%;}
+.msg-mine{align-self:flex-end;align-items:flex-end;}
+.msg-other{align-self:flex-start;align-items:flex-start;}
+.msg-bubble{padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.6;word-break:break-word;}
+.msg-mine .msg-bubble{background:var(--ac);color:#fff;border-radius:14px 14px 3px 14px;}
+.msg-other .msg-bubble{background:var(--sf2);color:var(--tx);border-radius:14px 14px 14px 3px;}
+.msg-meta{font-size:10px;color:var(--tx3);margin-top:3px;padding:0 4px;}
+
+/* ══ ORG ROLE BADGE COLOURS ══ */
+.orb-alif{background:rgba(255,200,40,.12);color:#ffd94d;border:1px solid rgba(255,200,40,.25);}
+.orb-mutabbiq{background:rgba(255,92,108,.12);color:var(--rd-t);border:1px solid rgba(255,92,108,.25);}
+.orb-khazin{background:rgba(16,212,142,.12);color:var(--gn-t);border:1px solid rgba(16,212,142,.25);}
+.org-role-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.3px;}
+
+@media print{.topbar,.nav,.fb,.btn,.mc-ac,.sh-a,#readonly-banner,#undo-bar,.sheet-banner,#call-overlay{display:none!important;}.main{padding:0;max-width:100%;}.tw{box-shadow:none;}}
+
+/* ══ THEME: LIGHT ══ */
+body.theme-light{
+  --bg:#f0f2f8;--bg2:#e8eaf2;--sf:#ffffff;--sf2:#f4f5fa;--sf3:#eaecf4;
+  --tx:#111827;--tx2:#374151;--tx3:#6b7280;
+  --br:rgba(0,0,0,.06);--br2:rgba(0,0,0,.1);--br3:rgba(0,0,0,.15);
+  --sh:0 2px 8px rgba(0,0,0,.08);--sh-m:0 8px 24px rgba(0,0,0,.12);--sh-l:0 20px 60px rgba(0,0,0,.18);
+}
+body.theme-light .topbar{background:rgba(255,255,255,.9);}
+body.theme-light .nav{background:rgba(255,255,255,.85);}
+body.theme-light body::before{background-image:linear-gradient(rgba(91,141,238,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,238,.05) 1px,transparent 1px);}
+body.theme-light .fi,.theme-light .pc-id-row input,.theme-light .fr input,.theme-light .fr select,.theme-light .fr textarea,.theme-light .fb input,.theme-light .fb select{background:var(--sf);color:var(--tx);}
+body.theme-light .lc{background:rgba(255,255,255,.95);}
+body.theme-light .cm-box,.theme-light .mo-b,.theme-light .pc{background:var(--sf);}
+
+/* ══ THEME: NIGHT ══ */
+body.theme-night{
+  --bg:#01050b;--bg2:#030810;--sf:#07111e;--sf2:#0c1a2a;--sf3:#112033;
+  --tx:#c8d8f0;--tx2:#7a9bb5;--tx3:#3a5570;
+  --ac:#3a6fd8;--ac-t:#7aaff5;
+}
+
+/* ══ THEME TOGGLE ══ */
+.theme-btn{font-size:16px;padding:5px 8px;cursor:pointer;border-radius:var(--r);border:1px solid var(--br2);background:var(--sf2);transition:all .18s;line-height:1;}
+.theme-btn:hover{background:var(--sf3);}
+
+/* ══ GLOW EFFECTS ══ */
+@keyframes glowRed{0%,100%{box-shadow:0 0 8px 2px rgba(255,92,108,.5),0 0 18px 4px rgba(255,92,108,.25);}50%{box-shadow:0 0 12px 4px rgba(255,92,108,.7),0 0 28px 8px rgba(255,92,108,.35);}}
+@keyframes glowYellow{0%,100%{box-shadow:0 0 8px 2px rgba(255,173,46,.5),0 0 18px 4px rgba(255,173,46,.25);}50%{box-shadow:0 0 12px 4px rgba(255,173,46,.7),0 0 28px 8px rgba(255,173,46,.35);}}
+@keyframes glowGreen{0%,100%{box-shadow:0 0 8px 2px rgba(16,212,142,.4),0 0 18px 4px rgba(16,212,142,.2);}50%{box-shadow:0 0 12px 4px rgba(16,212,142,.6),0 0 28px 8px rgba(16,212,142,.3);}}
+@keyframes glowWhite{0%,100%{box-shadow:0 0 8px 2px rgba(255,255,255,.35),0 0 18px 4px rgba(255,255,255,.15);}50%{box-shadow:0 0 12px 4px rgba(255,255,255,.5),0 0 28px 8px rgba(255,255,255,.25);}}
+@keyframes glowBlue{0%,100%{box-shadow:0 0 10px 3px rgba(91,141,238,.6),0 0 22px 6px rgba(91,141,238,.3);}50%{box-shadow:0 0 16px 5px rgba(91,141,238,.8),0 0 32px 10px rgba(91,141,238,.4);}}
+.glow-red{animation:glowRed 2s ease-in-out infinite;border-color:rgba(255,92,108,.4)!important;}
+.glow-yellow{animation:glowYellow 2s ease-in-out infinite;border-color:rgba(255,173,46,.4)!important;}
+.glow-green{animation:glowGreen 2s ease-in-out infinite;border-color:rgba(16,212,142,.4)!important;}
+.glow-white{animation:glowWhite 2s ease-in-out infinite;}
+.glow-blue{animation:glowBlue 1.8s ease-in-out infinite;}
+
+/* ══ ROLE BADGES (org roles) ══ */
+.org-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:.4px;border:1px solid rgba(91,141,238,.35);background:rgba(91,141,238,.12);color:var(--ac-t);animation:glowBlue 2s ease-in-out infinite;margin-left:4px;}
+
+/* ══ NOTICE BOARD ══ */
+.notice-list{display:flex;flex-direction:column;gap:10px;}
+.notice-item{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:1rem 1.15rem;position:relative;overflow:hidden;transition:all .2s;}
+.notice-item::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--g1);}
+.notice-item:hover{transform:translateX(3px);box-shadow:var(--sh-m);}
+.ni-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.ni-body{font-size:13px;color:var(--tx2);line-height:1.7;white-space:pre-wrap;}
+.ni-meta{font-size:10px;color:var(--tx3);margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.ni-tag{background:var(--sf2);padding:2px 8px;border-radius:99px;border:1px solid var(--br2);}
+
+/* ══ NIZAM RULEBOOK ══ */
+.rule-list{display:flex;flex-direction:column;gap:8px;}
+.rule-item{background:var(--sf);border:1px solid var(--br);border-radius:var(--r);padding:.9rem 1.1rem;display:flex;gap:12px;align-items:flex-start;transition:all .15s;}
+.rule-item:hover{border-color:var(--br2);}
+.rule-num{width:28px;height:28px;background:var(--ac-s);color:var(--ac-t);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;border:1px solid rgba(91,141,238,.2);}
+.rule-txt{font-size:13px;color:var(--tx2);line-height:1.7;flex:1;}
+
+/* ══ PRIVATE NOTICES ══ */
+.pn-item{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:1rem 1.15rem;position:relative;}
+.pn-item::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--pu);}
+.pn-from{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:700;}
+.pn-msg{font-size:13px;color:var(--tx);line-height:1.7;white-space:pre-wrap;}
+.pn-time{font-size:10px;color:var(--tx3);margin-top:6px;}
+.pn-badge{background:var(--pu-s);color:var(--pu-t);border:1px solid rgba(157,122,250,.2);font-size:10px;font-weight:700;padding:1px 8px;border-radius:99px;display:inline-block;margin-bottom:6px;}
+
+/* ══ CHAT ══ */
+#chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 160px);max-height:600px;}
+.chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;}
+.chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:80%;}
+.chat-msg.mine{flex-direction:row-reverse;align-self:flex-end;}
+.chat-av{width:30px;height:30px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+.chat-bub{padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.6;max-width:100%;word-break:break-word;}
+.chat-msg.mine .chat-bub{background:var(--ac);color:#fff;border-radius:12px 12px 3px 12px;}
+.chat-msg:not(.mine) .chat-bub{background:var(--sf2);color:var(--tx);border-radius:12px 12px 12px 3px;}
+.chat-meta{font-size:9px;color:var(--tx3);margin-top:3px;text-align:right;}
+.chat-msg:not(.mine) .chat-meta{text-align:left;}
+.chat-input-wrap{display:flex;gap:8px;padding:10px;border-top:1px solid var(--br);background:var(--sf2);}
+.chat-input{flex:1;padding:9px 13px;border:1px solid var(--br2);border-radius:20px;font-family:var(--fn);font-size:13px;color:var(--tx);background:var(--sf);outline:none;transition:border .2s;}
+.chat-input:focus{border-color:var(--ac);}
+.chat-send{padding:9px 16px;background:var(--ac);color:#fff;border:none;border-radius:20px;font-family:var(--fn);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+.chat-send:hover{opacity:.85;}
+.muted-badge{background:var(--rd-s);color:var(--rd-t);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;border:1px solid rgba(255,92,108,.2);}
+
+/* ══ PROJECT TRACKER ══ */
+.proj-card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;margin-bottom:12px;}
+.proj-head{padding:1rem 1.15rem;border-bottom:1px solid var(--br);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.proj-nm{font-size:15px;font-weight:700;}
+.proj-desc{font-size:12px;color:var(--tx3);margin-top:2px;}
+.proj-body{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+@media(max-width:600px){.proj-body{grid-template-columns:1fr;}}
+.proj-section{padding:1rem 1.15rem;}
+.proj-section:first-child{border-right:1px solid var(--br);}
+@media(max-width:600px){.proj-section:first-child{border-right:none;border-bottom:1px solid var(--br);}}
+.proj-section-t{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.proj-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--br);font-size:12px;}
+.proj-row:last-child{border-bottom:none;}
+.proj-row-l{color:var(--tx2);flex:1;}
+.proj-row-v{font-family:var(--mo);font-weight:600;}
+.proj-footer{background:var(--sf2);padding:.85rem 1.15rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
+.proj-stat{text-align:center;}
+.proj-stat-v{font-size:16px;font-weight:700;font-family:var(--mo);}
+.proj-stat-l{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+
+/* ══ PAYMENT HISTORY MODAL ══ */
+.pay-hist-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:var(--r);background:var(--sf2);margin-bottom:6px;gap:8px;}
+.pay-hist-row:hover{background:var(--sf3);}
+.ph-month{font-size:13px;font-weight:600;flex:1;}
+.ph-amt{font-size:12px;font-family:var(--mo);color:var(--gn-t);}
+.ph-del{padding:3px 8px;border:1px solid rgba(255,92,108,.3);background:var(--rd-s);color:var(--rd-t);border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fn);transition:all .15s;}
+.ph-del:hover{background:var(--rd);color:#fff;}
+
+/* ══ CALL UI ══ */
+#call-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9000;backdrop-filter:blur(12px);}
+.call-box{background:var(--sf);border:1px solid var(--br2);border-radius:var(--rxl);padding:2.5rem 2rem;text-align:center;width:min(320px,90vw);animation:loginPop .3s ease;}
+.call-avatar{width:72px;height:72px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;margin:0 auto 1rem;animation:glowBlue 1.5s ease-in-out infinite;}
+.call-name{font-size:20px;font-weight:800;margin-bottom:4px;}
+.call-status{font-size:13px;color:var(--tx3);margin-bottom:1.5rem;}
+.call-btns{display:flex;gap:12px;justify-content:center;}
+.call-btn{width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;font-size:20px;transition:all .2s;}
+.call-btn.answer{background:var(--gn);animation:pulse 1s ease-in-out infinite;}
+.call-btn.decline,.call-btn.hangup{background:var(--rd);}
+.call-btn:hover{transform:scale(1.1);}
+
+/* ══ NOTIF DOT ══ */
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--rd);position:absolute;top:3px;right:3px;border:2px solid var(--bg);}
+.nb-wrap{position:relative;display:inline-block;}
 </style>
 </head>
 <body>
@@ -347,11 +516,13 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
       <div class="lb-ico"><img src="https://instasize.com/api/image/b991d8a9d15515996e724e5b54e9429bbdecce49b0f2a2eeed7aa2e5142987a1.png" alt="Logo" onerror="this.style.display='none';this.parentNode.textContent='📚'"></div>
       <div><div class="lb-nm">Fityahal</div><div class="lb-sub">Account Book Management</div></div>
     </div>
-    <div class="l-hint"><strong>Admin</strong> can edit · <strong>Viewer</strong> can browse read-only</div>
-    <div class="fl"><label>Email address</label><input class="fi" type="email" id="li-e" placeholder="your@email.com" autocomplete="email"/></div>
-    <div class="fl"><label>Password</label><input class="fi" type="password" id="li-p" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doPasswordLogin()"/></div>
-    <div class="l-err" id="l-err-pw">❌ Incorrect email or password.</div>
-    <button class="lb-btn" onclick="doPasswordLogin()">Sign in →</button>
+    <div class="l-hint"><strong>Admin</strong> — use your Google account to sign in.<br><strong>Viewers</strong> — sign in with the Google account your admin registered for you.</div>
+    <div class="l-err" id="l-err-pw">❌ Access denied. Your Google account is not authorised.</div>
+    <button class="lb-btn" id="google-signin-btn" onclick="startGoogleLogin()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg>
+      Sign in with Google
+    </button>
+    <p style="font-size:11px;color:var(--tx3);text-align:center;margin-top:12px;">Only authorised accounts can access this app.</p>
   </div>
 </div>
 
@@ -389,6 +560,7 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
     <div class="tb-r">
       <div id="sync-status" class="sync-ok"><span class="sync-dot"></span><span id="sync-txt">Synced</span></div>
       <span class="tb-em" id="tb-em"></span>
+      <button class="theme-btn" id="theme-btn" onclick="cycleTheme()" title="Toggle theme">🌙</button>
       <button class="tb-btn" id="undo-btn" onclick="doUndo()" title="Undo (Ctrl+Z)" disabled>↩</button>
       <button class="tb-btn" id="redo-btn" onclick="doRedo()" title="Redo (Ctrl+Y)" disabled>↪</button>
       <button class="tb-btn" onclick="syncNow()">↻</button>
@@ -402,6 +574,10 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
     <button class="nb" onclick="showTab('members',this)">Members</button>
     <button class="nb" onclick="showTab('info',this)">Info</button>
     <button class="nb" onclick="showTab('costs',this)">Costs</button>
+    <button class="nb" onclick="showTab('projects',this)">Projects</button>
+    <div class="nb-wrap" style="display:inline-block;"><button class="nb" onclick="showTab('notices',this)">Notice Board</button><span class="notif-dot" id="notice-dot" style="display:none;"></span></div>
+    <button class="nb" onclick="showTab('nizam',this)">Nizam</button>
+    <div class="nb-wrap" style="display:inline-block;"><button class="nb" onclick="showTab('chat',this)">Chat</button><span class="notif-dot" id="chat-dot" style="display:none;"></span></div>
     <button class="nb" onclick="showTab('activity',this)">Activity</button>
   </div>
 
@@ -475,6 +651,77 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
       <div id="activity-list" class="activity-list"></div>
     </div>
 
+    <!-- PROJECTS TAB -->
+    <div id="tab-projects" class="tab-panel">
+      <div class="sh">
+        <div class="sh-t">Project Tracker</div>
+        <div class="sh-a" id="proj-admin-btns">
+          <button class="btn btn-p" onclick="guardEdit(()=>openProjectMo())">+ New Project</button>
+        </div>
+      </div>
+      <div id="proj-list"></div>
+    </div>
+
+    <!-- NOTICE BOARD TAB -->
+    <div id="tab-notices" class="tab-panel">
+      <div class="sh">
+        <div class="sh-t">Notice Board</div>
+        <div class="sh-a">
+          <button class="btn btn-p" id="add-notice-btn" style="display:none;" onclick="guardEdit(()=>openNoticeMo())">+ Post Notice</button>
+          <button class="btn" id="send-pnotice-btn" style="display:none;" onclick="guardEdit(openPrivateNoticeMo)">📨 Private Notice</button>
+          <button class="btn" id="assign-role-btn" style="display:none;" onclick="guardEdit(openOrgRoleMo)">⭐ Assign Role</button>
+        </div>
+      </div>
+      <div class="notice-list" id="notice-list"></div>
+      <div id="private-notices-wrap" style="margin-top:1.5rem;display:none;">
+        <div class="sh"><div class="sh-t" style="font-size:13px;color:var(--tx3);">📬 Private Notices for You</div></div>
+        <div id="private-notices-list"></div>
+      </div>
+    </div>
+
+    <!-- NIZAM TAB -->
+    <div id="tab-nizam" class="tab-panel">
+      <div class="sh">
+        <div class="sh-t">Nizam — Rulebook</div>
+        <button class="btn btn-p" id="edit-nizam-btn" style="display:none;" onclick="guardEdit(openNizamEdit)">✏️ Edit Rules</button>
+      </div>
+      <div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:1.5rem;min-height:200px;">
+        <pre id="nizam-content" style="font-family:var(--fn);font-size:13px;color:var(--tx2);line-height:1.9;white-space:pre-wrap;margin:0;"></pre>
+        <div class="empty" id="nizam-empty" style="display:none;"><div class="ei">📖</div><div>No rules written yet.</div></div>
+      </div>
+    </div>
+
+    <!-- CHAT TAB -->
+    <div id="tab-chat" class="tab-panel" style="padding:0;">
+      <div style="padding:.75rem 1.25rem;background:var(--sf2);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:13px;font-weight:600;color:var(--tx2);">💬 Member Chat</span>
+        <div id="chat-admin-controls" style="display:none;">
+          <button class="btn btn-sm" onclick="guardEdit(openMuteModal)">🔇 Moderate</button>
+        </div>
+      </div>
+      <div id="chat-msgs" style="height:calc(100vh - 240px);max-height:500px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;"></div>
+      <div id="chat-footer" style="display:flex;gap:8px;padding:10px 1rem;border-top:1px solid var(--br);background:var(--sf2);">
+        <input class="chat-input" id="chat-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+        <button class="chat-send" onclick="sendChatMsg()">Send</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CALL OVERLAY -->
+<div id="call-overlay">
+  <div class="call-box">
+    <div class="call-avatar" id="call-av-txt">?</div>
+    <div class="call-name" id="call-name-txt">Someone</div>
+    <div class="call-status" id="call-status-txt">Incoming call…</div>
+    <div class="call-btns" id="call-btns-incoming">
+      <button class="call-btn answer" onclick="answerCall()" title="Answer">📞</button>
+      <button class="call-btn decline" onclick="declineCall()" title="Decline">📵</button>
+    </div>
+    <div class="call-btns" id="call-btns-active" style="display:none;">
+      <button class="call-btn hangup" onclick="hangupCall()" title="End call">📵</button>
+    </div>
   </div>
 </div>
 
@@ -499,7 +746,6 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
       <div class="fr"><label>Student ID / Roll</label><input id="em-sid" placeholder="Optional"/></div>
     </div>
     <div class="fr"><label>Notes</label><textarea id="em-notes" placeholder="Any additional notes…"></textarea></div>
-    <!-- ROLE SELECTOR -->
     <div class="fr">
       <label>App Role</label>
       <div class="role-toggle">
@@ -550,14 +796,151 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
     </div>
   </div>
 
-</div>
+  <!-- PAYMENT HISTORY MODAL -->
+  <div class="mo-b" id="mo-payhist" style="display:none;">
+    <div class="mo-t"><span id="mo-payhist-t">Payment History</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div id="payhist-list" style="max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;"></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Close</button>
+      <button class="btn btn-p" onclick="guardEdit(openPayMo)">+ Add Payment</button>
+    </div>
+  </div>
 
+  <!-- NOTICE MODAL -->
+  <div class="mo-b" id="mo-notice" style="display:none;">
+    <div class="mo-t"><span id="mo-notice-t">Post Notice</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <input type="hidden" id="notice-edit-idx" value="-1"/>
+    <div class="fr"><label>Title</label><input id="notice-title-inp" placeholder="Notice title…"/></div>
+    <div class="fr"><label>Body</label><textarea id="notice-body-inp" placeholder="Write the announcement…" style="min-height:110px;"></textarea></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveNotice()">Post</button>
+    </div>
+  </div>
+
+  <!-- PRIVATE NOTICE MODAL -->
+  <div class="mo-b" id="mo-pnotice" style="display:none;">
+    <div class="mo-t"><span>Send Private Notice</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div class="fr"><label>To Member</label><select id="pnotice-to"><option value="">Select member…</option></select></div>
+    <div class="fr"><label>Message</label><textarea id="pnotice-body" placeholder="Private message…" style="min-height:100px;"></textarea></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="sendPrivateNotice()">Send</button>
+    </div>
+  </div>
+
+  <!-- NIZAM MODAL -->
+  <div class="mo-b" id="mo-nizam" style="display:none;">
+    <div class="mo-t"><span>Edit Rulebook</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div class="fr"><label>Rules</label><textarea id="nizam-inp" placeholder="Write the organisation rules…" style="min-height:200px;"></textarea></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveNizam()">Save Rules</button>
+    </div>
+  </div>
+
+  <!-- ORG ROLE MODAL -->
+  <div class="mo-b" id="mo-orgrole" style="display:none;">
+    <div class="mo-t"><span>Assign Org Role</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div class="fr"><label>Member</label><select id="orgrole-mem"><option value="">Select member…</option></select></div>
+    <div class="fr"><label>Role</label>
+      <select id="orgrole-role">
+        <option value="">None</option>
+        <option value="Alif">👑 Alif — Head</option>
+        <option value="Mutabbiq">⚖️ Mutabbiq — Rule Enforcer</option>
+        <option value="Khazin">💰 Khazin — Treasurer</option>
+      </select>
+    </div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveOrgRole()">Assign</button>
+    </div>
+  </div>
+
+  <!-- CHAT MUTE MODAL -->
+  <div class="mo-b" id="mo-mute" style="display:none;">
+    <div class="mo-t"><span>Chat Moderation</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div class="fr"><label>Member</label><select id="mute-mem"><option value="">Select member…</option></select></div>
+    <div class="fr"><label>Action</label>
+      <select id="mute-action">
+        <option value="mute">🔇 Mute</option>
+        <option value="suspend">⏸ Suspend (temp)</option>
+        <option value="ban">🚫 Permanent Ban</option>
+        <option value="unmute">✅ Remove restriction</option>
+      </select>
+    </div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="applyMute()">Apply</button>
+    </div>
+  </div>
+
+  <!-- PROJECT MODAL -->
+  <div class="mo-b" id="mo-project" style="display:none;">
+    <div class="mo-t"><span id="mo-proj-t">New Project</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <input type="hidden" id="proj-edit-idx" value="-1"/>
+    <div class="fr"><label>Project Name *</label><input id="proj-name-inp" placeholder="Project name…"/></div>
+    <div class="fr"><label>Description</label><input id="proj-desc-inp" placeholder="Short description…"/></div>
+    <div class="fr"><label>Status</label>
+      <select id="proj-status-inp">
+        <option value="active">🟢 Active</option>
+        <option value="done">✅ Completed</option>
+      </select>
+    </div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveProject()">Save</button>
+    </div>
+  </div>
+
+  <!-- ADD EXPENSE MODAL -->
+  <div class="mo-b" id="mo-projexp" style="display:none;">
+    <div class="mo-t"><span>Add Expense Item</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <input type="hidden" id="projexp-pidx" value="0"/>
+    <div class="fr"><label>Item Description</label><input id="projexp-item" placeholder="e.g. Chairs, Printing…"/></div>
+    <div class="fr"><label>Amount (৳)</label><input id="projexp-amt" type="number" min="0" step="0.01" placeholder="0.00"/></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveProjExp()">Add</button>
+    </div>
+  </div>
+
+  <!-- ADD COLLECTION MODAL -->
+  <div class="mo-b" id="mo-projcol" style="display:none;">
+    <div class="mo-t"><span>Add Collection Entry</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <input type="hidden" id="projcol-pidx" value="0"/>
+    <div class="fr"><label>From / Source</label><input id="projcol-from" placeholder="e.g. Member name, Donor…"/></div>
+    <div class="fr"><label>Amount (৳)</label><input id="projcol-amt" type="number" min="0" step="0.01" placeholder="0.00"/></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveProjCol()">Add</button>
+    </div>
+  </div>
+
+  <!-- CALL MODAL -->
+  <div class="mo-b" id="mo-call" style="display:none;">
+    <div class="mo-t"><span>Place a Call</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div class="fr"><label>Call Member</label><select id="call-mem"><option value="">Select member…</option></select></div>
+    <div class="fr"><label>Call Type</label>
+      <select id="call-type">
+        <option value="voice">📞 Voice Call</option>
+        <option value="video">📹 Video Call</option>
+        <option value="group">👥 Group Call</option>
+      </select>
+    </div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="initiateCall()">Call</button>
+    </div>
+  </div>
+
+</div>
 <script>
 // ══ CONFIG ══════════════════════════════════════════════════════════════════
 const CONFIG={
   CLIENT_ID:'885276391812-ss7igds0m4pf39mt7g0mue8o6k0cpmlc.apps.googleusercontent.com',
   API_KEY:'AIzaSyCziWiqTJOKll1k4u8or9uRdoQ_H7VWWHU',
-  SCOPES:'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file',
+  SCOPES:'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email',
   SHEET_MEMBERS:'Members',SHEET_PAYMENTS:'Payments',SHEET_COSTS:'Costs',
   // ── ACCOUNTS: add friends here with their email, password, and role ──────
   // role: 'admin' = full edit access | 'viewer' = read-only
@@ -583,6 +966,17 @@ localStorage.setItem('bft_sheet_id',SHEET_ID);
 let MEM=[],PAY={},COSTS={};
 let ACTIVITY=JSON.parse(localStorage.getItem('bft_activity')||'[]');
 let CURRENT_ROLE='viewer', syncTimer=null;
+// ── NEW FEATURE STATE ──────────────────────────────────────────────────────
+let NOTICES=JSON.parse(localStorage.getItem('bft_notices')||'[]');
+let PRIVATE_NOTICES=JSON.parse(localStorage.getItem('bft_pnotices')||'{}');
+let NIZAM=localStorage.getItem('bft_nizam')||'';
+let CHAT_MSGS=JSON.parse(localStorage.getItem('bft_chat')||'[]');
+let CHAT_MUTED=JSON.parse(localStorage.getItem('bft_muted')||'{}');
+let PROJECTS=JSON.parse(localStorage.getItem('bft_projects')||'[]');
+let ORG_ROLES=JSON.parse(localStorage.getItem('bft_orgroles')||'{}');
+let BORROWED_BOOKS=JSON.parse(localStorage.getItem('bft_books')||'{}');
+let CURRENT_EMAIL='';
+let _chatPollTimer=null;
 
 // ══ UNDO/REDO ════════════════════════════════════════════════════════════════
 let HISTORY=[],FUTURE=[],undoTimer=null;
@@ -697,55 +1091,140 @@ function setMemberRole(role){
   document.getElementById('em-role').value=role;
   document.getElementById('role-admin-btn').className='role-toggle-btn'+(role==='admin'?' active-admin':'');
   document.getElementById('role-viewer-btn').className='role-toggle-btn'+(role==='viewer'?' active-viewer':'');
+  const desc=document.getElementById('role-desc');
+  if(role==='admin'){
+    desc.innerHTML='🔑 <strong style="color:var(--ac-t)">Admin</strong>: full edit access. Their Google login email must be in CONFIG.ACCOUNTS.';
+  } else {
+    desc.innerHTML='👁 <strong style="color:var(--pu-t)">Viewer</strong>: read-only. They log in with the Google account matching the email above.';
+  }
 }
 
 // ══ AUTH ══════════════════════════════════════════════════════════════════════
-function doPasswordLogin(){
-  const e=document.getElementById('li-e').value.trim().toLowerCase();
-  const p=document.getElementById('li-p').value;
-  const acc=CONFIG.ACCOUNTS.find(a=>a.email.toLowerCase()===e&&a.pass===p);
-  if(acc){
-    document.getElementById('l-err-pw').style.display='none';
-    CURRENT_ROLE=acc.role;
-    sessionStorage.setItem('bft_email',e);
-    sessionStorage.setItem('bft_role',acc.role);
-    sessionStorage.setItem('bft_auth','1');
-    document.getElementById('login-screen').style.display='none';
-    showLoad('Connecting to Google…');
-    requestAccessToken();
-  } else {
-    document.getElementById('l-err-pw').style.display='block';
-    document.getElementById('li-p').value='';
-  }
+// After Google login gives us an access token, fetch the user's email from Google,
+// then check if they are an admin (CONFIG.ACCOUNTS) or a viewer (member email in Sheet).
+// Admin → full edit. Viewer (member email) → read-only. Anyone else → access denied.
+
+let tokenClient=null, idClient=null;
+
+function startGoogleLogin(){
+  // First request an access token (for Sheets API)
+  // We also need the user's email — we get that via the userinfo endpoint after we have a token
+  document.getElementById('l-err-pw').style.display='none';
+  document.getElementById('google-signin-btn').disabled=true;
+  document.getElementById('google-signin-btn').textContent='Opening Google…';
+  tokenClient.requestAccessToken({prompt:'select_account'});
 }
+
 function doLogout(){
   ACCESS_TOKEN=null;sessionStorage.clear();HISTORY=[];FUTURE=[];
   document.getElementById('app').classList.remove('show');
   document.getElementById('picker-screen').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('readonly-banner').style.display='none';
+  const btn=document.getElementById('google-signin-btn');
+  if(btn){btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg> Sign in with Google';}
+  // Also revoke current Google session so next login shows account picker
+  if(window.google&&google.accounts&&google.accounts.oauth2)google.accounts.oauth2.revoke(sessionStorage.getItem('bft_email')||'',()=>{});
 }
 
 // ══ GOOGLE OAUTH ══════════════════════════════════════════════════════════════
-let tokenClient=null;
 function initGoogleAuth(){
   try{
-    tokenClient=google.accounts.oauth2.initTokenClient({client_id:CONFIG.CLIENT_ID,scope:CONFIG.SCOPES,callback:handleToken});
+    tokenClient=google.accounts.oauth2.initTokenClient({
+      client_id:CONFIG.CLIENT_ID,
+      scope:CONFIG.SCOPES+' https://www.googleapis.com/auth/userinfo.email',
+      callback:handleToken
+    });
+    // Auto-reconnect if session exists
     if(sessionStorage.getItem('bft_auth')==='1'){
       CURRENT_ROLE=sessionStorage.getItem('bft_role')||'viewer';
       document.getElementById('login-screen').style.display='none';
-      showLoad('Reconnecting…');requestAccessToken();
+      showLoad('Reconnecting…');
+      tokenClient.requestAccessToken({prompt:''});
     }
   }catch(e){console.error('GIS init error',e);}
 }
-function requestAccessToken(){tokenClient.requestAccessToken({prompt:''});}
-function handleToken(resp){
-  hideLoad();
-  if(resp.error){toast('Google auth failed: '+resp.error,'t-err');document.getElementById('login-screen').style.display='flex';return;}
+
+async function handleToken(resp){
+  const btn=document.getElementById('google-signin-btn');
+  if(resp.error){
+    hideLoad();
+    if(btn){btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg> Sign in with Google';}
+    if(resp.error!=='access_denied')toast('Google auth failed: '+resp.error,'t-err');
+    document.getElementById('login-screen').style.display='flex';
+    return;
+  }
   ACCESS_TOKEN=resp.access_token;
-  document.getElementById('tb-em').textContent=sessionStorage.getItem('bft_email')||'';
-  if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
-  bootApp();
+
+  // If we already know the role from session, skip email lookup
+  if(sessionStorage.getItem('bft_auth')==='1'&&sessionStorage.getItem('bft_email')){
+    CURRENT_ROLE=sessionStorage.getItem('bft_role')||'viewer';
+    CURRENT_EMAIL=sessionStorage.getItem('bft_email')||'';
+    document.getElementById('tb-em').textContent=CURRENT_EMAIL;
+    if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
+    bootApp();return;
+  }
+
+  // Fetch the user's email from Google
+  showLoad('Verifying account…');
+  try{
+    const uRes=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+ACCESS_TOKEN}});
+    const uData=await uRes.json();
+    const email=(uData.email||'').toLowerCase().trim();
+
+    // Check if admin
+    const adminAcc=CONFIG.ACCOUNTS.find(a=>a.email.toLowerCase()===email);
+    if(adminAcc){
+      CURRENT_ROLE=adminAcc.role;
+      CURRENT_EMAIL=email;
+      sessionStorage.setItem('bft_email',email);
+      sessionStorage.setItem('bft_role',adminAcc.role);
+      sessionStorage.setItem('bft_auth','1');
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('tb-em').textContent=email;
+      if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
+      bootApp();return;
+    }
+
+    // Not in admin list — load sheet data first, then check member emails
+    // We need a temporary load to check members
+    const checkOk=await loadMembersOnly();
+    if(checkOk){
+      const memberMatch=MEM.find(m=>m.email&&m.email.toLowerCase().trim()===email);
+      if(memberMatch){
+        CURRENT_ROLE='viewer';
+        CURRENT_EMAIL=email;
+        sessionStorage.setItem('bft_email',email);
+        sessionStorage.setItem('bft_role','viewer');
+        sessionStorage.setItem('bft_auth','1');
+        document.getElementById('login-screen').style.display='none';
+        document.getElementById('tb-em').textContent=email;
+        document.getElementById('readonly-banner').style.display='flex';
+        bootApp();return;
+      }
+    }
+
+    // Access denied
+    hideLoad();
+    ACCESS_TOKEN=null;
+    document.getElementById('l-err-pw').style.display='block';
+    document.getElementById('login-screen').style.display='flex';
+    if(btn){btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg> Try a different account';}
+    google.accounts.oauth2.revoke(email,()=>{});
+  }catch(e){
+    hideLoad();toast('Could not verify account','t-err');
+    if(btn){btn.disabled=false;btn.textContent='Sign in with Google';}
+    document.getElementById('login-screen').style.display='flex';
+  }
+}
+
+// Load only members sheet (for login email check)
+async function loadMembersOnly(){
+  try{
+    const mr=await sheetsGet(`${CONFIG.SHEET_MEMBERS}!A2:I1000`);
+    MEM=(mr.values||[]).filter(r=>r[0]).map(r=>({name:r[0]||'',nick:r[1]||r[0]||'',phone:r[2]||'',email:r[3]||'',addr:r[4]||'',join:r[5]||'',sid:r[6]||'',notes:r[7]||'',role:r[8]||'viewer'}));
+    return true;
+  }catch(e){return false;}
 }
 
 // ══ SHEETS API ════════════════════════════════════════════════════════════════
@@ -822,7 +1301,9 @@ async function bootApp(){
   setupMthFilter();renderAll();updateUndoUI();
   if(!ok)toast('Loaded with errors','t-err');
   const main=document.querySelector('.main');
-  if(!document.getElementById('sheet-banner') && CURRENT_ROLE==='admin'){
+  const existingBanner=document.getElementById('sheet-banner');
+  if(existingBanner)existingBanner.remove();
+  if(CURRENT_ROLE==='admin'){
     const b=document.createElement('div');b.id='sheet-banner';b.className='sheet-banner';
     b.innerHTML=`📊 Synced with Google Sheets — <a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank">Open Sheet ↗</a>`;
     main.prepend(b);
@@ -841,8 +1322,13 @@ function showTab(id,btn){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  btn.classList.add('active');
-  if(id==='activity')renderActivity();else renderAll();
+  if(btn)btn.classList.add('active');
+  if(id==='activity')renderActivity();
+  else if(id==='notices')renderNoticeBoard();
+  else if(id==='nizam')renderNizam();
+  else if(id==='chat')renderChat();
+  else if(id==='projects')renderProjects();
+  else renderAll();
 }
 
 // ══ RENDER ════════════════════════════════════════════════════════════════════
@@ -900,23 +1386,44 @@ function renderMC(){
   document.getElementById('mc-cnt').textContent=`(${MEM.length})`;
   if(!MEM.length){document.getElementById('mc-grid').innerHTML='<div class="empty"><div class="ei">👥</div><div>No members yet.</div></div>';return;}
   const allKeys=activeMonthKeys(),isAdmin=CURRENT_ROLE==='admin';let h='';
+  const currentEmail=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
   MEM.forEach((r,i)=>{
     const mp=gp(r.name);let tm=0,tb=0,act=0;
     Object.values(mp).forEach(p=>{tm+=p.m;tb+=p.b;if(p.m>0||p.b>0)act++;});
     const badge=act>0?`<span class="badge b-par">${act} mo</span>`:`<span class="badge b-none">—</span>`;
     const roleBadge=`<span class="mc-role-badge ${r.role==='admin'?'rb-admin':'rb-viewer'}">${r.role==='admin'?'🔑 Admin':'👁 Viewer'}</span>`;
+    // Org role badge
+    const orgRole=ORG_ROLES[r.name];
+    const orgBadge=orgRole?`<span class="org-role-badge ${ORG_ROLE_CLASS[orgRole]||'orb-alif'}">${ORG_ROLE_ICONS[orgRole]||'⭐'} ${orgRole}</span>`:'';
     const chips=allKeys.map(k=>{const p=gpk(r.name,k);const paid=p.m>0||p.b>0;return`<div class="chip ${paid?'paid':'nopaid'}" title="${keyToFull(k)}: ৳${(p.m+p.b).toFixed(2)}">${keyToShort(k).replace(' ','<br>')}</div>`;}).join('');
-    h+=`<div class="mc">
+    // Payment glow (only visible to admin and the member themselves)
+    const isMe=r.email&&r.email.toLowerCase()===currentEmail.toLowerCase();
+    let glowClass='';
+    if(isAdmin||isMe){
+      const glow=getPaymentGlow(r.name);
+      if(glow)glowClass='glow-'+glow;
+    }
+    // Book glow visible to all
+    const hasBk=hasBorrowedBook(r.name);
+    if(hasBk&&!glowClass)glowClass='glow-white';
+    h+=`<div class="mc ${glowClass}">
       <div class="mc-top">
         <div class="mc-av">${ini(r.name)}</div>
         <div style="flex:1;min-width:0;">
           <div class="mc-nm">${r.name}${r.nick&&r.nick!==r.name?` <span style="font-size:11px;color:var(--tx3);font-weight:400;">(${r.nick})</span>`:''}</div>
           <div class="mc-mt">${r.email||r.phone||'No contact info'}</div>
-          ${roleBadge}
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${roleBadge}${orgBadge}${hasBk?'<span class="mc-role-badge" style="background:rgba(220,230,255,.12);color:#ddeeff;border:1px solid rgba(220,230,255,.25);">📚 Has Book</span>':''}</div>
         </div>
         ${badge}
       </div>
-      ${isAdmin?`<div class="mc-ac"><button class="btn btn-sm btn-g" onclick="openPayMo(${i})">+ Pay</button><button class="btn btn-sm" onclick="openEditMem(${i})">Edit</button><button class="btn btn-sm btn-d" onclick="confirmDelMem(${i})">Remove</button></div>`:''}
+      ${isAdmin?`<div class="mc-ac">
+        <button class="btn btn-sm btn-g" onclick="openPayMo(${i})">+ Pay</button>
+        <button class="btn btn-sm" onclick="openPayHist(${i})">History</button>
+        <button class="btn btn-sm" onclick="openEditMem(${i})">Edit</button>
+        <button class="btn btn-sm btn-pu" onclick="toggleBookBorrow('${r.name}')">${hasBk?'📗 Return':'📕 Borrow'}</button>
+        <button class="btn btn-sm" onclick="showCallModal(${i})">📞</button>
+        <button class="btn btn-sm btn-d" onclick="confirmDelMem(${i})">Remove</button>
+      </div>`:''}
       <div class="mc-st">
         <div class="mc-s"><div class="mc-sl">Monthly</div><div class="mc-sv" style="color:var(--ac-t);">৳${tm.toFixed(0)}</div></div>
         <div class="mc-s"><div class="mc-sl">Book Fund</div><div class="mc-sv" style="color:var(--pu-t);">৳${tb.toFixed(0)}</div></div>
@@ -927,6 +1434,13 @@ function renderMC(){
     </div>`;
   });
   document.getElementById('mc-grid').innerHTML=h;
+}
+function showCallModal(mIdx){
+  const sel=document.getElementById('call-mem');
+  sel.innerHTML='<option value="">Select member…</option>';
+  MEM.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r.name;sel.appendChild(o);});
+  sel.value=mIdx;
+  openMo('mo-call');
 }
 function renderIC(){
   if(!MEM.length){document.getElementById('ic-grid').innerHTML='<div class="empty"><div class="ei">📋</div><div>No members yet.</div></div>';return;}
@@ -1100,7 +1614,441 @@ function setupMthFilter(){
   if(cur)sel.value=cur;
 }
 
-// ══ INIT ══════════════════════════════════════════════════════════════════════
+// ══ THEME ════════════════════════════════════════════════════════════════════
+const THEMES=['dark','light','night'];
+let _themeIdx=0;
+function cycleTheme(){
+  _themeIdx=(_themeIdx+1)%THEMES.length;
+  applyTheme(THEMES[_themeIdx]);
+}
+function applyTheme(t){
+  document.body.className=t==='dark'?'':'theme-'+t;
+  localStorage.setItem('bft_theme',t);
+  _themeIdx=THEMES.indexOf(t);
+  const icons={dark:'🌙',light:'☀️',night:'🌑'};
+  const btn=document.getElementById('theme-btn');
+  if(btn)btn.textContent=icons[t]||'🌙';
+}
+(function(){applyTheme(localStorage.getItem('bft_theme')||'dark');})();
+
+// ══ PAYMENT COLOR GLOW ═══════════════════════════════════════════════════════
+function getPaymentGlow(memberName){
+  const now=new Date();
+  const allKeys=activeMonthKeys();
+  const mp=gp(memberName);
+  // Find most recent unpaid month
+  let overdueMonths=0;
+  for(let i=allKeys.length-1;i>=0;i--){
+    const k=allKeys[i];
+    const [y,mo]=k.split('-').map(Number);
+    const d=new Date(y,mo-1,1);
+    if(d>now) continue;
+    const p=mp[k];
+    if(!p||(!p.m&&!p.b)) overdueMonths++;
+    else break;
+  }
+  if(overdueMonths>=3) return 'red';
+  if(overdueMonths===2) return 'yellow';
+  if(overdueMonths===0){
+    // Check 1 month left warning: next month is due
+    const nextKey=mkKey(now.getFullYear(),now.getMonth()+1);
+    const np=mp[nextKey];
+    if(!np||(!np.m&&!np.b)) return 'green';
+  }
+  return null;
+}
+function hasBorrowedBook(memberName){ return !!BORROWED_BOOKS[memberName]; }
+
+// ══ ORG ROLES ════════════════════════════════════════════════════════════════
+function openOrgRoleMo(){
+  const sel=document.getElementById('orgrole-mem');
+  sel.innerHTML='<option value="">Select member…</option>';
+  MEM.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r.name;sel.appendChild(o);});
+  document.getElementById('orgrole-role').value='';
+  openMo('mo-orgrole');
+}
+function saveOrgRole(){
+  const mi=document.getElementById('orgrole-mem').value;
+  const role=document.getElementById('orgrole-role').value;
+  if(mi===''){toast('Select a member','t-err');return;}
+  const name=MEM[parseInt(mi)].name;
+  if(role) ORG_ROLES[name]=role;
+  else delete ORG_ROLES[name];
+  localStorage.setItem('bft_orgroles',JSON.stringify(ORG_ROLES));
+  logActivity('⭐','Assigned org role: '+name+' → '+(role||'none'));
+  toast('Role assigned!');closeMo();renderAll();
+}
+const ORG_ROLE_ICONS={Alif:'👑',Mutabbiq:'⚖️',Khazin:'💰'};
+const ORG_ROLE_CLASS={Alif:'orb-alif',Mutabbiq:'orb-mutabbiq',Khazin:'orb-khazin'};
+
+// ══ PAYMENT HISTORY VIEW ══════════════════════════════════════════════════════
+function openPayHist(mIdx){
+  const r=MEM[mIdx];
+  document.getElementById('mo-payhist-t').textContent=r.name+' — Payment History';
+  const mp=gp(r.name);
+  const keys=Object.keys(mp).filter(k=>mp[k]&&(mp[k].m||mp[k].b)).sort(keySort);
+  let h='';
+  if(!keys.length){h='<div class="empty"><div class="ei">💸</div><div>No payments yet.</div></div>';}
+  else{
+    keys.forEach(k=>{
+      const p=mp[k];
+      h+=`<div class="pay-hist-item">
+        <span class="pay-hist-key">${keyToFull(k)}</span>
+        <span class="pay-hist-amt">৳${(p.m+p.b).toFixed(2)}</span>
+        ${CURRENT_ROLE==='admin'?`<button class="pay-hist-del" onclick="removePayEntry('${r.name}','${k}')">✕ Remove</button>`:''}
+      </div>`;
+    });
+  }
+  document.getElementById('payhist-list').innerHTML=h;
+  openMo('mo-payhist');
+}
+function removePayEntry(name,k){
+  if(!PAY[name]||!PAY[name][k])return;
+  snapshot('Remove payment: '+name+' '+keyToFull(k));
+  delete PAY[name][k];
+  flush();
+  toast('Payment entry removed');
+  logActivity('🗑️','Removed payment: '+name+' '+keyToFull(k));
+  // Refresh modal
+  const mp=gp(name);
+  const keys=Object.keys(mp).filter(k2=>mp[k2]&&(mp[k2].m||mp[k2].b)).sort(keySort);
+  let h='';
+  if(!keys.length){h='<div class="empty"><div class="ei">💸</div><div>No payments yet.</div></div>';}
+  else{keys.forEach(k2=>{const p=mp[k2];h+=`<div class="pay-hist-item"><span class="pay-hist-key">${keyToFull(k2)}</span><span class="pay-hist-amt">৳${(p.m+p.b).toFixed(2)}</span><button class="pay-hist-del" onclick="removePayEntry('${name}','${k2}')">✕ Remove</button></div>`;});}
+  document.getElementById('payhist-list').innerHTML=h;
+  renderAll();
+}
+
+// ══ NOTICE BOARD ═════════════════════════════════════════════════════════════
+function openNoticeMo(editIdx=-1){
+  document.getElementById('notice-edit-idx').value=editIdx;
+  if(editIdx>=0){
+    const n=NOTICES[editIdx];
+    document.getElementById('notice-title-inp').value=n.title;
+    document.getElementById('notice-body-inp').value=n.body;
+    document.getElementById('mo-notice-t').textContent='Edit Notice';
+  } else {
+    document.getElementById('notice-title-inp').value='';
+    document.getElementById('notice-body-inp').value='';
+    document.getElementById('mo-notice-t').textContent='Post Notice';
+  }
+  openMo('mo-notice');
+}
+function saveNotice(){
+  const title=document.getElementById('notice-title-inp').value.trim();
+  const body=document.getElementById('notice-body-inp').value.trim();
+  if(!title||!body){toast('Title and message required','t-err');return;}
+  const idx=parseInt(document.getElementById('notice-edit-idx').value);
+  const entry={title,body,by:CURRENT_EMAIL||'Admin',time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})};
+  if(idx>=0) NOTICES[idx]=entry;
+  else NOTICES.unshift(entry);
+  localStorage.setItem('bft_notices',JSON.stringify(NOTICES));
+  logActivity('📢','Notice posted: '+title);
+  toast('Notice posted!');closeMo();renderNoticeBoard();
+  pushNotif('📢','New notice: '+title);
+}
+async function deleteNotice(idx){
+  const ok=await confirm2('Delete Notice','Remove this notice?','🗑️',true);
+  if(!ok)return;
+  NOTICES.splice(idx,1);
+  localStorage.setItem('bft_notices',JSON.stringify(NOTICES));
+  renderNoticeBoard();toast('Notice removed');
+}
+function renderNoticeBoard(){
+  const isAdmin=CURRENT_ROLE==='admin';
+  const addBtn=document.getElementById('add-notice-btn');
+  const pnBtn=document.getElementById('send-pnotice-btn');
+  const roleBtn=document.getElementById('assign-role-btn');
+  if(addBtn)addBtn.style.display=isAdmin?'':'none';
+  if(pnBtn)pnBtn.style.display=isAdmin?'':'none';
+  if(roleBtn)roleBtn.style.display=isAdmin?'':'none';
+  const el=document.getElementById('notice-list');
+  if(!NOTICES.length){el.innerHTML='<div class="empty"><div class="ei">📢</div><div>No notices yet.</div></div>';}
+  else{
+    el.innerHTML=NOTICES.map((n,i)=>`<div class="notice-item">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
+        <div class="ni-title">${n.title}</div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">${isAdmin?`<button class="btn btn-sm btn-gh" onclick="openNoticeMo(${i})">Edit</button><button class="btn btn-sm btn-d" onclick="deleteNotice(${i})">✕</button>`:''}</div>
+      </div>
+      <div class="ni-body">${n.body}</div>
+      <div class="ni-meta"><span class="ni-tag">📢 ${n.by||'Admin'}</span><span>${n.time}</span></div>
+    </div>`).join('');
+  }
+  // Private notices
+  const email=(CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'').toLowerCase();
+  const myPN=(PRIVATE_NOTICES[email]||[]);
+  const pnWrap=document.getElementById('private-notices-wrap');
+  const pnList=document.getElementById('private-notices-list');
+  if(pnWrap){
+    if(myPN.length){
+      pnWrap.style.display='';
+      if(pnList)pnList.innerHTML=myPN.map(n=>`<div class="notice-item" style="border-left:3px solid var(--pu);">
+        <div class="pn-badge">Private Notice</div>
+        <div class="pn-msg">${n.body}</div>
+        <div class="pn-time">${n.time}</div>
+      </div>`).join('');
+    } else {
+      pnWrap.style.display='none';
+    }
+  }
+}
+function openPrivateNoticeMo(){
+  const sel=document.getElementById('pnotice-to');
+  sel.innerHTML='<option value="">Select member…</option>';
+  MEM.forEach(r=>{if(r.email){const o=document.createElement('option');o.value=r.email;o.textContent=r.name;sel.appendChild(o);}});
+  document.getElementById('pnotice-body').value='';
+  openMo('mo-pnotice');
+}
+function sendPrivateNotice(){
+  const to=document.getElementById('pnotice-to').value;
+  const body=document.getElementById('pnotice-body').value.trim();
+  if(!to||!body){toast('Select recipient and write message','t-err');return;}
+  if(!PRIVATE_NOTICES[to])PRIVATE_NOTICES[to]=[];
+  PRIVATE_NOTICES[to].unshift({body,time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})});
+  localStorage.setItem('bft_pnotices',JSON.stringify(PRIVATE_NOTICES));
+  logActivity('📨','Private notice sent to '+to);
+  toast('Private notice sent!');closeMo();
+}
+
+// ══ NIZAM / RULEBOOK ══════════════════════════════════════════════════════════
+function openNizamEdit(){
+  document.getElementById('nizam-inp').value=NIZAM;
+  openMo('mo-nizam');
+}
+function saveNizam(){
+  NIZAM=document.getElementById('nizam-inp').value;
+  localStorage.setItem('bft_nizam',NIZAM);
+  logActivity('📖','Nizam updated');
+  toast('Rules saved!');closeMo();renderNizam();
+}
+function renderNizam(){
+  const isAdmin=CURRENT_ROLE==='admin';
+  const btn=document.getElementById('edit-nizam-btn');
+  if(btn)btn.style.display=isAdmin?'':'none';
+  const content=document.getElementById('nizam-content');
+  const empty=document.getElementById('nizam-empty');
+  if(NIZAM){
+    if(content){content.textContent=NIZAM;content.style.display='';}
+    if(empty)empty.style.display='none';
+  } else {
+    if(content)content.style.display='none';
+    if(empty)empty.style.display='';
+  }
+}
+
+// ══ CHAT ═════════════════════════════════════════════════════════════════════
+function sendChatMsg(){
+  const el=document.getElementById('chat-input');
+  const txt=el.value.trim();if(!txt)return;
+  const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'unknown';
+  const muted=CHAT_MUTED[email];
+  if(muted==='ban'){toast('You are permanently banned from chat','t-err');return;}
+  if(muted==='suspend'){toast('You are temporarily suspended from chat','t-warn');return;}
+  if(muted==='mute'){toast('You have been muted','t-warn');return;}
+  const me=MEM.find(r=>r.email&&r.email.toLowerCase()===email.toLowerCase());
+  const displayName=me?me.nick||me.name:email;
+  const msg={txt,name:displayName,email,time:new Date().toISOString()};
+  CHAT_MSGS.push(msg);
+  if(CHAT_MSGS.length>200)CHAT_MSGS.shift();
+  localStorage.setItem('bft_chat',JSON.stringify(CHAT_MSGS));
+  el.value='';renderChat();
+}
+function renderChat(){
+  const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
+  const isAdmin=CURRENT_ROLE==='admin';
+  document.getElementById('chat-admin-controls').style.display=isAdmin?'':'none';
+  // Mute check
+  const muted=CHAT_MUTED[email];
+  const footer=document.getElementById('chat-footer');
+  if(muted&&muted!=='unmute'){
+    footer.innerHTML=`<div style="flex:1;text-align:center;color:var(--rd-t);font-size:13px;padding:8px;">🚫 You are ${muted==='ban'?'permanently banned':muted==='suspend'?'suspended':'muted'} from this chat.</div>`;
+  } else {
+    footer.innerHTML=`<input id="chat-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatMsg()"/><button onclick="sendChatMsg()">Send</button>`;
+  }
+  const el=document.getElementById('chat-msgs');
+  if(!CHAT_MSGS.length){el.innerHTML='<div class="empty"><div class="ei">💬</div><div>No messages yet. Say hello!</div></div>';return;}
+  el.innerHTML=CHAT_MSGS.map(m=>{
+    const mine=m.email===email;
+    const d=new Date(m.time);
+    const ts=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' · '+d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+    return `<div class="chat-msg ${mine?'msg-mine':'msg-other'}">
+      <div class="msg-bubble">${mine?'':(`<div style="font-size:10px;font-weight:700;color:var(--ac-t);margin-bottom:4px;">${m.name}</div>`)}${m.txt}</div>
+      <div class="msg-meta">${ts}</div>
+    </div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function openMuteModal(){
+  const sel=document.getElementById('mute-mem');
+  sel.innerHTML='<option value="">Select member…</option>';
+  MEM.forEach(r=>{if(r.email){const o=document.createElement('option');o.value=r.email;o.textContent=r.name+(CHAT_MUTED[r.email]?' ('+CHAT_MUTED[r.email]+')':'');sel.appendChild(o);}});
+  openMo('mo-mute');
+}
+function applyMute(){
+  const email=document.getElementById('mute-mem').value;
+  const action=document.getElementById('mute-action').value;
+  if(!email){toast('Select a member','t-err');return;}
+  if(action==='unmute') delete CHAT_MUTED[email];
+  else CHAT_MUTED[email]=action;
+  localStorage.setItem('bft_muted',JSON.stringify(CHAT_MUTED));
+  logActivity('💬','Chat moderation: '+email+' → '+action);
+  toast('Applied!');closeMo();renderChat();
+}
+
+// ══ PROJECTS ══════════════════════════════════════════════════════════════════
+function saveProjects(){localStorage.setItem('bft_projects',JSON.stringify(PROJECTS));}
+function openProjectMo(editIdx=-1){
+  document.getElementById('proj-edit-idx').value=editIdx;
+  if(editIdx>=0){
+    const p=PROJECTS[editIdx];
+    document.getElementById('proj-name-inp').value=p.name;
+    document.getElementById('proj-desc-inp').value=p.desc||'';
+    document.getElementById('proj-status-inp').value=p.status||'active';
+    document.getElementById('mo-proj-t').textContent='Edit Project';
+  } else {
+    document.getElementById('proj-name-inp').value='';
+    document.getElementById('proj-desc-inp').value='';
+    document.getElementById('proj-status-inp').value='active';
+    document.getElementById('mo-proj-t').textContent='New Project';
+  }
+  openMo('mo-project');
+}
+function saveProject(){
+  const name=document.getElementById('proj-name-inp').value.trim();
+  if(!name){toast('Project name required','t-err');return;}
+  const idx=parseInt(document.getElementById('proj-edit-idx').value);
+  const obj={name,desc:document.getElementById('proj-desc-inp').value.trim(),status:document.getElementById('proj-status-inp').value,expenses:[],collections:[]};
+  if(idx>=0){obj.expenses=PROJECTS[idx].expenses||[];obj.collections=PROJECTS[idx].collections||[];PROJECTS[idx]=obj;}
+  else PROJECTS.unshift(obj);
+  saveProjects();logActivity('📊','Project saved: '+name);toast('Project saved!');closeMo();renderProjects();
+}
+async function deleteProject(idx){
+  const ok=await confirm2('Delete Project','Remove "'+PROJECTS[idx].name+'"?','🗑️',true);
+  if(!ok)return;
+  PROJECTS.splice(idx,1);saveProjects();renderProjects();toast('Project removed');
+}
+function openProjExpMo(pidx){document.getElementById('projexp-pidx').value=pidx;document.getElementById('projexp-item').value='';document.getElementById('projexp-amt').value='';openMo('mo-projexp');}
+function saveProjExp(){
+  const pidx=parseInt(document.getElementById('projexp-pidx').value);
+  const item=document.getElementById('projexp-item').value.trim();
+  const amt=parseFloat(document.getElementById('projexp-amt').value)||0;
+  if(!item||!amt){toast('Item and amount required','t-err');return;}
+  if(!PROJECTS[pidx].expenses)PROJECTS[pidx].expenses=[];
+  PROJECTS[pidx].expenses.push({item,amt,time:new Date().toISOString().slice(0,10)});
+  saveProjects();toast('Expense added!');closeMo();renderProjects();
+}
+function deleteProjExp(pidx,eidx){PROJECTS[pidx].expenses.splice(eidx,1);saveProjects();renderProjects();}
+function openProjColMo(pidx){document.getElementById('projcol-pidx').value=pidx;document.getElementById('projcol-from').value='';document.getElementById('projcol-amt').value='';openMo('mo-projcol');}
+function saveProjCol(){
+  const pidx=parseInt(document.getElementById('projcol-pidx').value);
+  const from=document.getElementById('projcol-from').value.trim();
+  const amt=parseFloat(document.getElementById('projcol-amt').value)||0;
+  if(!from||!amt){toast('Source and amount required','t-err');return;}
+  if(!PROJECTS[pidx].collections)PROJECTS[pidx].collections=[];
+  PROJECTS[pidx].collections.push({from,amt,time:new Date().toISOString().slice(0,10)});
+  saveProjects();toast('Collection added!');closeMo();renderProjects();
+}
+function deleteProjCol(pidx,cidx){PROJECTS[pidx].collections.splice(cidx,1);saveProjects();renderProjects();}
+function renderProjects(){
+  const el=document.getElementById('proj-list');
+  if(!PROJECTS.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div>No projects yet.</div></div>';return;}
+  const isAdmin=CURRENT_ROLE==='admin';
+  el.innerHTML=PROJECTS.map((p,i)=>{
+    const totalExp=(p.expenses||[]).reduce((a,e)=>a+e.amt,0);
+    const totalCol=(p.collections||[]).reduce((a,c)=>a+c.amt,0);
+    const net=totalCol-totalExp;
+    const pct=totalExp>0?Math.min(100,(totalCol/totalExp*100)):0;
+    const expRows=(p.expenses||[]).map((e,ei)=>`<div class="proj-row"><span>${e.item}</span><span>৳${e.amt.toFixed(2)}<button class="proj-row-del" ${isAdmin?'onclick="deleteProjExp('+i+','+ei+')"':''}>✕</button></span></div>`).join('');
+    const colRows=(p.collections||[]).map((c,ci)=>`<div class="proj-row"><span>${c.from}</span><span style="color:var(--gn-t);">৳${c.amt.toFixed(2)}<button class="proj-row-del" ${isAdmin?'onclick="deleteProjCol('+i+','+ci+')"':''}>✕</button></span></div>`).join('');
+    return `<div class="proj-card">
+      <div class="proj-hd">
+        <div>
+          <div class="proj-name">${p.name}</div>
+          ${p.desc?`<div style="font-size:12px;color:var(--tx3);margin-top:2px;">${p.desc}</div>`:''}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="proj-status ${p.status==='done'?'ps-done':'ps-active'}">${p.status==='done'?'Completed':'Active'}</span>
+          ${isAdmin?`<button class="btn btn-sm" onclick="openProjectMo(${i})">Edit</button><button class="btn btn-sm btn-d" onclick="deleteProject(${i})">Del</button>`:''}
+        </div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-m"><div class="proj-ml">Expenses</div><div class="proj-mv" style="color:var(--rd-t);">৳${totalExp.toFixed(0)}</div></div>
+        <div class="proj-m"><div class="proj-ml">Collected</div><div class="proj-mv" style="color:var(--gn-t);">৳${totalCol.toFixed(0)}</div></div>
+        <div class="proj-m"><div class="proj-ml">Balance</div><div class="proj-mv" style="color:${net>=0?'var(--gn-t)':'var(--rd-t)'};">৳${net.toFixed(0)}</div></div>
+      </div>
+      <div class="proj-progress"><div class="proj-progress-fill" style="width:${pct.toFixed(0)}%"></div></div>
+      <div style="font-size:10px;color:var(--tx3);margin-top:4px;margin-bottom:10px;">${pct.toFixed(0)}% of expenses covered</div>
+      <div class="proj-sect">
+        <div class="proj-sl">Expenses ${isAdmin?`<button class="btn btn-sm" style="float:right;margin-top:-2px;" onclick="openProjExpMo(${i})">+ Add</button>`:''}</div>
+        ${expRows||'<div style="font-size:12px;color:var(--tx3);padding:4px 0;">No expenses yet.</div>'}
+      </div>
+      <div class="proj-sect">
+        <div class="proj-sl">Collections ${isAdmin?`<button class="btn btn-sm" style="float:right;margin-top:-2px;" onclick="openProjColMo(${i})">+ Add</button>`:''}</div>
+        ${colRows||'<div style="font-size:12px;color:var(--tx3);padding:4px 0;">No collections yet.</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══ NOTIFICATIONS ═════════════════════════════════════════════════════════════
+function pushNotif(icon,txt){
+  toast(icon+' '+txt,'t-info');
+}
+
+// ══ VOICE/VIDEO CALLS (simulated) ════════════════════════════════════════════
+function openCallMo(){
+  const sel=document.getElementById('call-mem');
+  sel.innerHTML='<option value="">Select member…</option>';
+  MEM.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r.name;sel.appendChild(o);});
+  openMo('mo-call');
+}
+function initiateCall(){
+  const mi=document.getElementById('call-mem').value;
+  const type=document.getElementById('call-type').value;
+  if(mi===''){toast('Select a member','t-err');return;}
+  const name=MEM[parseInt(mi)].name;
+  closeMo();
+  // Show simulated outgoing call
+  showCallOverlay(name,type,false);
+}
+function showCallOverlay(name,type,incoming){
+  document.getElementById('call-av-txt').textContent=ini(name);
+  document.getElementById('call-name-txt').textContent=name;
+  document.getElementById('call-status-txt').textContent=incoming?'Incoming '+(type==='video'?'📹':'📞')+' call…':type==='group'?'Group call starting…':'Calling '+name+'…';
+  const inc=document.getElementById('call-btns-incoming');
+  const act=document.getElementById('call-btns-active');
+  if(incoming){
+    inc.style.display='flex';act.style.display='none';
+  } else {
+    inc.style.display='none';act.style.display='flex';
+    setTimeout(()=>{document.getElementById('call-status-txt').textContent='Connected — 00:00';startCallTimer();},2000);
+  }
+  document.getElementById('call-overlay').style.display='flex';
+}
+let _callTimerInt=null;
+function startCallTimer(){
+  let s=0;
+  if(_callTimerInt)clearInterval(_callTimerInt);
+  _callTimerInt=setInterval(()=>{s++;const m=Math.floor(s/60).toString().padStart(2,'0');const sec=(s%60).toString().padStart(2,'0');const el=document.getElementById('call-status-txt');if(el)el.textContent='Connected — '+m+':'+sec;},1000);
+}
+function answerCall(){
+  document.getElementById('call-status-txt').textContent='Connected — 00:00';
+  document.getElementById('call-btns-incoming').style.display='none';
+  document.getElementById('call-btns-active').style.display='flex';
+  startCallTimer();
+}
+function declineCall(){hangupCall();}
+function hangupCall(){if(_callTimerInt){clearInterval(_callTimerInt);_callTimerInt=null;}document.getElementById('call-overlay').style.display='none';toast('Call ended');}
+
+// ══ BOOK BORROW STATUS ════════════════════════════════════════════════════════
+function toggleBookBorrow(name){
+  if(!CURRENT_ROLE==='admin'){toast('Admin only','t-warn');return;}
+  if(BORROWED_BOOKS[name]) delete BORROWED_BOOKS[name];
+  else BORROWED_BOOKS[name]=new Date().toISOString().slice(0,10);
+  localStorage.setItem('bft_books',JSON.stringify(BORROWED_BOOKS));
+  renderAll();toast(BORROWED_BOOKS[name]?name+' marked as holding a book':'Book returned by '+name);
+}
+
 window.addEventListener('load',()=>{
   let tries=0;
   const wait=setInterval(()=>{
