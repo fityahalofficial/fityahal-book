@@ -470,14 +470,10 @@ body.theme-night{
 /* ══ CALL UI ══ */
 #call-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9000;backdrop-filter:blur(12px);}
 .call-box{background:var(--sf);border:1px solid var(--br2);border-radius:var(--rxl);padding:2.5rem 2rem;text-align:center;width:min(320px,90vw);animation:loginPop .3s ease;}
-<<<<<<< HEAD
-.call-avatar{width:72px;height:72px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;margin:0 auto 1rem;animation:glowBlue 1.5s ease-in-out infinite;}
-=======
 .call-avatar{width:80px;height:80px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff;margin:0 auto 1rem;overflow:hidden;}
 .call-avatar img{width:100%;height:100%;object-fit:cover;}
 .call-avatar.ringing{animation:ringPulse 1.2s ease-in-out infinite;}
 @keyframes ringPulse{0%,100%{box-shadow:0 0 0 0 rgba(91,141,238,.5);}50%{box-shadow:0 0 0 18px rgba(91,141,238,0);}}
->>>>>>> e63faec (inserting)
 .call-name{font-size:20px;font-weight:800;margin-bottom:4px;}
 .call-status{font-size:13px;color:var(--tx3);margin-bottom:1.5rem;}
 .call-btns{display:flex;gap:12px;justify-content:center;}
@@ -486,8 +482,6 @@ body.theme-night{
 .call-btn.decline,.call-btn.hangup{background:var(--rd);}
 .call-btn:hover{transform:scale(1.1);}
 
-<<<<<<< HEAD
-=======
 /* ══ ELITE CARD ══ */
 .mc.elite{background:linear-gradient(135deg,rgba(20,16,40,.95),rgba(30,20,60,.95));border:1.5px solid rgba(200,160,255,.35);box-shadow:0 0 28px rgba(157,122,250,.18),0 2px 12px rgba(0,0,0,.5);}
 .mc.elite::before{opacity:1;background:linear-gradient(90deg,#ffd94d,#9d7afa,#ffd94d);background-size:200%;animation:eliteShimmer 3s linear infinite;}
@@ -512,7 +506,6 @@ body.theme-night{
 .book-close-btn{display:block;margin:2rem auto 0;padding:10px 32px;background:linear-gradient(135deg,#5c3a10,#3b2008);color:#ffd794;border:none;border-radius:8px;font-family:Georgia,serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;}
 .book-close-btn:hover{opacity:.85;}
 
->>>>>>> e63faec (inserting)
 /* ══ NOTIF DOT ══ */
 .notif-dot{width:8px;height:8px;border-radius:50%;background:var(--rd);position:absolute;top:3px;right:3px;border:2px solid var(--bg);}
 .nb-wrap{position:relative;display:inline-block;}
@@ -647,9 +640,6 @@ body.theme-night{
     <div id="tab-members" class="tab-panel">
       <div class="sh">
         <div class="sh-t">Members <span id="mc-cnt" style="font-size:13px;color:var(--tx3);font-weight:400;"></span></div>
-<<<<<<< HEAD
-        <button class="btn btn-p" onclick="guardEdit(openAddMem)">+ Add Member</button>
-=======
         <div class="sh-a">
           <button class="btn" id="call-all-btn" onclick="openCallMo()">📞 Call</button>
           <button class="btn" id="pending-pay-btn" style="display:none;" onclick="openPendingPayments()">⏳ Pending</button>
@@ -657,7 +647,6 @@ body.theme-night{
           <button class="btn btn-sm" id="submit-pay-btn" style="display:none;" onclick="openMemberPayMo()">💳 Pay</button>
           <button class="btn btn-p" id="add-mem-btn" style="display:none;" onclick="guardEdit(openAddMem)">+ Add Member</button>
         </div>
->>>>>>> e63faec (inserting)
       </div>
       <div class="mg" id="mc-grid"></div>
     </div>
@@ -713,10 +702,6 @@ body.theme-night{
         <div class="sh-a">
           <button class="btn btn-p" id="add-notice-btn" style="display:none;" onclick="guardEdit(()=>openNoticeMo())">+ Post Notice</button>
           <button class="btn" id="send-pnotice-btn" style="display:none;" onclick="guardEdit(openPrivateNoticeMo)">📨 Private Notice</button>
-<<<<<<< HEAD
-          <button class="btn" id="assign-role-btn" style="display:none;" onclick="guardEdit(openOrgRoleMo)">⭐ Assign Role</button>
-=======
->>>>>>> e63faec (inserting)
         </div>
       </div>
       <div class="notice-list" id="notice-list"></div>
@@ -730,14 +715,10 @@ body.theme-night{
     <div id="tab-nizam" class="tab-panel">
       <div class="sh">
         <div class="sh-t">Nizam — Rulebook</div>
-<<<<<<< HEAD
-        <button class="btn btn-p" id="edit-nizam-btn" style="display:none;" onclick="guardEdit(openNizamEdit)">✏️ Edit Rules</button>
-=======
         <div class="sh-a">
           <button class="btn" onclick="showNizamBook()">📖 Open as Book</button>
           <button class="btn btn-p" id="edit-nizam-btn" style="display:none;" onclick="guardEdit(openNizamEdit)">✏️ Edit Rules</button>
         </div>
->>>>>>> e63faec (inserting)
       </div>
       <div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:1.5rem;min-height:200px;">
         <pre id="nizam-content" style="font-family:var(--fn);font-size:13px;color:var(--tx2);line-height:1.9;white-space:pre-wrap;margin:0;"></pre>
@@ -763,8 +744,6 @@ body.theme-night{
   </div>
 </div>
 
-<<<<<<< HEAD
-=======
 <!-- NIZAM BOOK OVERLAY -->
 <div id="nizam-book-overlay" style="display:none;align-items:center;justify-content:center;">
   <div class="nizam-book">
@@ -781,7 +760,6 @@ body.theme-night{
   </div>
 </div>
 
->>>>>>> e63faec (inserting)
 <!-- CALL OVERLAY -->
 <div id="call-overlay">
   <div class="call-box">
@@ -795,12 +773,9 @@ body.theme-night{
     <div class="call-btns" id="call-btns-active" style="display:none;">
       <button class="call-btn hangup" onclick="hangupCall()" title="End call">📵</button>
     </div>
-<<<<<<< HEAD
-=======
     <div id="call-force-end" style="display:none;margin-top:10px;">
       <button onclick="forceEndCall()" style="background:var(--rd-s);color:var(--rd-t);border:1px solid rgba(255,92,108,.3);border-radius:var(--r);padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fn);">✂ Force End (Admin/Alif)</button>
     </div>
->>>>>>> e63faec (inserting)
   </div>
 </div>
 
@@ -811,8 +786,6 @@ body.theme-night{
   <div class="mo-b" id="mo-mem" style="display:none;">
     <div class="mo-t"><span id="mo-mem-t">Add Member</span><button class="mo-x" onclick="closeMo()">✕</button></div>
     <input type="hidden" id="em-idx" value="-1"/>
-<<<<<<< HEAD
-=======
     <div class="fr" style="text-align:center;margin-bottom:.75rem;">
       <label>Profile Photo</label>
       <div style="position:relative;width:70px;height:70px;margin:0 auto;">
@@ -822,7 +795,6 @@ body.theme-night{
       <input type="hidden" id="em-photo" value=""/>
       <div style="font-size:10px;color:var(--tx3);margin-top:5px;">Click to upload photo</div>
     </div>
->>>>>>> e63faec (inserting)
     <div class="fg">
       <div class="fr"><label>Full Name *</label><input id="em-name" placeholder="Full name"/></div>
       <div class="fr"><label>Display Name</label><input id="em-nick" placeholder="Short name"/></div>
@@ -897,9 +869,6 @@ body.theme-night{
     </div>
   </div>
 
-<<<<<<< HEAD
-  <!-- NOTICE MODAL -->
-=======
   <!-- MEMBER PAYMENT SUBMISSION MODAL -->
   <div class="mo-b" id="mo-mem-pay" style="display:none;">
     <div class="mo-t"><span>Submit Monthly Payment</span><button class="mo-x" onclick="closeMo()">✕</button></div>
@@ -925,7 +894,6 @@ body.theme-night{
     <div id="pending-list" style="max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
     <div class="mo-f"><button class="btn" onclick="closeMo()">Close</button></div>
   </div>
->>>>>>> e63faec (inserting)
   <div class="mo-b" id="mo-notice" style="display:none;">
     <div class="mo-t"><span id="mo-notice-t">Post Notice</span><button class="mo-x" onclick="closeMo()">✕</button></div>
     <input type="hidden" id="notice-edit-idx" value="-1"/>
@@ -1094,16 +1062,11 @@ let CHAT_MUTED=JSON.parse(localStorage.getItem('bft_muted')||'{}');
 let PROJECTS=JSON.parse(localStorage.getItem('bft_projects')||'[]');
 let ORG_ROLES=JSON.parse(localStorage.getItem('bft_orgroles')||'{}');
 let BORROWED_BOOKS=JSON.parse(localStorage.getItem('bft_books')||'{}');
-<<<<<<< HEAD
-let CURRENT_EMAIL='';
-let _chatPollTimer=null;
-=======
 let PENDING_PAYS=JSON.parse(localStorage.getItem('bft_pending_pays')||'[]');
 let MEMBER_PHOTOS=JSON.parse(localStorage.getItem('bft_member_photos')||'{}');
 let CURRENT_EMAIL='';
 let _chatPollTimer=null;
 const SUPREME_ADMIN='fityahalofficial@gmail.com';
->>>>>>> e63faec (inserting)
 
 // ══ UNDO/REDO ════════════════════════════════════════════════════════════════
 let HISTORY=[],FUTURE=[],undoTimer=null;
@@ -1435,15 +1398,6 @@ async function bootApp(){
     b.innerHTML=`📊 Synced with Google Sheets — <a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank">Open Sheet ↗</a>`;
     main.prepend(b);
   }
-<<<<<<< HEAD
-  // Auto-sync every 60 seconds
-  if(_autoSyncInterval)clearInterval(_autoSyncInterval);
-  _autoSyncInterval=setInterval(async()=>{
-    if(syncTimer)return; // skip if a save is already pending
-    await loadFromSheet();
-    setupMthFilter();renderAll();
-  },30000);
-=======
   // Auto-sync every 30 seconds
   if(_autoSyncInterval)clearInterval(_autoSyncInterval);
   _autoSyncInterval=setInterval(async()=>{
@@ -1463,7 +1417,6 @@ async function bootApp(){
   if(CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase()){
     CURRENT_ROLE='admin';
   }
->>>>>>> e63faec (inserting)
 }
 
 // ══ TABS ══════════════════════════════════════════════════════════════════════
@@ -1475,13 +1428,6 @@ function showTab(id,btn){
   if(id==='activity')renderActivity();
   else if(id==='notices')renderNoticeBoard();
   else if(id==='nizam')renderNizam();
-<<<<<<< HEAD
-  else if(id==='chat')renderChat();
-  else if(id==='projects')renderProjects();
-  else renderAll();
-}
-
-=======
   else if(id==='chat'){
     // Reload fresh messages
     CHAT_MSGS=JSON.parse(localStorage.getItem('bft_chat')||'[]');
@@ -1491,7 +1437,6 @@ function showTab(id,btn){
   else if(id==='projects')renderProjects();
   else renderAll();
 }
->>>>>>> e63faec (inserting)
 // ══ RENDER ════════════════════════════════════════════════════════════════════
 function renderAll(){
   renderStats();
@@ -1545,10 +1490,6 @@ function rTable(hId,bId,fId,keys,list,ml,bl){
 }
 function renderMC(){
   document.getElementById('mc-cnt').textContent=`(${MEM.length})`;
-<<<<<<< HEAD
-  if(!MEM.length){document.getElementById('mc-grid').innerHTML='<div class="empty"><div class="ei">👥</div><div>No members yet.</div></div>';return;}
-  const allKeys=activeMonthKeys(),isAdmin=CURRENT_ROLE==='admin';let h='';
-=======
   // Show/hide header buttons based on role
   const isAdmin=CURRENT_ROLE==='admin';
   const isSupreme=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
@@ -1567,7 +1508,6 @@ function renderMC(){
 
   if(!MEM.length){document.getElementById('mc-grid').innerHTML='<div class="empty"><div class="ei">👥</div><div>No members yet.</div></div>';return;}
   const allKeys=activeMonthKeys();let h='';
->>>>>>> e63faec (inserting)
   const currentEmail=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
   MEM.forEach((r,i)=>{
     const mp=gp(r.name);let tm=0,tb=0,act=0;
@@ -1578,27 +1518,13 @@ function renderMC(){
     const orgRole=ORG_ROLES[r.name];
     const orgBadge=orgRole?`<span class="org-role-badge ${ORG_ROLE_CLASS[orgRole]||'orb-alif'}">${ORG_ROLE_ICONS[orgRole]||'⭐'} ${orgRole}</span>`:'';
     const chips=allKeys.map(k=>{const p=gpk(r.name,k);const paid=p.m>0||p.b>0;return`<div class="chip ${paid?'paid':'nopaid'}" title="${keyToFull(k)}: ৳${(p.m+p.b).toFixed(2)}">${keyToShort(k).replace(' ','<br>')}</div>`;}).join('');
-<<<<<<< HEAD
-    // Payment glow (only visible to admin and the member themselves)
-=======
     // Payment glow
->>>>>>> e63faec (inserting)
     const isMe=r.email&&r.email.toLowerCase()===currentEmail.toLowerCase();
     let glowClass='';
     if(isAdmin||isMe){
       const glow=getPaymentGlow(r.name);
       if(glow)glowClass='glow-'+glow;
     }
-<<<<<<< HEAD
-    // Book glow visible to all
-    const hasBk=hasBorrowedBook(r.name);
-    if(hasBk&&!glowClass)glowClass='glow-white';
-    h+=`<div class="mc ${glowClass}">
-      <div class="mc-top">
-        <div class="mc-av">${ini(r.name)}</div>
-        <div style="flex:1;min-width:0;">
-          <div class="mc-nm">${r.name}${r.nick&&r.nick!==r.name?` <span style="font-size:11px;color:var(--tx3);font-weight:400;">(${r.nick})</span>`:''}</div>
-=======
     // Book glow
     const hasBk=hasBorrowedBook(r.name);
     if(hasBk&&!glowClass)glowClass='glow-white';
@@ -1615,22 +1541,11 @@ function renderMC(){
         <div class="mc-av">${avContent}</div>
         <div style="flex:1;min-width:0;">
           <div class="mc-nm">${r.name}${r.nick&&r.nick!==r.name?` <span style="font-size:11px;color:var(--tx3);font-weight:400;">(${r.nick})</span>`:''} ${pendBadge}</div>
->>>>>>> e63faec (inserting)
           <div class="mc-mt">${r.email||r.phone||'No contact info'}</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${roleBadge}${orgBadge}${hasBk?'<span class="mc-role-badge" style="background:rgba(220,230,255,.12);color:#ddeeff;border:1px solid rgba(220,230,255,.25);">📚 Has Book</span>':''}</div>
         </div>
         ${badge}
       </div>
-<<<<<<< HEAD
-      ${isAdmin?`<div class="mc-ac">
-        <button class="btn btn-sm btn-g" onclick="openPayMo(${i})">+ Pay</button>
-        <button class="btn btn-sm" onclick="openPayHist(${i})">History</button>
-        <button class="btn btn-sm" onclick="openEditMem(${i})">Edit</button>
-        <button class="btn btn-sm btn-pu" onclick="toggleBookBorrow('${r.name}')">${hasBk?'📗 Return':'📕 Borrow'}</button>
-        <button class="btn btn-sm" onclick="showCallModal(${i})">📞</button>
-        <button class="btn btn-sm btn-d" onclick="confirmDelMem(${i})">Remove</button>
-      </div>`:''}
-=======
       <div class="mc-ac">
         ${isAdmin?`
           <button class="btn btn-sm btn-g" onclick="openPayMo(${i})">+ Pay</button>
@@ -1642,7 +1557,6 @@ function renderMC(){
         <button class="btn btn-sm" onclick="callMember(${i})">📞 Call</button>
         ${isAdmin&&pendingCount>0?`<button class="btn btn-sm" style="color:var(--am-t);" onclick="openPendingPayments()">⏳ Pending (${pendingCount})</button>`:''}
       </div>
->>>>>>> e63faec (inserting)
       <div class="mc-st">
         <div class="mc-s"><div class="mc-sl">Monthly</div><div class="mc-sv" style="color:var(--ac-t);">৳${tm.toFixed(0)}</div></div>
         <div class="mc-s"><div class="mc-sl">Book Fund</div><div class="mc-sv" style="color:var(--pu-t);">৳${tb.toFixed(0)}</div></div>
@@ -1654,14 +1568,11 @@ function renderMC(){
   });
   document.getElementById('mc-grid').innerHTML=h;
 }
-<<<<<<< HEAD
-=======
 function callMember(mIdx){
   const r=MEM[mIdx];
   // All members can call anyone
   showCallOverlay(r.name,'voice',false,r);
 }
->>>>>>> e63faec (inserting)
 function showCallModal(mIdx){
   const sel=document.getElementById('call-mem');
   sel.innerHTML='<option value="">Select member…</option>';
@@ -1718,12 +1629,9 @@ function openAddMem(){
   document.getElementById('mo-mem-t').textContent='Add Member';
   ['em-name','em-nick','em-phone','em-email','em-addr','em-sid','em-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('em-join').value=new Date().toISOString().slice(0,10);
-<<<<<<< HEAD
-=======
   document.getElementById('em-photo').value='';
   const prev=document.getElementById('em-photo-preview');
   prev.innerHTML='📷';prev.style.fontSize='22px';
->>>>>>> e63faec (inserting)
   setMemberRole('viewer');
   openMo('mo-mem');
 }
@@ -1740,8 +1648,6 @@ function openEditMem(idx){
   document.getElementById('em-join').value=r.join||'';
   document.getElementById('em-notes').value=r.notes||'';
   setMemberRole(r.role||'viewer');
-<<<<<<< HEAD
-=======
   // Load photo
   const photo=MEMBER_PHOTOS[r.name]||r.photo||'';
   document.getElementById('em-photo').value=photo;
@@ -1752,17 +1658,12 @@ function openEditMem(idx){
   } else {
     prev.innerHTML='📷';prev.style.fontSize='22px';
   }
->>>>>>> e63faec (inserting)
   openMo('mo-mem');
 }
 function saveMem(){
   const name=document.getElementById('em-name').value.trim();
   if(!name){toast('Name is required','t-err');return;}
   const idx=parseInt(document.getElementById('em-idx').value);
-<<<<<<< HEAD
-  const role=document.getElementById('em-role').value||'viewer';
-  const obj={name,nick:document.getElementById('em-nick').value.trim()||name,phone:document.getElementById('em-phone').value.trim(),email:document.getElementById('em-email').value.trim(),addr:document.getElementById('em-addr').value.trim(),join:document.getElementById('em-join').value,sid:document.getElementById('em-sid').value.trim(),notes:document.getElementById('em-notes').value.trim(),role};
-=======
   let role=document.getElementById('em-role').value||'viewer';
   const email=document.getElementById('em-email').value.trim();
   // Supreme admin protection: fityahalofficial cannot be set to viewer by anyone
@@ -1777,7 +1678,6 @@ function saveMem(){
   const photo=document.getElementById('em-photo').value||'';
   const obj={name,nick:document.getElementById('em-nick').value.trim()||name,phone:document.getElementById('em-phone').value.trim(),email,addr:document.getElementById('em-addr').value.trim(),join:document.getElementById('em-join').value,sid:document.getElementById('em-sid').value.trim(),notes:document.getElementById('em-notes').value.trim(),role,photo};
   if(photo){MEMBER_PHOTOS[name]=photo;localStorage.setItem('bft_member_photos',JSON.stringify(MEMBER_PHOTOS));}
->>>>>>> e63faec (inserting)
   if(idx===-1){snapshot('Add member: '+name);MEM.push(obj);ep(name);logActivity('👤','Added member: '+name+' ('+role+')');toast('Member added!');}
   else{const old=MEM[idx].name;snapshot('Edit member: '+name);if(old!==name&&PAY[old]){PAY[name]=PAY[old];delete PAY[old];}MEM[idx]=obj;ep(name);logActivity('✏️','Updated: '+name);toast('Member updated!');}
   flush();closeMo();renderAll();
@@ -1935,13 +1835,10 @@ function saveOrgRole(){
   const role=document.getElementById('orgrole-role').value;
   if(mi===''){toast('Select a member','t-err');return;}
   const name=MEM[parseInt(mi)].name;
-<<<<<<< HEAD
-=======
   // Only supreme admin can assign Alif role
   if(role==='Alif'&&CURRENT_EMAIL.toLowerCase()!==SUPREME_ADMIN.toLowerCase()){
     toast('⚠ Only the supreme admin can assign Alif role','t-err');return;
   }
->>>>>>> e63faec (inserting)
   if(role) ORG_ROLES[name]=role;
   else delete ORG_ROLES[name];
   localStorage.setItem('bft_orgroles',JSON.stringify(ORG_ROLES));
@@ -2028,15 +1925,8 @@ function renderNoticeBoard(){
   const isAdmin=CURRENT_ROLE==='admin';
   const addBtn=document.getElementById('add-notice-btn');
   const pnBtn=document.getElementById('send-pnotice-btn');
-<<<<<<< HEAD
-  const roleBtn=document.getElementById('assign-role-btn');
   if(addBtn)addBtn.style.display=isAdmin?'':'none';
   if(pnBtn)pnBtn.style.display=isAdmin?'':'none';
-  if(roleBtn)roleBtn.style.display=isAdmin?'':'none';
-=======
-  if(addBtn)addBtn.style.display=isAdmin?'':'none';
-  if(pnBtn)pnBtn.style.display=isAdmin?'':'none';
->>>>>>> e63faec (inserting)
   const el=document.getElementById('notice-list');
   if(!NOTICES.length){el.innerHTML='<div class="empty"><div class="ei">📢</div><div>No notices yet.</div></div>';}
   else{
@@ -2112,15 +2002,10 @@ function renderNizam(){
 }
 
 // ══ CHAT ═════════════════════════════════════════════════════════════════════
-<<<<<<< HEAD
-function sendChatMsg(){
-  const el=document.getElementById('chat-input');
-=======
 let _chatLastCount=0;
 function sendChatMsg(){
   const el=document.getElementById('chat-input');
   if(!el)return;
->>>>>>> e63faec (inserting)
   const txt=el.value.trim();if(!txt)return;
   const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'unknown';
   const muted=CHAT_MUTED[email];
@@ -2133,10 +2018,6 @@ function sendChatMsg(){
   CHAT_MSGS.push(msg);
   if(CHAT_MSGS.length>200)CHAT_MSGS.shift();
   localStorage.setItem('bft_chat',JSON.stringify(CHAT_MSGS));
-<<<<<<< HEAD
-  el.value='';renderChat();
-}
-=======
   el.value='';
   _chatLastCount=CHAT_MSGS.length;
   renderChat();
@@ -2149,36 +2030,15 @@ function formatChatTime(isoStr){
   return `${time} · ${date}`;
 }
 
->>>>>>> e63faec (inserting)
 function renderChat(){
   const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
   const isAdmin=CURRENT_ROLE==='admin';
   document.getElementById('chat-admin-controls').style.display=isAdmin?'':'none';
-<<<<<<< HEAD
-  // Mute check
-=======
->>>>>>> e63faec (inserting)
   const muted=CHAT_MUTED[email];
   const footer=document.getElementById('chat-footer');
   if(muted&&muted!=='unmute'){
     footer.innerHTML=`<div style="flex:1;text-align:center;color:var(--rd-t);font-size:13px;padding:8px;">🚫 You are ${muted==='ban'?'permanently banned':muted==='suspend'?'suspended':'muted'} from this chat.</div>`;
   } else {
-<<<<<<< HEAD
-    footer.innerHTML=`<input id="chat-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatMsg()"/><button onclick="sendChatMsg()">Send</button>`;
-  }
-  const el=document.getElementById('chat-msgs');
-  if(!CHAT_MSGS.length){el.innerHTML='<div class="empty"><div class="ei">💬</div><div>No messages yet. Say hello!</div></div>';return;}
-  el.innerHTML=CHAT_MSGS.map(m=>{
-    const mine=m.email===email;
-    const d=new Date(m.time);
-    const ts=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' · '+d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-    return `<div class="chat-msg ${mine?'msg-mine':'msg-other'}">
-      <div class="msg-bubble">${mine?'':(`<div style="font-size:10px;font-weight:700;color:var(--ac-t);margin-bottom:4px;">${m.name}</div>`)}${m.txt}</div>
-      <div class="msg-meta">${ts}</div>
-    </div>`;
-  }).join('');
-  el.scrollTop=el.scrollHeight;
-=======
     footer.innerHTML=`<input class="chat-input" id="chat-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatMsg()"/><button class="chat-send" onclick="sendChatMsg()">Send</button>`;
   }
   const el=document.getElementById('chat-msgs');
@@ -2227,7 +2087,6 @@ function startChatPoll(){
       }
     }
   },2000);
->>>>>>> e63faec (inserting)
 }
 function openMuteModal(){
   const sel=document.getElementById('mute-mem');
@@ -2346,9 +2205,6 @@ function pushNotif(icon,txt){
   toast(icon+' '+txt,'t-info');
 }
 
-<<<<<<< HEAD
-// ══ VOICE/VIDEO CALLS (simulated) ════════════════════════════════════════════
-=======
 // ══ VOICE/VIDEO CALLS ════════════════════════════════════════════════════════
 let _ringAudio=null, _ringing=false;
 
@@ -2373,42 +2229,17 @@ function makeRingTone(){
   return ctx;
 }
 
->>>>>>> e63faec (inserting)
 function openCallMo(){
   const sel=document.getElementById('call-mem');
   sel.innerHTML='<option value="">Select member…</option>';
   MEM.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r.name;sel.appendChild(o);});
   openMo('mo-call');
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> e63faec (inserting)
 function initiateCall(){
   const mi=document.getElementById('call-mem').value;
   const type=document.getElementById('call-type').value;
   if(mi===''){toast('Select a member','t-err');return;}
-<<<<<<< HEAD
-  const name=MEM[parseInt(mi)].name;
-  closeMo();
-  // Show simulated outgoing call
-  showCallOverlay(name,type,false);
-}
-function showCallOverlay(name,type,incoming){
-  document.getElementById('call-av-txt').textContent=ini(name);
-  document.getElementById('call-name-txt').textContent=name;
-  document.getElementById('call-status-txt').textContent=incoming?'Incoming '+(type==='video'?'📹':'📞')+' call…':type==='group'?'Group call starting…':'Calling '+name+'…';
-  const inc=document.getElementById('call-btns-incoming');
-  const act=document.getElementById('call-btns-active');
-  if(incoming){
-    inc.style.display='flex';act.style.display='none';
-  } else {
-    inc.style.display='none';act.style.display='flex';
-    setTimeout(()=>{document.getElementById('call-status-txt').textContent='Connected — 00:00';startCallTimer();},2000);
-  }
-  document.getElementById('call-overlay').style.display='flex';
-}
-=======
   const r=MEM[parseInt(mi)];
   closeMo();
   showCallOverlay(r.name,type,false,r);
@@ -2470,34 +2301,21 @@ function forceEndCall(){
   hangupCall();
 }
 
->>>>>>> e63faec (inserting)
 let _callTimerInt=null;
 function startCallTimer(){
   let s=0;
   if(_callTimerInt)clearInterval(_callTimerInt);
   _callTimerInt=setInterval(()=>{s++;const m=Math.floor(s/60).toString().padStart(2,'0');const sec=(s%60).toString().padStart(2,'0');const el=document.getElementById('call-status-txt');if(el)el.textContent='Connected — '+m+':'+sec;},1000);
 }
-<<<<<<< HEAD
-function answerCall(){
-=======
 
 function answerCall(){
   _ringing=false;
   document.getElementById('call-av-txt').classList.remove('ringing');
->>>>>>> e63faec (inserting)
   document.getElementById('call-status-txt').textContent='Connected — 00:00';
   document.getElementById('call-btns-incoming').style.display='none';
   document.getElementById('call-btns-active').style.display='flex';
   startCallTimer();
 }
-<<<<<<< HEAD
-function declineCall(){hangupCall();}
-function hangupCall(){if(_callTimerInt){clearInterval(_callTimerInt);_callTimerInt=null;}document.getElementById('call-overlay').style.display='none';toast('Call ended');}
-
-// ══ BOOK BORROW STATUS ════════════════════════════════════════════════════════
-function toggleBookBorrow(name){
-  if(!CURRENT_ROLE==='admin'){toast('Admin only','t-warn');return;}
-=======
 
 function declineCall(){hangupCall();}
 
@@ -2640,7 +2458,6 @@ function rejectPending(id){
 // ══ BOOK BORROW STATUS ════════════════════════════════════════════════════════
 function toggleBookBorrow(name){
   if(CURRENT_ROLE!=='admin'){toast('Admin only','t-warn');return;}
->>>>>>> e63faec (inserting)
   if(BORROWED_BOOKS[name]) delete BORROWED_BOOKS[name];
   else BORROWED_BOOKS[name]=new Date().toISOString().slice(0,10);
   localStorage.setItem('bft_books',JSON.stringify(BORROWED_BOOKS));
