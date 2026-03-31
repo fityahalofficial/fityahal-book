@@ -608,7 +608,7 @@ body.theme-night{
       <button class="tb-btn" id="undo-btn" onclick="doUndo()" title="Undo (Ctrl+Z)" disabled>↩</button>
       <button class="tb-btn" id="redo-btn" onclick="doRedo()" title="Redo (Ctrl+Y)" disabled>↪</button>
       <button class="tb-btn" onclick="syncNow()" title="Sync now">↻</button>
-      <button class="tb-btn" onclick="showTab('profile',document.querySelector('.nb:last-child'))" title="Profile & Logout">👤</button>
+      <button class="tb-btn" onclick="goToProfile()" title="Profile & Logout">👤</button>
     </div>
   </div>
 
@@ -1171,6 +1171,14 @@ function renderActivity(){
       <div class="act-txt">${a.txt}</div>
       <div class="act-time">${a.time}</div>
     </div>`).join('');
+}
+
+function goToProfile(){
+  // Find and activate the profile nav button
+  const navBtns=document.querySelectorAll('.nb');
+  let profileBtn=null;
+  navBtns.forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes('profile'))profileBtn=b;});
+  showTab('profile',profileBtn);
 }
 
 // ══ GUARD EDIT ════════════════════════════════════════════════════════════════
@@ -2039,37 +2047,40 @@ const ORG_ROLE_CLASS={Alif:'orb-alif',Mutabbiq:'orb-mutabbiq',Khazin:'orb-khazin
 function openPayHist(mIdx){
   const r=MEM[mIdx];
   document.getElementById('mo-payhist-t').textContent=r.name+' — Payment History';
-  const mp=gp(r.name);
+  refreshPayHistModal(r.name);
+  openMo('mo-payhist');
+}
+
+function refreshPayHistModal(memberName){
+  const mp=gp(memberName);
   const keys=Object.keys(mp).filter(k=>mp[k]&&(mp[k].m||mp[k].b)).sort(keySort);
+  const isAdmin=CURRENT_ROLE==='admin';
   let h='';
-  if(!keys.length){h='<div class="empty"><div class="ei">💸</div><div>No payments yet.</div></div>';}
-  else{
+  if(!keys.length){
+    h='<div class="empty"><div class="ei">💸</div><div>No payments yet.</div></div>';
+  } else {
     keys.forEach(k=>{
       const p=mp[k];
+      const safeKey=k.replace(/'/g,"\\'");
+      const safeName=memberName.replace(/'/g,"\\'");
       h+=`<div class="pay-hist-item">
         <span class="pay-hist-key">${keyToFull(k)}</span>
         <span class="pay-hist-amt">৳${(p.m+p.b).toFixed(2)}</span>
-        ${CURRENT_ROLE==='admin'?`<button class="pay-hist-del" onclick="removePayEntry('${r.name}','${k}')">✕ Remove</button>`:''}
+        ${isAdmin?`<button class="pay-hist-del" onclick="removePayEntry('${safeName}','${safeKey}')">✕ Remove</button>`:''}
       </div>`;
     });
   }
   document.getElementById('payhist-list').innerHTML=h;
-  openMo('mo-payhist');
 }
+
 function removePayEntry(name,k){
   if(!PAY[name]||!PAY[name][k])return;
   snapshot('Remove payment: '+name+' '+keyToFull(k));
   delete PAY[name][k];
   flush();
-  toast('Payment entry removed');
+  toast('Payment removed');
   logActivity('🗑️','Removed payment: '+name+' '+keyToFull(k));
-  // Refresh modal
-  const mp=gp(name);
-  const keys=Object.keys(mp).filter(k2=>mp[k2]&&(mp[k2].m||mp[k2].b)).sort(keySort);
-  let h='';
-  if(!keys.length){h='<div class="empty"><div class="ei">💸</div><div>No payments yet.</div></div>';}
-  else{keys.forEach(k2=>{const p=mp[k2];h+=`<div class="pay-hist-item"><span class="pay-hist-key">${keyToFull(k2)}</span><span class="pay-hist-amt">৳${(p.m+p.b).toFixed(2)}</span><button class="pay-hist-del" onclick="removePayEntry('${name}','${k2}')">✕ Remove</button></div>`;});}
-  document.getElementById('payhist-list').innerHTML=h;
+  refreshPayHistModal(name);
   renderAll();
 }
 
@@ -2580,8 +2591,14 @@ function initiateCall(){
 }
 
 function showCallOverlay(name,type,incoming,memberObj){
-  // Stop any existing call first
-  if(_ringing||_callTimerInt) hangupCall();
+  // Silently stop any existing call without showing "Call ended" toast
+  _ringing=false;
+  if(_callTimerInt){clearInterval(_callTimerInt);_callTimerInt=null;}
+  if(_ringAudio){
+    if(_ringAudio._dotInterval) clearInterval(_ringAudio._dotInterval);
+    try{_ringAudio.close();}catch(e){}
+    _ringAudio=null;
+  }
 
   const av=document.getElementById('call-av-txt');
   const photo=memberObj?(MEMBER_PHOTOS[memberObj.name]||memberObj.photo||''):'';
@@ -2597,44 +2614,49 @@ function showCallOverlay(name,type,incoming,memberObj){
   const statusEl=document.getElementById('call-status-txt');
   const inc=document.getElementById('call-btns-incoming');
   const act=document.getElementById('call-btns-active');
-  const overlay=document.getElementById('call-overlay');
-  const forceBtn=document.getElementById('call-force-end');
+
+  // Always reset button states first
+  inc.style.display='none';
+  act.style.display='none';
 
   if(incoming){
-    // Incoming call — show Answer/Decline, play ring
     av.className='call-avatar ringing';
     statusEl.textContent='📞 Incoming '+(type==='video'?'video':'voice')+' call…';
     inc.style.display='flex';
-    act.style.display='none';
     _ringing=true;
     _ringAudio=makeRingTone();
   } else {
-    // Outgoing call — ring, wait for user to hangup (no auto-connect)
     av.className='call-avatar ringing';
     statusEl.textContent='📞 Calling '+name+'…';
-    inc.style.display='none';
     act.style.display='flex';
     _ringing=true;
     _ringAudio=makeRingTone();
-    // Show ringing status updates
+    // Animate calling dots
     let dots=0;
     const dotInterval=setInterval(()=>{
       if(!_ringing){clearInterval(dotInterval);return;}
       dots=(dots+1)%4;
       statusEl.textContent='📞 Calling '+name+'.'.repeat(dots||1);
     },800);
-    // Store the interval so hangup can clear it
-    _ringAudio._dotInterval=dotInterval;
+    if(_ringAudio) _ringAudio._dotInterval=dotInterval;
+    else _ringAudio={_dotInterval:dotInterval, close:()=>{}};
   }
 
-  overlay.style.display='flex';
-  if(forceBtn) forceBtn.style.display=canCutCall()?'block':'none';
+  // Show overlay
+  document.getElementById('call-overlay').style.display='flex';
 
-  // Log notification
+  // Force-end button — always re-evaluate after overlay is shown
+  const forceBtn=document.getElementById('call-force-end');
+  if(forceBtn){
+    const canForce=canCutCall();
+    forceBtn.style.display=canForce?'block':'none';
+  }
+
   logActivity('📞','Call '+(incoming?'incoming from':'to')+' '+name);
 }
 
 function answerCall(){
+  // Stop ringing
   if(_ringAudio){
     if(_ringAudio._dotInterval) clearInterval(_ringAudio._dotInterval);
     try{_ringAudio.close();}catch(e){}
@@ -2642,7 +2664,7 @@ function answerCall(){
   }
   _ringing=false;
   document.getElementById('call-av-txt').className='call-avatar';
-  document.getElementById('call-status-txt').textContent='Connected — 00:00';
+  document.getElementById('call-status-txt').textContent='🟢 Connected — 00:00';
   document.getElementById('call-btns-incoming').style.display='none';
   document.getElementById('call-btns-active').style.display='flex';
   startCallTimer();
@@ -2654,20 +2676,25 @@ function declineCall(){
 }
 
 function forceEndCall(){
-  toast('📵 Call force-ended by '+CURRENT_EMAIL,'t-warn');
+  toast('📵 Call ended by admin','t-warn');
   hangupCall();
 }
 
 function hangupCall(){
   _ringing=false;
+  if(_callTimerInt){clearInterval(_callTimerInt);_callTimerInt=null;}
   if(_ringAudio){
     if(_ringAudio._dotInterval) clearInterval(_ringAudio._dotInterval);
     try{_ringAudio.close();}catch(e){}
     _ringAudio=null;
   }
-  if(_callTimerInt){clearInterval(_callTimerInt);_callTimerInt=null;}
   const overlay=document.getElementById('call-overlay');
   if(overlay) overlay.style.display='none';
+  // Reset overlay state for next call
+  const inc=document.getElementById('call-btns-incoming');
+  const act=document.getElementById('call-btns-active');
+  if(inc) inc.style.display='none';
+  if(act) act.style.display='none';
   toast('Call ended');
 }
 
