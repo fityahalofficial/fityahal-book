@@ -562,11 +562,22 @@ body.theme-night{
     </div>
     <div class="l-hint"><strong>Admin</strong> — use your Google account to sign in.<br><strong>Viewers</strong> — sign in with the Google account your admin registered for you.</div>
     <div class="l-err" id="l-err-pw">❌ Access denied. Your Google account is not authorised.</div>
+    <div class="l-err" id="l-err-config" style="display:none;"></div>
     <button class="lb-btn" id="google-signin-btn" onclick="startGoogleLogin()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
-      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg>
-      Sign in with Google
+Sign in with Google
     </button>
     <p style="font-size:11px;color:var(--tx3);text-align:center;margin-top:12px;">Only authorised accounts can access this app.</p>
+    <details style="margin-top:12px;font-size:11px;color:var(--tx3);">
+      <summary style="cursor:pointer;color:var(--ac-t);font-weight:600;">⚙️ Sign-in not working?</summary>
+      <div style="margin-top:8px;line-height:1.8;background:var(--sf2);padding:10px;border-radius:var(--r);">
+        If the button does nothing, your site domain needs to be added to Google Cloud Console:<br>
+        1. Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--ac-t);">console.cloud.google.com/apis/credentials</a><br>
+        2. Click your OAuth 2.0 Client ID<br>
+        3. Under <strong>Authorized JavaScript Origins</strong> add:<br>
+        <code style="background:var(--sf3);padding:2px 6px;border-radius:4px;font-size:10px;display:inline-block;margin-top:4px;">https://YOUR-USERNAME.github.io</code><br>
+        4. Save and wait 5 minutes, then refresh this page.
+      </div>
+    </details>
   </div>
 </div>
 
@@ -1255,13 +1266,33 @@ function setMemberRole(role){
 
 let tokenClient=null, idClient=null;
 
+function _gBtnHtml(){return '<svg width="18" height="18" viewBox="0 0 18 18" style="flex-shrink:0"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg> Sign in with Google';}
+
+function showLoginError(msg){
+  const el=document.getElementById('l-err-config');
+  if(el){el.innerHTML='⚙️ '+msg;el.style.display='block';}
+  const btn=document.getElementById('google-signin-btn');
+  if(btn){btn.disabled=false;btn.innerHTML=_gBtnHtml();}
+}
+
 function startGoogleLogin(){
-  // First request an access token (for Sheets API)
-  // We also need the user's email — we get that via the userinfo endpoint after we have a token
   document.getElementById('l-err-pw').style.display='none';
-  document.getElementById('google-signin-btn').disabled=true;
-  document.getElementById('google-signin-btn').textContent='Opening Google…';
-  tokenClient.requestAccessToken({prompt:'select_account'});
+  const errEl=document.getElementById('l-err-config');
+  if(errEl)errEl.style.display='none';
+  if(!window.google||!google.accounts||!google.accounts.oauth2){
+    showLoginError('Google services not loaded. Check internet connection and refresh the page.');return;
+  }
+  if(!tokenClient){
+    showLoginError('OAuth not ready. Your domain <strong>'+location.hostname+'</strong> may not be authorised in Google Cloud Console → Credentials → OAuth Client → Authorized JavaScript Origins.');return;
+  }
+  const btn=document.getElementById('google-signin-btn');
+  btn.disabled=true;
+  btn.textContent='Opening Google…';
+  try{
+    tokenClient.requestAccessToken({prompt:'select_account'});
+  }catch(e){
+    showLoginError('Sign-in failed: '+e.message+'. Allow pop-ups for this site and try again.');
+  }
 }
 
 function doLogout(){
@@ -1271,7 +1302,7 @@ function doLogout(){
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('readonly-banner').style.display='none';
   const btn=document.getElementById('google-signin-btn');
-  if(btn){btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg> Sign in with Google';}
+  if(btn){btn.disabled=false;btn.innerHTML=_gBtnHtml();}
   // Also revoke current Google session so next login shows account picker
   if(window.google&&google.accounts&&google.accounts.oauth2)google.accounts.oauth2.revoke(sessionStorage.getItem('bft_email')||'',()=>{});
 }
@@ -1281,24 +1312,31 @@ function initGoogleAuth(){
   try{
     tokenClient=google.accounts.oauth2.initTokenClient({
       client_id:CONFIG.CLIENT_ID,
-      scope:CONFIG.SCOPES+' https://www.googleapis.com/auth/userinfo.email',
-      callback:handleToken
+      scope:CONFIG.SCOPES,
+      callback:handleToken,
+      error_callback:(err)=>{
+        console.error('OAuth error_callback:',err);
+        const type=(err&&err.type)?err.type:'unknown';
+        showLoginError('OAuth error ('+type+'). Add <strong>'+location.origin+'</strong> to Google Cloud Console → Credentials → OAuth 2.0 Client → Authorized JavaScript Origins, then refresh.');
+      }
     });
-    // Auto-reconnect if session exists
     if(sessionStorage.getItem('bft_auth')==='1'){
       CURRENT_ROLE=sessionStorage.getItem('bft_role')||'viewer';
       document.getElementById('login-screen').style.display='none';
       showLoad('Reconnecting…');
       tokenClient.requestAccessToken({prompt:''});
     }
-  }catch(e){console.error('GIS init error',e);}
+  }catch(e){
+    console.error('GIS init error',e);
+    showLoginError('Google Sign-In failed to initialise: '+e.message);
+  }
 }
 
 async function handleToken(resp){
   const btn=document.getElementById('google-signin-btn');
   if(resp.error){
     hideLoad();
-    if(btn){btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg> Sign in with Google';}
+    if(btn){btn.disabled=false;btn.innerHTML=_gBtnHtml();}
     if(resp.error!=='access_denied')toast('Google auth failed: '+resp.error,'t-err');
     document.getElementById('login-screen').style.display='flex';
     return;
@@ -1361,7 +1399,7 @@ async function handleToken(resp){
     ACCESS_TOKEN=null;
     document.getElementById('l-err-pw').style.display='block';
     document.getElementById('login-screen').style.display='flex';
-    if(btn){btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z"/><path fill="#fff" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#fff" d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z"/><path fill="#fff" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.87 13.04C2.35 15.98 5.48 18 9 18z"/></svg> Try a different account';}
+    if(btn){btn.disabled=false;btn.innerHTML=_gBtnHtml();}
     google.accounts.oauth2.revoke(email,()=>{});
   }catch(e){
     hideLoad();toast('Could not verify account','t-err');
@@ -2844,11 +2882,27 @@ function toggleBookBorrow(name){
 }
 
 window.addEventListener('load',()=>{
+  // Set button HTML (needs _gBtnHtml to be defined first)
+  const btn=document.getElementById('google-signin-btn');
+  if(btn) btn.innerHTML=_gBtnHtml();
+
+  // Show current domain in hint for easier setup
+  const hint=document.querySelector('.l-hint');
+  if(hint&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
+    const domainNote=document.createElement('div');
+    domainNote.style.cssText='font-size:10px;margin-top:6px;color:var(--tx3);';
+    domainNote.textContent='Domain: '+location.origin;
+    hint.appendChild(domainNote);
+  }
+
   let tries=0;
   const wait=setInterval(()=>{
     tries++;
     if(window.google&&google.accounts&&google.accounts.oauth2){clearInterval(wait);initGoogleAuth();}
-    else if(tries>60){clearInterval(wait);toast('Could not load Google services','t-err');}
+    else if(tries>60){
+      clearInterval(wait);
+      showLoginError('Google services failed to load after 6 seconds. Check internet connection and refresh.');
+    }
   },100);
 });
 </script>
