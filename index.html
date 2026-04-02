@@ -567,17 +567,6 @@ body.theme-night{
 Sign in with Google
     </button>
     <p style="font-size:11px;color:var(--tx3);text-align:center;margin-top:12px;">Only authorised accounts can access this app.</p>
-    <details style="margin-top:12px;font-size:11px;color:var(--tx3);">
-      <summary style="cursor:pointer;color:var(--ac-t);font-weight:600;">⚙️ Sign-in not working?</summary>
-      <div style="margin-top:8px;line-height:1.8;background:var(--sf2);padding:10px;border-radius:var(--r);">
-        If the button does nothing, your site domain needs to be added to Google Cloud Console:<br>
-        1. Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--ac-t);">console.cloud.google.com/apis/credentials</a><br>
-        2. Click your OAuth 2.0 Client ID<br>
-        3. Under <strong>Authorized JavaScript Origins</strong> add:<br>
-        <code style="background:var(--sf3);padding:2px 6px;border-radius:4px;font-size:10px;display:inline-block;margin-top:4px;">https://YOUR-USERNAME.github.io</code><br>
-        4. Save and wait 5 minutes, then refresh this page.
-      </div>
-    </details>
   </div>
 </div>
 
@@ -2580,9 +2569,6 @@ function pushNotif(icon,txt){
   toast(icon+' '+txt,'t-info');
   logActivity(icon,txt);
 }
-
-// ══ VOICE/VIDEO CALLS ════════════════════════════════════════════════════════
-let _ringAudio=null, _ringing=false;
 
 // ══ CALL SYSTEM ══════════════════════════════════════════════════════════════
 let _ringAudio=null, _ringing=false, _callTimerInt=null;
