@@ -25,7 +25,7 @@
   --g3:linear-gradient(135deg,#ff5c6c,#ff8c42);
 }
 html,body{height:100%;font-family:var(--fn);font-size:14px;color:var(--tx);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
-::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar{width:7px;height:7px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--sf3);border-radius:99px;}
 
@@ -120,8 +120,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #app.show{display:flex;}
 
 /* ══ TOPBAR ══ */
-.topbar{background:rgba(17,24,39,.9);border-bottom:1px solid var(--br);padding:0 1.25rem;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
-.tb-l{display:flex;align-items:center;gap:10px;}
+.topbar{background:rgba(17,24,39,.95);border-bottom:1px solid var(--br);padding:0;height:52px;display:flex;align-items:stretch;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.tb-l{padding:0 1rem;flex-shrink:0;}
+.tb-nav{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;}
+.tb-nav::-webkit-scrollbar{display:none;}
+.tb-nav .nb{padding:0 12px;height:100%;border-bottom:3px solid transparent;border-top:none;display:flex;align-items:center;font-size:13px;}
+.tb-nav .nb.active{background:rgba(91,141,238,.08);color:var(--ac-t);border-bottom-color:var(--ac);}
+.tb-nav .nb:hover{color:var(--tx);background:rgba(255,255,255,.04);}
 .tb-logo{width:34px;height:34px;background:var(--g1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 12px rgba(91,141,238,.35);overflow:hidden;flex-shrink:0;}
 .tb-logo img{width:100%;height:100%;object-fit:cover;}
 .tb-ttl{font-size:15px;font-weight:800;letter-spacing:-.4px;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -281,7 +286,7 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
 .role-toggle-btn:hover:not(.active-admin):not(.active-viewer){background:var(--sf2);color:var(--tx);}
 
 /* ══ TOAST ══ */
-.toast{position:fixed;bottom:80px;right:1.25rem;padding:11px 16px;border-radius:var(--rl);font-size:13px;z-index:9999;box-shadow:var(--sh-l);animation:toastIn .3s cubic-bezier(.16,1,.3,1);font-weight:500;display:flex;align-items:center;gap:8px;max-width:300px;}
+.toast{position:fixed;top:70px;right:1.25rem;padding:13px 18px;border-radius:var(--rl);font-size:13px;z-index:9999;box-shadow:var(--sh-l);animation:toastIn .3s cubic-bezier(.16,1,.3,1);font-weight:500;display:flex;align-items:center;gap:10px;max-width:340px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(16px) scale(.96);}to{opacity:1;transform:translateX(0) scale(1);}}
 .t-ok{background:var(--sf);border:1px solid rgba(16,212,142,.35);color:var(--gn-t);}
 .t-err{background:var(--sf);border:1px solid rgba(255,92,108,.35);color:var(--rd-t);}
@@ -354,7 +359,7 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
 .orb-khazin{background:rgba(16,212,142,.12);color:var(--gn-t);border:1px solid rgba(16,212,142,.25);}
 .org-role-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.3px;}
 
-@media print{.topbar,.nav,.fb,.btn,.mc-ac,.sh-a,#readonly-banner,#undo-bar,.sheet-banner,#call-overlay{display:none!important;}.main{padding:0;max-width:100%;}.tw{box-shadow:none;}}
+@media print{.topbar,.nav,.fb,.btn,.mc-ac,.sh-a,#readonly-banner,#undo-bar,.sheet-banner{display:none!important;}.main{padding:0;max-width:100%;}.tw{box-shadow:none;}}
 
 /* ══ THEME: LIGHT ══ */
 body.theme-light{
@@ -467,20 +472,6 @@ body.theme-night{
 .ph-del{padding:3px 8px;border:1px solid rgba(255,92,108,.3);background:var(--rd-s);color:var(--rd-t);border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fn);transition:all .15s;}
 .ph-del:hover{background:var(--rd);color:#fff;}
 
-/* ══ CALL UI ══ */
-#call-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9000;backdrop-filter:blur(12px);}
-.call-box{background:var(--sf);border:1px solid var(--br2);border-radius:var(--rxl);padding:2.5rem 2rem;text-align:center;width:min(320px,90vw);animation:loginPop .3s ease;}
-.call-avatar{width:80px;height:80px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff;margin:0 auto 1rem;overflow:hidden;}
-.call-avatar img{width:100%;height:100%;object-fit:cover;}
-.call-avatar.ringing{animation:ringPulse 1.2s ease-in-out infinite;}
-@keyframes ringPulse{0%,100%{box-shadow:0 0 0 0 rgba(91,141,238,.5);}50%{box-shadow:0 0 0 18px rgba(91,141,238,0);}}
-.call-name{font-size:20px;font-weight:800;margin-bottom:4px;}
-.call-status{font-size:13px;color:var(--tx3);margin-bottom:1.5rem;}
-.call-btns{display:flex;gap:12px;justify-content:center;}
-.call-btn{width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;font-size:20px;transition:all .2s;}
-.call-btn.answer{background:var(--gn);animation:pulse 1s ease-in-out infinite;}
-.call-btn.decline,.call-btn.hangup{background:var(--rd);}
-.call-btn:hover{transform:scale(1.1);}
 
 /* ══ ELITE CARD ══ */
 .mc.elite{background:linear-gradient(135deg,rgba(20,16,40,.95),rgba(30,20,60,.95));border:1.5px solid rgba(200,160,255,.35);box-shadow:0 0 28px rgba(157,122,250,.18),0 2px 12px rgba(0,0,0,.5);}
@@ -597,33 +588,29 @@ Sign in with Google
   </div>
 
   <div class="topbar">
-    <div class="tb-l">
+    <div style="display:flex;align-items:center;gap:8px;padding:0 .75rem;flex-shrink:0;">
       <div class="tb-logo"><img src="https://instasize.com/api/image/b991d8a9d15515996e724e5b54e9429bbdecce49b0f2a2eeed7aa2e5142987a1.png" alt="Logo" onerror="this.style.display='none';this.parentNode.textContent='📚'"></div>
-      <span class="tb-ttl">Fityahal Account Book</span>
+      <span class="tb-ttl">Fityahal</span>
     </div>
-    <div class="tb-r">
-      <div id="sync-status" class="sync-ok"><span class="sync-dot"></span><span id="sync-txt">Synced</span></div>
-      <span class="tb-em" id="tb-em"></span>
-      <button class="theme-btn" id="theme-btn" onclick="cycleTheme()" title="Toggle theme">🌙</button>
-      <button class="tb-btn" id="undo-btn" onclick="doUndo()" title="Undo (Ctrl+Z)" disabled>↩</button>
-      <button class="tb-btn" id="redo-btn" onclick="doRedo()" title="Redo (Ctrl+Y)" disabled>↪</button>
-      <button class="tb-btn" onclick="syncNow()" title="Sync now">↻</button>
-      <button class="tb-btn" onclick="goToProfile()" title="Profile & Logout">👤</button>
+    <div class="tb-nav">
+      <button class="nb active" onclick="showTab('dashboard',this)">Dashboard</button>
+      <button class="nb" onclick="showTab('table',this)">Overview</button>
+      <button class="nb" onclick="showTab('members',this)">Members</button>
+      <button class="nb" onclick="showTab('projects',this)">Projects</button>
+      <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('notices',this)">Notice Board</button><span class="notif-dot" id="notice-dot" style="display:none;"></span></div>
+      <button class="nb" onclick="showTab('nizam',this)">Nizam</button>
+      <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('chat',this)">Chat</button><span class="notif-dot" id="chat-dot" style="display:none;"></span></div>
+      <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('activity',this)">🔔 Notifs</button><span class="notif-dot" id="notif-dot" style="display:none;"></span></div>
+      <button class="nb" onclick="showTab('about',this)">About Us</button>
     </div>
-  </div>
-
-  <div class="nav">
-    <button class="nb active" onclick="showTab('dashboard',this)">Dashboard</button>
-    <button class="nb" onclick="showTab('table',this)">Payments</button>
-    <button class="nb" onclick="showTab('members',this)">Members</button>
-    <button class="nb" onclick="showTab('info',this)">Info</button>
-    <button class="nb" onclick="showTab('costs',this)">Costs</button>
-    <button class="nb" onclick="showTab('projects',this)">Projects</button>
-    <div class="nb-wrap" style="display:inline-block;"><button class="nb" onclick="showTab('notices',this)">Notice Board</button><span class="notif-dot" id="notice-dot" style="display:none;"></span></div>
-    <button class="nb" onclick="showTab('nizam',this)">Nizam</button>
-    <div class="nb-wrap" style="display:inline-block;"><button class="nb" onclick="showTab('chat',this)">Chat</button><span class="notif-dot" id="chat-dot" style="display:none;"></span></div>
-    <div class="nb-wrap" style="display:inline-block;"><button class="nb" onclick="showTab('activity',this)">🔔 Notifications</button><span class="notif-dot" id="notif-dot" style="display:none;"></span></div>
-    <button class="nb" onclick="showTab('profile',this)">👤 Profile</button>
+    <div style="display:flex;align-items:center;gap:4px;padding:0 .5rem;flex-shrink:0;">
+      <div id="sync-status" class="sync-ok" style="margin-right:2px;"><span class="sync-dot"></span><span id="sync-txt" style="font-size:10px;color:var(--tx3);"></span></div>
+      <button class="theme-btn" id="theme-btn" onclick="cycleTheme()" title="Theme">🌙</button>
+      <button class="tb-btn" id="undo-btn" onclick="doUndo()" title="Undo" disabled>↩</button>
+      <button class="tb-btn" id="redo-btn" onclick="doRedo()" title="Redo" disabled>↪</button>
+      <button class="tb-btn" onclick="syncNow()" title="Sync">↻</button>
+      <button onclick="goToProfile()" style="display:flex;flex-direction:column;align-items:center;font-size:10px;padding:5px 10px;gap:1px;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);cursor:pointer;color:var(--tx2);min-width:46px;transition:all .18s;" onmouseover="this.style.background='var(--sf3)'" onmouseout="this.style.background='var(--sf2)'"><span style="font-size:18px;line-height:1.2;">👤</span><span>Profile</span></button>
+    </div>
   </div>
 
   <div class="main">
@@ -632,20 +619,20 @@ Sign in with Google
       <div class="sr" id="stat-row"></div>
       <div class="sh">
         <div class="sh-t">Payment Overview</div>
-        <div class="sh-a">
-          <button class="btn" onclick="guardEdit(openCostMo)">+ Cost</button>
+        <div class="sh-a" id="dash-admin-btns">
           <button class="btn btn-p" onclick="guardEdit(openPayMo)">+ Payment</button>
         </div>
       </div>
       <div class="tw"><div class="ts"><table><thead id="db-h"></thead><tbody id="db-b"></tbody><tfoot id="db-f"></tfoot></table></div></div>
     </div>
 
+    <!-- OVERVIEW TAB = Payments + Costs -->
     <div id="tab-table" class="tab-panel">
       <div class="sh">
-        <div class="sh-t">Full Payment Records</div>
+        <div class="sh-t">Payments</div>
         <div class="sh-a">
           <button class="btn" onclick="window.print()">🖨 Print</button>
-          <button class="btn btn-p" onclick="guardEdit(openPayMo)">+ Payment</button>
+          <button class="btn btn-p" id="overview-pay-btn" onclick="guardEdit(openPayMo)">+ Payment</button>
         </div>
       </div>
       <div class="fb">
@@ -653,69 +640,75 @@ Sign in with Google
         <select id="t-mth" onchange="renderAll()"><option value="">All months</option></select>
       </div>
       <div class="tw"><div class="ts"><table><thead id="ft-h"></thead><tbody id="ft-b"></tbody><tfoot id="ft-f"></tfoot></table></div></div>
-    </div>
 
-    <div id="tab-members" class="tab-panel">
-      <div class="sh">
-        <div class="sh-t">Members <span id="mc-cnt" style="font-size:13px;color:var(--tx3);font-weight:400;"></span></div>
-        <div class="sh-a">
-          <button class="btn" id="call-all-btn" onclick="openCallMo()">📞 Call</button>
-          <button class="btn" id="pending-pay-btn" style="display:none;" onclick="openPendingPayments()">⏳ Pending</button>
-          <button class="btn" id="assign-role-members-btn" style="display:none;" onclick="guardEdit(openOrgRoleMo)">⭐ Assign Role</button>
-          <button class="btn btn-sm" id="submit-pay-btn" style="display:none;" onclick="openMemberPayMo()">💳 Pay</button>
-          <button class="btn btn-p" id="add-mem-btn" style="display:none;" onclick="guardEdit(openAddMem)">+ Add Member</button>
-        </div>
-      </div>
-      <div class="mg" id="mc-grid"></div>
-    </div>
-
-    <div id="tab-info" class="tab-panel">
-      <div class="sh">
-        <div class="sh-t">Member Information</div>
-        <button class="btn btn-p" onclick="guardEdit(openAddMem)">+ Add Member</button>
-      </div>
-      <div class="ig" id="ic-grid"></div>
-    </div>
-
-    <div id="tab-costs" class="tab-panel">
-      <div class="sh">
+      <!-- Costs section - only admin sees add button, viewers see cost amounts -->
+      <div class="sh" style="margin-top:1.5rem;">
         <div class="sh-t">Monthly Costs</div>
-        <button class="btn btn-p" onclick="guardEdit(openCostMo)">+ Record Cost</button>
+        <button class="btn btn-p" id="add-cost-btn" style="display:none;" onclick="guardEdit(openCostMo)">+ Record Cost</button>
       </div>
       <div class="tw"><div class="ts">
         <table>
           <thead><tr>
             <th style="text-align:left;padding:10px 14px;">Month</th>
             <th>Cost (৳)</th><th>Collected (৳)</th><th>Net</th>
-            <th style="width:70px;"></th>
+            <th id="cost-action-col" style="width:70px;display:none;"></th>
           </tr></thead>
           <tbody id="cost-body"></tbody>
         </table>
       </div></div>
     </div>
 
+    <!-- MEMBERS TAB = Cards + Detail Info combined -->
+    <div id="tab-members" class="tab-panel">
+      <div class="sh">
+        <div class="sh-t">Members <span id="mc-cnt" style="font-size:13px;color:var(--tx3);font-weight:400;"></span></div>
+        <div class="sh-a">
+          <button class="btn" id="pending-pay-btn" style="display:none;" onclick="openPendingPayments()">⏳ Pending</button>
+          <button class="btn" id="assign-role-members-btn" style="display:none;" onclick="guardEdit(openOrgRoleMo)">⭐ Assign Role</button>
+          <button class="btn btn-sm" id="submit-pay-btn" style="display:none;" onclick="openMemberPayMo()">💳 Pay</button>
+          <button class="btn btn-p" id="add-mem-btn" style="display:none;" onclick="guardEdit(openAddMem)">+ Add Member</button>
+        </div>
+      </div>
+      <!-- Toggle between cards and info view -->
+      <div style="display:flex;gap:8px;margin-bottom:1rem;">
+        <button class="btn btn-sm" id="view-cards-btn" onclick="setMemberView('cards')" style="background:var(--ac-s);color:var(--ac-t);border-color:transparent;">Cards</button>
+        <button class="btn btn-sm" id="view-info-btn" onclick="setMemberView('info')">Info</button>
+      </div>
+      <div id="mc-grid" class="mg"></div>
+      <div id="ic-grid" class="ig" style="display:none;"></div>
+    </div>
+
+    <!-- ABOUT US TAB -->
+    <div id="tab-about" class="tab-panel">
+      <div class="sh">
+        <div class="sh-t">About Us</div>
+        <button class="btn btn-p" id="edit-about-btn" style="display:none;" onclick="guardEdit(openAboutEdit)">✏️ Edit</button>
+      </div>
+      <div id="about-content" style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:1.5rem;min-height:200px;">
+        <pre id="about-text" style="font-family:var(--fn);font-size:14px;color:var(--tx2);line-height:1.9;white-space:pre-wrap;margin:0;"></pre>
+        <div class="empty" id="about-empty"><div class="ei">🏢</div><div>No information added yet.</div></div>
+      </div>
+    </div>
+
     <div id="tab-activity" class="tab-panel">
       <div class="sh">
         <div class="sh-t">🔔 Notifications</div>
-        <button class="btn btn-d" onclick="guardEdit(clearActivity)">Clear</button>
+        <button class="btn btn-d" id="clear-notif-btn" style="display:none;" onclick="guardEdit(clearActivity)">Clear</button>
       </div>
       <div id="activity-list" class="activity-list"></div>
     </div>
 
     <!-- PROFILE TAB -->
     <div id="tab-profile" class="tab-panel">
-      <div class="sh">
-        <div class="sh-t">👤 My Profile</div>
-      </div>
       <div id="profile-content"></div>
     </div>
 
     <!-- PROJECTS TAB -->
     <div id="tab-projects" class="tab-panel">
       <div class="sh">
-        <div class="sh-t">Project Tracker</div>
-        <div class="sh-a" id="proj-admin-btns">
-          <button class="btn btn-p" onclick="guardEdit(()=>openProjectMo())">+ New Project</button>
+        <div class="sh-t">Projects</div>
+        <div class="sh-a">
+          <button class="btn btn-p" id="add-proj-btn" style="display:none;" onclick="guardEdit(()=>openProjectMo())">+ New Project</button>
         </div>
       </div>
       <div id="proj-list"></div>
@@ -727,7 +720,7 @@ Sign in with Google
         <div class="sh-t">Notice Board</div>
         <div class="sh-a">
           <button class="btn btn-p" id="add-notice-btn" style="display:none;" onclick="guardEdit(()=>openNoticeMo())">+ Post Notice</button>
-          <button class="btn" id="send-pnotice-btn" style="display:none;" onclick="guardEdit(openPrivateNoticeMo)">📨 Private Notice</button>
+          <button class="btn" id="send-pnotice-btn" style="display:none;" onclick="guardEdit(openPrivateNoticeMo)">📨 Private</button>
         </div>
       </div>
       <div class="notice-list" id="notice-list"></div>
@@ -756,14 +749,11 @@ Sign in with Google
     <div id="tab-chat" class="tab-panel" style="padding:0;">
       <div style="padding:.75rem 1.25rem;background:var(--sf2);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
         <span style="font-size:13px;font-weight:600;color:var(--tx2);">💬 Member Chat</span>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <button class="btn btn-sm" onclick="openCallMo()" title="Start a call from chat">📞 Call</button>
-          <div id="chat-admin-controls" style="display:none;">
-            <button class="btn btn-sm" onclick="guardEdit(openMuteModal)">🔇 Moderate</button>
-          </div>
+        <div id="chat-admin-controls" style="display:none;">
+          <button class="btn btn-sm" onclick="guardEdit(openMuteModal)">🔇 Moderate</button>
         </div>
       </div>
-      <div id="chat-msgs" style="height:calc(100vh - 260px);max-height:500px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;"></div>
+      <div id="chat-msgs" style="height:calc(100vh - 200px);max-height:520px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;"></div>
       <div id="chat-footer" style="display:flex;gap:8px;padding:10px 1rem;border-top:1px solid var(--br);background:var(--sf2);">
         <input class="chat-input" id="chat-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatMsg()"/>
         <button class="chat-send" onclick="sendChatMsg()">Send</button>
@@ -789,24 +779,6 @@ Sign in with Google
   </div>
 </div>
 
-<!-- CALL OVERLAY -->
-<div id="call-overlay">
-  <div class="call-box">
-    <div class="call-avatar" id="call-av-txt">?</div>
-    <div class="call-name" id="call-name-txt">Someone</div>
-    <div class="call-status" id="call-status-txt">Incoming call…</div>
-    <div class="call-btns" id="call-btns-incoming">
-      <button class="call-btn answer" onclick="answerCall()" title="Answer">📞</button>
-      <button class="call-btn decline" onclick="declineCall()" title="Decline">📵</button>
-    </div>
-    <div class="call-btns" id="call-btns-active" style="display:none;">
-      <button class="call-btn hangup" onclick="hangupCall()" title="End call">📵</button>
-    </div>
-    <div id="call-force-end" style="display:none;margin-top:10px;">
-      <button onclick="forceEndCall()" style="background:var(--rd-s);color:var(--rd-t);border:1px solid rgba(255,92,108,.3);border-radius:var(--r);padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fn);">✂ Force End (Admin/Alif)</button>
-    </div>
-  </div>
-</div>
 
 <!-- MODALS -->
 <div class="mo" id="mo" style="display:none;" onclick="if(event.target===this)closeMo()">
@@ -945,6 +917,16 @@ Sign in with Google
     </div>
   </div>
 
+  <!-- ABOUT US MODAL -->
+  <div class="mo-b" id="mo-about" style="display:none;">
+    <div class="mo-t"><span>Edit About Us</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div class="fr"><label>Content</label><textarea id="about-inp" placeholder="Write about Fityahal organisation…" style="min-height:220px;"></textarea></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveAbout()">Save</button>
+    </div>
+  </div>
+
   <!-- NIZAM MODAL -->
   <div class="mo-b" id="mo-nizam" style="display:none;">
     <div class="mo-t"><span>Edit Rulebook</span><button class="mo-x" onclick="closeMo()">✕</button></div>
@@ -1033,22 +1015,6 @@ Sign in with Google
     </div>
   </div>
 
-  <!-- CALL MODAL -->
-  <div class="mo-b" id="mo-call" style="display:none;">
-    <div class="mo-t"><span>Place a Call</span><button class="mo-x" onclick="closeMo()">✕</button></div>
-    <div class="fr"><label>Call Member</label><select id="call-mem"><option value="">Select member…</option></select></div>
-    <div class="fr"><label>Call Type</label>
-      <select id="call-type">
-        <option value="voice">📞 Voice Call</option>
-        <option value="video">📹 Video Call</option>
-        <option value="group">👥 Group Call</option>
-      </select>
-    </div>
-    <div class="mo-f">
-      <button class="btn" onclick="closeMo()">Cancel</button>
-      <button class="btn btn-p" onclick="initiateCall()">Call</button>
-    </div>
-  </div>
 
 </div>
 <script>
@@ -1174,11 +1140,12 @@ function renderActivity(){
 }
 
 function goToProfile(){
-  // Find and activate the profile nav button
-  const navBtns=document.querySelectorAll('.nb');
-  let profileBtn=null;
-  navBtns.forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes('profile'))profileBtn=b;});
-  showTab('profile',profileBtn);
+  // Profile is shown as a tab panel but accessed via the action button, not nav
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tb-nav .nb').forEach(b=>b.classList.remove('active'));
+  const panel=document.getElementById('tab-profile');
+  if(panel)panel.classList.add('active');
+  renderProfile();
 }
 
 // ══ GUARD EDIT ════════════════════════════════════════════════════════════════
@@ -1286,6 +1253,8 @@ function startGoogleLogin(){
 
 function doLogout(){
   ACCESS_TOKEN=null;sessionStorage.clear();HISTORY=[];FUTURE=[];
+  if(typeof _autoSyncInterval!=='undefined'&&_autoSyncInterval)clearInterval(_autoSyncInterval);
+  if(typeof _chatPollTimer!=='undefined'&&_chatPollTimer)clearInterval(_chatPollTimer);
   document.getElementById('app').classList.remove('show');
   document.getElementById('picker-screen').style.display='none';
   document.getElementById('login-screen').style.display='flex';
@@ -1338,7 +1307,7 @@ async function handleToken(resp){
     CURRENT_EMAIL=sessionStorage.getItem('bft_email')||'';
     // Supreme admin always gets admin role regardless of saved session role
     if(CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase()) CURRENT_ROLE='admin';
-    document.getElementById('tb-em').textContent=CURRENT_EMAIL;
+    // tb-em removed
     if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
     else document.getElementById('readonly-banner').style.display='none';
     bootApp();return;
@@ -1360,7 +1329,7 @@ async function handleToken(resp){
       sessionStorage.setItem('bft_role',adminAcc.role);
       sessionStorage.setItem('bft_auth','1');
       document.getElementById('login-screen').style.display='none';
-      document.getElementById('tb-em').textContent=email;
+      // tb-em removed
       if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
       bootApp();return;
     }
@@ -1377,7 +1346,7 @@ async function handleToken(resp){
         sessionStorage.setItem('bft_role','viewer');
         sessionStorage.setItem('bft_auth','1');
         document.getElementById('login-screen').style.display='none';
-        document.getElementById('tb-em').textContent=email;
+        // tb-em removed
         document.getElementById('readonly-banner').style.display='flex';
         bootApp();return;
       }
@@ -1630,6 +1599,9 @@ async function bootApp(){
   startChatPoll();
   // Profile
   renderProfile();
+  // About Us - load from local first, then try sheet
+  ABOUT_US=localStorage.getItem('bft_about')||'';
+  renderAbout();
   // First login nizam
   const loginKey='bft_first_login_'+CURRENT_EMAIL;
   if(!localStorage.getItem(loginKey)){
@@ -1641,13 +1613,13 @@ async function bootApp(){
 // ══ TABS ══════════════════════════════════════════════════════════════════════
 function showTab(id,btn){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tb-nav .nb').forEach(b=>b.classList.remove('active'));
   const panel=document.getElementById('tab-'+id);
   if(panel)panel.classList.add('active');
   if(btn)btn.classList.add('active');
   if(id==='activity'){
     const dot=document.getElementById('notif-dot');
-    if(dot) dot.style.display='none';
+    if(dot)dot.style.display='none';
     renderActivity();
   }
   else if(id==='notices'){loadSharedData().then(()=>renderNoticeBoard());}
@@ -1658,10 +1630,31 @@ function showTab(id,btn){
   }
   else if(id==='projects'){loadSharedData().then(()=>renderProjects());}
   else if(id==='profile')renderProfile();
+  else if(id==='about')renderAbout();
   else renderAll();
+}
+
+function setMemberView(v){
+  const cards=document.getElementById('mc-grid');
+  const info=document.getElementById('ic-grid');
+  const cb=document.getElementById('view-cards-btn');
+  const ib=document.getElementById('view-info-btn');
+  if(v==='cards'){
+    if(cards)cards.style.display='';
+    if(info)info.style.display='none';
+    if(cb){cb.style.background='var(--ac-s)';cb.style.color='var(--ac-t)';cb.style.borderColor='transparent';}
+    if(ib){ib.style.background='';ib.style.color='';ib.style.borderColor='';}
+  } else {
+    if(cards)cards.style.display='none';
+    if(info)info.style.display='';
+    if(ib){ib.style.background='var(--ac-s)';ib.style.color='var(--ac-t)';ib.style.borderColor='transparent';}
+    if(cb){cb.style.background='';cb.style.color='';cb.style.borderColor='';}
+    renderIC();
+  }
 }
 // ══ RENDER ════════════════════════════════════════════════════════════════════
 function renderAll(){
+  const isAdmin=CURRENT_ROLE==='admin';
   renderStats();
   const allKeys=activeMonthKeys();
   rTable('db-h','db-b','db-f',allKeys,MEM,'M','B');
@@ -1671,6 +1664,18 @@ function renderAll(){
   const fl=MEM.filter(r=>(r.nick||r.name).toLowerCase().includes(q.toLowerCase())||r.name.toLowerCase().includes(q.toLowerCase()));
   rTable('ft-h','ft-b','ft-f',keys,fl,'Monthly','Book Fund');
   renderMC();renderIC();renderCosts();
+  // Viewer visibility: hide admin-only UI elements
+  const adminOnlyEls=['add-cost-btn','overview-pay-btn','add-proj-btn','clear-notif-btn'];
+  adminOnlyEls.forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=isAdmin?'':'none';});
+  // cost action column - only admin sees edit button column
+  const costCol=document.getElementById('cost-action-col');
+  if(costCol)costCol.style.display=isAdmin?'':'none';
+  // About edit
+  const aboutBtn=document.getElementById('edit-about-btn');
+  if(aboutBtn)aboutBtn.style.display=isAdmin?'':'none';
+  // Nizam edit
+  const nizBtn=document.getElementById('edit-nizam-btn');
+  if(nizBtn)nizBtn.style.display=isAdmin?'':'none';
 }
 function renderStats(){
   let col=0,cost=0,act=0;
@@ -1713,52 +1718,44 @@ function rTable(hId,bId,fId,keys,list,ml,bl){
 }
 function renderMC(){
   document.getElementById('mc-cnt').textContent=`(${MEM.length})`;
-  // Show/hide header buttons based on role
   const isAdmin=CURRENT_ROLE==='admin';
   const isSupreme=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
   const myMem=MEM.find(m=>m.email&&m.email.toLowerCase()===CURRENT_EMAIL.toLowerCase());
-  const myOrgRole=myMem?ORG_ROLES[myMem.name]:'';
-  const canAssign=isAdmin; // admin can assign roles
+  // Viewer visibility for header buttons
   const pendBtn=document.getElementById('pending-pay-btn');
   const assignBtn=document.getElementById('assign-role-members-btn');
   const addBtn=document.getElementById('add-mem-btn');
   const submitPayBtn=document.getElementById('submit-pay-btn');
   if(pendBtn)pendBtn.style.display=isAdmin?'':'none';
-  if(assignBtn)assignBtn.style.display=canAssign?'':'none';
+  if(assignBtn)assignBtn.style.display=isAdmin?'':'none';
   if(addBtn)addBtn.style.display=isAdmin?'':'none';
-  // All members (non-admin viewers) can submit their own payment
   if(submitPayBtn)submitPayBtn.style.display=(!isAdmin&&myMem)?'':'none';
 
   if(!MEM.length){document.getElementById('mc-grid').innerHTML='<div class="empty"><div class="ei">👥</div><div>No members yet.</div></div>';return;}
-  const allKeys=activeMonthKeys();let h='';
+  const allKeys=activeMonthKeys();
   const currentEmail=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
+  let h='';
   MEM.forEach((r,i)=>{
     const mp=gp(r.name);let tm=0,tb=0,act=0;
     Object.values(mp).forEach(p=>{tm+=p.m;tb+=p.b;if(p.m>0||p.b>0)act++;});
     const badge=act>0?`<span class="badge b-par">${act} mo</span>`:`<span class="badge b-none">—</span>`;
     const roleBadge=`<span class="mc-role-badge ${r.role==='admin'?'rb-admin':'rb-viewer'}">${r.role==='admin'?'🔑 Admin':'👁 Viewer'}</span>`;
-    // Org role badge
     const orgRole=ORG_ROLES[r.name];
     const orgBadge=orgRole?`<span class="org-role-badge ${ORG_ROLE_CLASS[orgRole]||'orb-alif'}">${ORG_ROLE_ICONS[orgRole]||'⭐'} ${orgRole}</span>`:'';
     const chips=allKeys.map(k=>{const p=gpk(r.name,k);const paid=p.m>0||p.b>0;return`<div class="chip ${paid?'paid':'nopaid'}" title="${keyToFull(k)}: ৳${(p.m+p.b).toFixed(2)}">${keyToShort(k).replace(' ','<br>')}</div>`;}).join('');
-    // Payment glow
     const isMe=r.email&&r.email.toLowerCase()===currentEmail.toLowerCase();
     let glowClass='';
-    if(isAdmin||isMe){
-      const glow=getPaymentGlow(r.name);
-      if(glow)glowClass='glow-'+glow;
-    }
-    // Book glow
+    if(isAdmin||isMe){const glow=getPaymentGlow(r.name);if(glow)glowClass='glow-'+glow;}
     const hasBk=hasBorrowedBook(r.name);
     if(hasBk&&!glowClass)glowClass='glow-white';
-    // Elite card for org role holders
     const isElite=!!orgRole;
-    // Photo
     const photo=MEMBER_PHOTOS[r.name]||r.photo||'';
     const avContent=photo?`<img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`:`${ini(r.name)}`;
-    // Pending payment badge
     const pendingCount=PENDING_PAYS.filter(p=>p.memberName===r.name&&p.status==='pending').length;
     const pendBadge=pendingCount>0&&isAdmin?`<span style="background:var(--am-s);color:var(--am-t);border:1px solid rgba(255,173,46,.25);padding:2px 7px;border-radius:99px;font-size:9px;font-weight:700;">⏳${pendingCount}</span>`:'';
+    // Supreme admin can do anything; admin can do most things except what supreme has locked
+    const memberIsSupreme=r.email&&r.email.toLowerCase()===SUPREME_ADMIN.toLowerCase();
+    const canModifyMember=isAdmin&&(!memberIsSupreme||isSupreme);
     h+=`<div class="mc ${glowClass}${isElite?' elite':''}">
       <div class="mc-top">
         <div class="mc-av">${avContent}</div>
@@ -1770,15 +1767,12 @@ function renderMC(){
         ${badge}
       </div>
       <div class="mc-ac">
-        ${isAdmin?`
-          <button class="btn btn-sm btn-g" onclick="openPayMo(${i})">+ Pay</button>
-          <button class="btn btn-sm" onclick="openPayHist(${i})">History</button>
-          <button class="btn btn-sm" onclick="openEditMem(${i})">Edit</button>
+        ${isAdmin?`<button class="btn btn-sm btn-g" onclick="openPayMo(${i})">+ Pay</button>
+          <button class="btn btn-sm" onclick="openPayHist(${i})">History</button>`:''}
+        ${canModifyMember?`<button class="btn btn-sm" onclick="openEditMem(${i})">Edit</button>
           <button class="btn btn-sm btn-pu" onclick="toggleBookBorrow('${r.name}')">${hasBk?'📗 Return':'📕 Borrow'}</button>
-          <button class="btn btn-sm btn-d" onclick="confirmDelMem(${i})">Remove</button>
-        `:''}
-        <button class="btn btn-sm" onclick="callMember(${i})">📞 Call</button>
-        ${isAdmin&&pendingCount>0?`<button class="btn btn-sm" style="color:var(--am-t);" onclick="openPendingPayments()">⏳ Pending (${pendingCount})</button>`:''}
+          <button class="btn btn-sm btn-d" onclick="confirmDelMem(${i})">Remove</button>`:''}
+        ${isAdmin&&pendingCount>0?`<button class="btn btn-sm" style="color:var(--am-t);" onclick="openPendingPayments()">⏳(${pendingCount})</button>`:''}
       </div>
       <div class="mc-st">
         <div class="mc-s"><div class="mc-sl">Monthly</div><div class="mc-sv" style="color:var(--ac-t);">৳${tm.toFixed(0)}</div></div>
@@ -1790,18 +1784,6 @@ function renderMC(){
     </div>`;
   });
   document.getElementById('mc-grid').innerHTML=h;
-}
-function callMember(mIdx){
-  if(!checkNotRestricted())return;
-  const r=MEM[mIdx];
-  showCallOverlay(r.name,'voice',false,r);
-}
-function showCallModal(mIdx){
-  const sel=document.getElementById('call-mem');
-  sel.innerHTML='<option value="">Select member…</option>';
-  MEM.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r.name;sel.appendChild(o);});
-  sel.value=mIdx;
-  openMo('mo-call');
 }
 function renderIC(){
   if(!MEM.length){document.getElementById('ic-grid').innerHTML='<div class="empty"><div class="ei">📋</div><div>No members yet.</div></div>';return;}
@@ -1829,8 +1811,9 @@ function renderIC(){
   document.getElementById('ic-grid').innerHTML=h;
 }
 function renderCosts(){
-  const allKeys=activeMonthKeys(),isAdmin=CURRENT_ROLE==='admin';let h='';
-  allKeys.forEach(k=>{
+  const isAdmin=CURRENT_ROLE==='admin';
+  let h='';
+  activeMonthKeys().forEach(k=>{
     let col=0;MEM.forEach(r=>{const p=gpk(r.name,k);col+=p.m+p.b;});
     const cost=COSTS[k]||0,net=col-cost;
     h+=`<tr>
@@ -1838,7 +1821,7 @@ function renderCosts(){
       <td class="amt" style="color:var(--rd-t);">${cost>0?tkp(cost):'—'}</td>
       <td class="amt">${tkp(col)}</td>
       <td class="amt" style="color:${net>=0?'var(--gn-t)':'var(--rd-t)'};">${tkp(net)}</td>
-      <td style="text-align:center;">${isAdmin?`<button class="btn btn-sm btn-gh" onclick="editCost('${k}')">Edit</button>`:''}</td>
+      ${isAdmin?`<td style="text-align:center;"><button class="btn btn-sm btn-gh" onclick="editCost('${k}')">Edit</button></td>`:''}
     </tr>`;
   });
   document.getElementById('cost-body').innerHTML=h;
@@ -2266,7 +2249,6 @@ function renderChat(){
   const isAdmin=CURRENT_ROLE==='admin';
   const myMem=MEM.find(r=>r.email&&r.email.toLowerCase()===email.toLowerCase());
   const myOrgRole=myMem?ORG_ROLES[myMem.name]:'';
-  const canCall=true; // everyone can call from chat
   // Header controls
   document.getElementById('chat-admin-controls').style.display=isAdmin?'':'none';
   // Mute check
@@ -2288,12 +2270,11 @@ function renderChat(){
     const avatarHtml=photo
       ?`<img src="${photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">`
       :`<div style="width:28px;height:28px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">${ini(m.name)}</div>`;
-    const callBtn=!mine?`<button title="Call ${m.name}" onclick="callMemberByEmail('${m.email}')" style="background:none;border:none;color:var(--gn-t);cursor:pointer;font-size:13px;padding:0 3px;opacity:.7;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">📞</button>`:'';
     const delBtn=isAdmin&&!mine?`<button title="Delete" onclick="deleteChatMsg('${m.time}','${m.email}')" style="background:none;border:none;color:var(--rd-t);cursor:pointer;font-size:10px;padding:0 3px;opacity:.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">✕</button>`:'';
     return `<div class="chat-msg ${mine?'msg-mine':'msg-other'}" style="display:flex;gap:7px;align-items:flex-end;${mine?'flex-direction:row-reverse;':''}">
       ${!mine?avatarHtml:''}
       <div style="max-width:72%;">
-        ${!mine?`<div style="font-size:10px;font-weight:700;color:var(--ac-t);margin-bottom:3px;">${m.name} ${callBtn}</div>`:''}
+        ${!mine?`<div style="font-size:10px;font-weight:700;color:var(--ac-t);margin-bottom:3px;">${m.name} </div>`:''}
         <div class="msg-bubble">${m.txt}</div>
         <div class="msg-meta">${ts} ${delBtn}</div>
       </div>
@@ -2302,12 +2283,6 @@ function renderChat(){
   if(wasAtBottom||CHAT_MSGS.length<=3)el.scrollTop=el.scrollHeight;
 }
 
-function callMemberByEmail(targetEmail){
-  if(!checkNotRestricted())return;
-  const mem=MEM.find(r=>r.email&&r.email.toLowerCase()===targetEmail.toLowerCase());
-  if(!mem){toast('Member not found','t-err');return;}
-  showCallOverlay(mem.name,'voice',false,mem);
-}
 
 async function deleteChatMsg(time,senderEmail){
   if(CURRENT_ROLE!=='admin'&&CURRENT_EMAIL!==senderEmail){toast('Not allowed','t-err');return;}
@@ -2351,14 +2326,113 @@ function applyMute(){
   const email=document.getElementById('mute-mem').value;
   const action=document.getElementById('mute-action').value;
   if(!email){toast('Select a member','t-err');return;}
+  // Supreme admin cannot be moderated by regular admins
+  if(email.toLowerCase()===SUPREME_ADMIN.toLowerCase()&&CURRENT_EMAIL.toLowerCase()!==SUPREME_ADMIN.toLowerCase()){
+    toast('⚠ Cannot moderate the supreme admin','t-err');return;
+  }
   if(action==='unmute') delete CHAT_MUTED[email];
   else CHAT_MUTED[email]=action;
   localStorage.setItem('bft_muted',JSON.stringify(CHAT_MUTED));
   logActivity('💬','Chat moderation: '+email+' → '+action);
-  toast('Applied!');closeMo();renderChat();
+  toast(action==='unmute'?'Restriction removed':'Moderation applied!');
+  closeMo();renderChat();
+  // Show popup notification for the moderated action
+  const actionLabel=action==='ban'?'permanently banned':action==='suspend'?'suspended':action==='mute'?'muted':'unrestricted';
+  pushNotif('🔇',`Member ${email} is now ${actionLabel}`);
 }
 
-// ══ PROJECTS ══════════════════════════════════════════════════════════════════
+// ══ ABOUT US ══════════════════════════════════════════════════════════════════
+let ABOUT_US=localStorage.getItem('bft_about')||'';
+
+function renderAbout(){
+  const isAdmin=CURRENT_ROLE==='admin';
+  const btn=document.getElementById('edit-about-btn');
+  if(btn)btn.style.display=isAdmin?'':'none';
+  const textEl=document.getElementById('about-text');
+  const emptyEl=document.getElementById('about-empty');
+  if(ABOUT_US){
+    if(textEl){textEl.textContent=ABOUT_US;textEl.style.display='';}
+    if(emptyEl)emptyEl.style.display='none';
+  } else {
+    if(textEl)textEl.style.display='none';
+    if(emptyEl)emptyEl.style.display='';
+  }
+}
+
+function openAboutEdit(){
+  document.getElementById('about-inp').value=ABOUT_US;
+  openMo('mo-about');
+}
+
+async function saveAbout(){
+  ABOUT_US=document.getElementById('about-inp').value;
+  localStorage.setItem('bft_about',ABOUT_US);
+  // Also save to a sheet cell if possible
+  try{
+    await sheetsClear(`${CONFIG.SHEET_NIZAM}!B2:B2`);
+    await sheetsUpdate(`${CONFIG.SHEET_NIZAM}!B2:B2`,[[ABOUT_US]]);
+  }catch(e){/* ok, local only */}
+  logActivity('🏢','About Us updated');
+  toast('About Us saved!');closeMo();renderAbout();
+}
+
+// ══ BKASH PAYMENT ════════════════════════════════════════════════════════════
+const BKASH_NUMBER='01785853252'; // update this number
+
+function openBkashModal(memberName){
+  const myMem=MEM.find(r=>r.name===memberName)||MEM.find(r=>r.email&&r.email.toLowerCase()===CURRENT_EMAIL.toLowerCase());
+  if(!myMem){openMemberPayMo();return;}
+  // Calculate amount owed
+  const allKeys=activeMonthKeys();
+  const mp=gp(myMem.name);
+  let unpaidMonths=0;
+  const now=new Date();
+  allKeys.forEach(k=>{
+    const[y,mo]=k.split('-').map(Number);
+    const d=new Date(y,mo-1,1);
+    if(d>now)return;
+    const p=mp[k];
+    if(!p||(!p.m&&!p.b))unpaidMonths++;
+  });
+  const amountOwed=unpaidMonths*100; // adjust per your monthly fee
+  const msg=`Pay ৳${amountOwed>0?amountOwed:'your dues'} to Fityahal — ${myMem.name}`;
+  // Open bKash app via deep link
+  const bkashUrl=`bkash://send?number=${BKASH_NUMBER}&amount=${amountOwed}&ref=${encodeURIComponent(msg)}`;
+  // Show a modal first with details
+  if(confirm(`Send payment to bKash: ${BKASH_NUMBER}\nAmount: ৳${amountOwed>0?amountOwed:'[enter amount]'}\n\nClick OK to open bKash app, or Cancel to submit manually.`)){
+    window.location.href=bkashUrl;
+    setTimeout(()=>{
+      // Fallback: if app didn't open, show web link
+      window.open(`https://www.bkash.com/send-money?to=${BKASH_NUMBER}`,'_blank');
+    },1500);
+  }
+}
+
+function showBkashInfo(){
+  const myMem=MEM.find(r=>r.email&&r.email.toLowerCase()===CURRENT_EMAIL.toLowerCase());
+  const allKeys=activeMonthKeys();
+  let unpaid=[];
+  const now=new Date();
+  if(myMem){
+    const mp=gp(myMem.name);
+    allKeys.forEach(k=>{
+      const[y,mo]=k.split('-').map(Number);
+      const d=new Date(y,mo-1,1);
+      if(d>now)return;
+      const p=mp[k];
+      if(!p||(!p.m&&!p.b))unpaid.push(keyToFull(k));
+    });
+  }
+  const unpaidText=unpaid.length>0?`Unpaid months: ${unpaid.slice(-3).join(', ')}${unpaid.length>3?' + more':''}.\n`:'All payments up to date! ✅\n';
+  // Show bKash send button
+  const amountOwed=unpaid.length*100;
+  const confirmed=window.confirm(`📱 bKash Payment\n\n${unpaidText}Send to: ${BKASH_NUMBER}\nAmount: ৳${amountOwed||'[enter amount]'}\n\nClick OK to open bKash app.`);
+  if(confirmed){
+    const bkashUrl=`bkash://send?number=${BKASH_NUMBER}`;
+    window.location.href=bkashUrl;
+    setTimeout(()=>window.open('https://www.bkash.com','_blank'),1500);
+  }
+}
 async function saveProjects(){await saveProjectsToSheet();}
 function openProjectMo(editIdx=-1){
   document.getElementById('proj-edit-idx').value=editIdx;
@@ -2415,21 +2489,20 @@ async function saveProjCol(){
 async function deleteProjCol(pidx,cidx){PROJECTS[pidx].collections.splice(cidx,1);await saveProjects();renderProjects();}
 function renderProjects(){
   const el=document.getElementById('proj-list');
-  if(!PROJECTS.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div>No projects yet.</div></div>';return;}
   const isAdmin=CURRENT_ROLE==='admin';
+  const addBtn=document.getElementById('add-proj-btn');
+  if(addBtn)addBtn.style.display=isAdmin?'':'none';
+  if(!PROJECTS.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div>No projects yet.</div></div>';return;}
   el.innerHTML=PROJECTS.map((p,i)=>{
     const totalExp=(p.expenses||[]).reduce((a,e)=>a+e.amt,0);
     const totalCol=(p.collections||[]).reduce((a,c)=>a+c.amt,0);
     const net=totalCol-totalExp;
     const pct=totalExp>0?Math.min(100,(totalCol/totalExp*100)):0;
-    const expRows=(p.expenses||[]).map((e,ei)=>`<div class="proj-row"><span>${e.item}</span><span>৳${e.amt.toFixed(2)}<button class="proj-row-del" ${isAdmin?'onclick="deleteProjExp('+i+','+ei+')"':''}>✕</button></span></div>`).join('');
-    const colRows=(p.collections||[]).map((c,ci)=>`<div class="proj-row"><span>${c.from}</span><span style="color:var(--gn-t);">৳${c.amt.toFixed(2)}<button class="proj-row-del" ${isAdmin?'onclick="deleteProjCol('+i+','+ci+')"':''}>✕</button></span></div>`).join('');
+    const expRows=(p.expenses||[]).map((e,ei)=>`<div class="proj-row"><span>${e.item}</span><span>৳${e.amt.toFixed(2)}${isAdmin?`<button class="proj-row-del" onclick="deleteProjExp(${i},${ei})">✕</button>`:''}</span></div>`).join('');
+    const colRows=(p.collections||[]).map((c,ci)=>`<div class="proj-row"><span>${c.from}</span><span style="color:var(--gn-t);">৳${c.amt.toFixed(2)}${isAdmin?`<button class="proj-row-del" onclick="deleteProjCol(${i},${ci})">✕</button>`:''}</span></div>`).join('');
     return `<div class="proj-card">
       <div class="proj-hd">
-        <div>
-          <div class="proj-name">${p.name}</div>
-          ${p.desc?`<div style="font-size:12px;color:var(--tx3);margin-top:2px;">${p.desc}</div>`:''}
-        </div>
+        <div><div class="proj-name">${p.name}</div>${p.desc?`<div style="font-size:12px;color:var(--tx3);margin-top:2px;">${p.desc}</div>`:''}</div>
         <div style="display:flex;align-items:center;gap:6px;">
           <span class="proj-status ${p.status==='done'?'ps-done':'ps-active'}">${p.status==='done'?'Completed':'Active'}</span>
           ${isAdmin?`<button class="btn btn-sm" onclick="openProjectMo(${i})">Edit</button><button class="btn btn-sm btn-d" onclick="deleteProject(${i})">Del</button>`:''}
@@ -2467,34 +2540,33 @@ function renderProfile(){
   const avHtml=photo
     ?`<img src="${photo}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;">`
     :`<span>${me?ini(me.name):'?'}</span>`;
+  const isAdmin=CURRENT_ROLE==='admin';
+  const isSupreme=email.toLowerCase()===SUPREME_ADMIN.toLowerCase();
 
-  // Payment summary
-  let payRows='';
   if(me){
     const allKeys=activeMonthKeys();
     const mp=gp(me.name);
-    let totalPaid=0,paidMonths=0;
+    const now=new Date();
+    let payRows='',unpaidCount=0,totalOwed=0;
     allKeys.slice(-6).forEach(k=>{
+      const[y,mo]=k.split('-').map(Number);
+      const d=new Date(y,mo-1,1);
       const p=mp[k]||{m:0,b:0};
       const paid=p.m>0||p.b>0;
-      if(paid){totalPaid+=p.m+p.b;paidMonths++;}
+      if(!paid&&d<=now){unpaidCount++;totalOwed+=100;}// 100 = monthly fee placeholder
       payRows+=`<div class="profile-row">
         <span class="profile-row-label">${keyToFull(k)}</span>
-        <span>
-          ${paid
-            ?`<span class="profile-pay-chip ppc-paid">✓ ৳${(p.m+p.b).toFixed(2)}</span>`
-            :`<span class="profile-pay-chip ppc-unpaid">Not paid</span>`}
-        </span>
+        <span>${paid
+          ?`<span class="profile-pay-chip ppc-paid">✓ ৳${(p.m+p.b).toFixed(2)}</span>`
+          :(d<=now?`<span class="profile-pay-chip ppc-unpaid">Not paid</span>`:`<span class="profile-pay-chip ppc-unpaid" style="opacity:.5;">Upcoming</span>`)
+        }</span>
       </div>`;
     });
-    // Pending payments for this member
     const myPending=PENDING_PAYS.filter(p=>p.memberName===me.name&&p.status==='pending');
-    const pendingRows=myPending.length
-      ?myPending.map(p=>`<div class="profile-row">
-          <span class="profile-row-label">${keyToFull(p.key)}</span>
-          <span class="profile-pay-chip" style="background:var(--am-s);color:var(--am-t);border:1px solid rgba(255,173,46,.2);">⏳ Pending ৳${(p.m+p.b).toFixed(2)}</span>
-        </div>`).join('')
-      :'';
+    const pendingRows=myPending.map(p=>`<div class="profile-row">
+        <span class="profile-row-label">${keyToFull(p.key)}</span>
+        <span class="profile-pay-chip" style="background:var(--am-s);color:var(--am-t);border:1px solid rgba(255,173,46,.2);">⏳ Pending ৳${(p.m+p.b).toFixed(2)}</span>
+      </div>`).join('');
 
     el.innerHTML=`
       <div class="profile-hero">
@@ -2503,30 +2575,31 @@ function renderProfile(){
           <div class="profile-name">${me.name}${me.nick&&me.nick!==me.name?` <span style="font-size:13px;color:var(--tx3);font-weight:400;">(${me.nick})</span>`:''}</div>
           <div class="profile-email">📧 ${email}</div>
           <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
-            <span class="mc-role-badge ${CURRENT_ROLE==='admin'?'rb-admin':'rb-viewer'}">${CURRENT_ROLE==='admin'?'🔑 Admin':'👁 Viewer'}</span>
+            <span class="mc-role-badge ${isAdmin?'rb-admin':'rb-viewer'}">${isAdmin?'🔑 Admin':'👁 Viewer'}</span>
             ${orgRole?`<span class="org-role-badge ${ORG_ROLE_CLASS[orgRole]||''}">${orgIcon} ${orgRole}</span>`:''}
-            ${email.toLowerCase()===SUPREME_ADMIN.toLowerCase()?`<span class="org-role-badge" style="background:rgba(255,200,40,.15);color:#ffd94d;border:1px solid rgba(255,200,40,.3);">👑 Supreme Admin</span>`:''}
+            ${isSupreme?`<span class="org-role-badge" style="background:rgba(255,200,40,.15);color:#ffd94d;border:1px solid rgba(255,200,40,.3);">👑 Supreme Admin</span>`:''}
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0;">
-          <button class="btn btn-sm" onclick="doLogout()" style="color:var(--rd-t);">🚪 Logout</button>
-        </div>
+        <button class="btn btn-sm" onclick="doLogout()" style="color:var(--rd-t);flex-shrink:0;">🚪 Logout</button>
       </div>
 
-      <div class="profile-section">
+      ${me.phone||me.addr||me.join||me.sid?`<div class="profile-section">
         <div class="profile-section-hd">Personal Details</div>
         ${me.phone?`<div class="profile-row"><span class="profile-row-label">Phone</span><span class="profile-row-val">${me.phone}</span></div>`:''}
         ${me.addr?`<div class="profile-row"><span class="profile-row-label">Address</span><span class="profile-row-val">${me.addr}</span></div>`:''}
         ${me.join?`<div class="profile-row"><span class="profile-row-label">Joined</span><span class="profile-row-val">${new Date(me.join).toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})}</span></div>`:''}
-        ${me.sid?`<div class="profile-row"><span class="profile-row-label">Student ID</span><span class="profile-row-val">${me.sid}</span></div>`:''}
-        ${me.notes?`<div class="profile-row"><span class="profile-row-label">Notes</span><span class="profile-row-val">${me.notes}</span></div>`:''}
-      </div>
+        ${me.sid?`<div class="profile-row"><span class="profile-row-label">ID/Roll</span><span class="profile-row-val">${me.sid}</span></div>`:''}
+      </div>`:''}
 
       <div class="profile-section">
         <div class="profile-section-hd" style="display:flex;justify-content:space-between;align-items:center;">
-          Payment History (Last 6 months)
-          <button class="btn btn-sm btn-p" onclick="openMemberPayMo()" style="${CURRENT_ROLE==='admin'?'display:none':''}">💳 Submit Payment</button>
+          Payment History
+          <div style="display:flex;gap:6px;">
+            ${!isAdmin?`<button class="btn btn-sm btn-p" onclick="openMemberPayMo()">💳 Submit Pay</button>
+            <button class="btn btn-sm" onclick="showBkashInfo()" style="background:linear-gradient(135deg,#e2136e,#a00050);color:#fff;border:none;">📱 bKash</button>`:''}
+          </div>
         </div>
+        ${unpaidCount>0&&!isAdmin?`<div style="padding:.75rem 1.1rem;background:var(--am-s);border-bottom:1px solid var(--br);font-size:13px;color:var(--am-t);">⚠ ${unpaidCount} unpaid month${unpaidCount>1?'s':''}. bKash to <strong>${BKASH_NUMBER}</strong></div>`:''}
         ${payRows||'<div class="profile-row"><span style="color:var(--tx3);">No payment records.</span></div>'}
         ${pendingRows}
       </div>
@@ -2534,13 +2607,10 @@ function renderProfile(){
       <div class="profile-section">
         <div class="profile-section-hd">Account</div>
         <div class="profile-row"><span class="profile-row-label">Login Email</span><span class="profile-row-val" style="font-size:12px;">${email}</span></div>
-        <div class="profile-row"><span class="profile-row-label">Role</span><span class="profile-row-val">${CURRENT_ROLE==='admin'?'🔑 Admin — Full access':'👁 Viewer — Read only'}</span></div>
-        <div class="profile-row" style="justify-content:center;">
-          <button class="btn btn-d" onclick="doLogout()">🚪 Sign Out</button>
-        </div>
+        <div class="profile-row"><span class="profile-row-label">Role</span><span class="profile-row-val">${isAdmin?'🔑 Admin — Full access':'👁 Viewer — Read only'}</span></div>
+        <div class="profile-row" style="justify-content:center;"><button class="btn btn-d" onclick="doLogout()">🚪 Sign Out</button></div>
       </div>`;
   } else {
-    // Not in member list (admin not registered as member, or email mismatch)
     el.innerHTML=`
       <div class="profile-hero">
         <div class="profile-av"><span>?</span></div>
@@ -2549,18 +2619,17 @@ function renderProfile(){
           <div class="profile-email">📧 ${email}</div>
           <div style="margin-top:8px;">
             <span class="mc-role-badge ${CURRENT_ROLE==='admin'?'rb-admin':'rb-viewer'}">${CURRENT_ROLE==='admin'?'🔑 Admin':'👁 Viewer'}</span>
-            ${email.toLowerCase()===SUPREME_ADMIN.toLowerCase()?`<span class="org-role-badge" style="background:rgba(255,200,40,.15);color:#ffd94d;border:1px solid rgba(255,200,40,.3);margin-left:4px;">👑 Supreme Admin</span>`:''}
+            ${isSupreme?`<span class="org-role-badge" style="background:rgba(255,200,40,.15);color:#ffd94d;border:1px solid rgba(255,200,40,.3);margin-left:4px;">👑 Supreme Admin</span>`:''}
           </div>
         </div>
+        <button class="btn btn-sm" onclick="doLogout()" style="color:var(--rd-t);">🚪 Logout</button>
       </div>
       <div class="profile-section">
         <div class="profile-section-hd">Account</div>
         <div class="profile-row"><span class="profile-row-label">Login Email</span><span class="profile-row-val" style="font-size:12px;">${email}</span></div>
         <div class="profile-row"><span class="profile-row-label">Role</span><span class="profile-row-val">${CURRENT_ROLE==='admin'?'🔑 Admin — Full access':'👁 Viewer — Read only'}</span></div>
-        <div style="padding:.75rem 1.1rem;font-size:12px;color:var(--tx3);">Your email is not linked to a member profile. Ask an admin to add your email to your member record.</div>
-        <div class="profile-row" style="justify-content:center;">
-          <button class="btn btn-d" onclick="doLogout()">🚪 Sign Out</button>
-        </div>
+        <div style="padding:.75rem 1.1rem;font-size:12px;color:var(--tx3);">Email not linked to a member profile. Ask admin to add your email to your record.</div>
+        <div class="profile-row" style="justify-content:center;"><button class="btn btn-d" onclick="doLogout()">🚪 Sign Out</button></div>
       </div>`;
   }
 }
@@ -2570,175 +2639,6 @@ function pushNotif(icon,txt){
   logActivity(icon,txt);
 }
 
-// ══ CALL SYSTEM ══════════════════════════════════════════════════════════════
-let _ringAudio=null, _ringing=false, _callTimerInt=null;
-
-function makeRingTone(){
-  try{
-    const ctx=new(window.AudioContext||window.webkitAudioContext)();
-    function ringOnce(){
-      if(!_ringing){try{ctx.close();}catch(e){}return;}
-      const osc1=ctx.createOscillator(),osc2=ctx.createOscillator(),gain=ctx.createGain();
-      osc1.frequency.value=480;osc2.frequency.value=440;
-      osc1.type='sine';osc2.type='sine';
-      gain.gain.setValueAtTime(0,ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.25,ctx.currentTime+0.06);
-      gain.gain.setValueAtTime(0.25,ctx.currentTime+0.38);
-      gain.gain.linearRampToValueAtTime(0,ctx.currentTime+0.5);
-      osc1.connect(gain);osc2.connect(gain);gain.connect(ctx.destination);
-      osc1.start(ctx.currentTime);osc2.start(ctx.currentTime);
-      osc1.stop(ctx.currentTime+0.5);osc2.stop(ctx.currentTime+0.5);
-      // Ring again after 2 seconds (0.5s tone + 1.5s silence)
-      setTimeout(ringOnce, 2000);
-    }
-    ringOnce();
-    return ctx;
-  }catch(e){return null;}
-}
-
-function openCallMo(){
-  if(!checkNotRestricted())return;
-  const sel=document.getElementById('call-mem');
-  sel.innerHTML='<option value="">Select member…</option>';
-  MEM.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r.name;sel.appendChild(o);});
-  openMo('mo-call');
-}
-
-function initiateCall(){
-  if(!checkNotRestricted())return;
-  const mi=document.getElementById('call-mem').value;
-  const type=document.getElementById('call-type').value;
-  if(mi===''){toast('Select a member','t-err');return;}
-  const r=MEM[parseInt(mi)];
-  closeMo();
-  showCallOverlay(r.name,type,false,r);
-}
-
-function showCallOverlay(name,type,incoming,memberObj){
-  // Silently stop any existing call without showing "Call ended" toast
-  _ringing=false;
-  if(_callTimerInt){clearInterval(_callTimerInt);_callTimerInt=null;}
-  if(_ringAudio){
-    if(_ringAudio._dotInterval) clearInterval(_ringAudio._dotInterval);
-    try{_ringAudio.close();}catch(e){}
-    _ringAudio=null;
-  }
-
-  const av=document.getElementById('call-av-txt');
-  const photo=memberObj?(MEMBER_PHOTOS[memberObj.name]||memberObj.photo||''):'';
-  if(photo){
-    av.innerHTML=`<img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-    av.style.fontSize='0';
-  } else {
-    av.innerHTML=ini(name);
-    av.style.fontSize='28px';
-  }
-
-  document.getElementById('call-name-txt').textContent=name;
-  const statusEl=document.getElementById('call-status-txt');
-  const inc=document.getElementById('call-btns-incoming');
-  const act=document.getElementById('call-btns-active');
-
-  // Always reset button states first
-  inc.style.display='none';
-  act.style.display='none';
-
-  if(incoming){
-    av.className='call-avatar ringing';
-    statusEl.textContent='📞 Incoming '+(type==='video'?'video':'voice')+' call…';
-    inc.style.display='flex';
-    _ringing=true;
-    _ringAudio=makeRingTone();
-  } else {
-    av.className='call-avatar ringing';
-    statusEl.textContent='📞 Calling '+name+'…';
-    act.style.display='flex';
-    _ringing=true;
-    _ringAudio=makeRingTone();
-    // Animate calling dots
-    let dots=0;
-    const dotInterval=setInterval(()=>{
-      if(!_ringing){clearInterval(dotInterval);return;}
-      dots=(dots+1)%4;
-      statusEl.textContent='📞 Calling '+name+'.'.repeat(dots||1);
-    },800);
-    if(_ringAudio) _ringAudio._dotInterval=dotInterval;
-    else _ringAudio={_dotInterval:dotInterval, close:()=>{}};
-  }
-
-  // Show overlay
-  document.getElementById('call-overlay').style.display='flex';
-
-  // Force-end button — always re-evaluate after overlay is shown
-  const forceBtn=document.getElementById('call-force-end');
-  if(forceBtn){
-    const canForce=canCutCall();
-    forceBtn.style.display=canForce?'block':'none';
-  }
-
-  logActivity('📞','Call '+(incoming?'incoming from':'to')+' '+name);
-}
-
-function answerCall(){
-  // Stop ringing
-  if(_ringAudio){
-    if(_ringAudio._dotInterval) clearInterval(_ringAudio._dotInterval);
-    try{_ringAudio.close();}catch(e){}
-    _ringAudio=null;
-  }
-  _ringing=false;
-  document.getElementById('call-av-txt').className='call-avatar';
-  document.getElementById('call-status-txt').textContent='🟢 Connected — 00:00';
-  document.getElementById('call-btns-incoming').style.display='none';
-  document.getElementById('call-btns-active').style.display='flex';
-  startCallTimer();
-}
-
-function declineCall(){
-  toast('Call declined');
-  hangupCall();
-}
-
-function forceEndCall(){
-  toast('📵 Call ended by admin','t-warn');
-  hangupCall();
-}
-
-function hangupCall(){
-  _ringing=false;
-  if(_callTimerInt){clearInterval(_callTimerInt);_callTimerInt=null;}
-  if(_ringAudio){
-    if(_ringAudio._dotInterval) clearInterval(_ringAudio._dotInterval);
-    try{_ringAudio.close();}catch(e){}
-    _ringAudio=null;
-  }
-  const overlay=document.getElementById('call-overlay');
-  if(overlay) overlay.style.display='none';
-  // Reset overlay state for next call
-  const inc=document.getElementById('call-btns-incoming');
-  const act=document.getElementById('call-btns-active');
-  if(inc) inc.style.display='none';
-  if(act) act.style.display='none';
-  toast('Call ended');
-}
-
-function startCallTimer(){
-  let s=0;
-  if(_callTimerInt)clearInterval(_callTimerInt);
-  _callTimerInt=setInterval(()=>{
-    s++;
-    const m=Math.floor(s/60).toString().padStart(2,'0');
-    const sec=(s%60).toString().padStart(2,'0');
-    const el=document.getElementById('call-status-txt');
-    if(el) el.textContent='Connected — '+m+':'+sec;
-  },1000);
-}
-
-function canCutCall(){
-  if(CURRENT_ROLE==='admin') return true;
-  const myMem=MEM.find(m=>m.email&&m.email.toLowerCase()===CURRENT_EMAIL.toLowerCase());
-  return !!(myMem&&ORG_ROLES[myMem.name]==='Alif');
-}
 
 // ══ NIZAM BOOK OVERLAY ═══════════════════════════════════════════════════════
 function showNizamBook(){
@@ -2874,13 +2774,6 @@ window.addEventListener('load',()=>{
 
   // Show current domain in hint for easier setup
   const hint=document.querySelector('.l-hint');
-  if(hint&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
-    const domainNote=document.createElement('div');
-    domainNote.style.cssText='font-size:10px;margin-top:6px;color:var(--tx3);';
-    domainNote.textContent='Domain: '+location.origin;
-    hint.appendChild(domainNote);
-  }
-
   let tries=0;
   const wait=setInterval(()=>{
     tries++;
