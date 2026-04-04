@@ -112,8 +112,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #sync-status{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:1px;}
 
 /* ══ READONLY BANNER ══ */
-#readonly-banner{background:linear-gradient(90deg,rgba(157,122,250,.1),rgba(91,141,238,.1));border-bottom:1px solid rgba(157,122,250,.2);padding:8px 1.5rem;display:none;align-items:center;justify-content:center;gap:10px;font-size:12px;color:var(--tx2);position:relative;}
-#readonly-banner::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(157,122,250,.03) 0px,rgba(157,122,250,.03) 1px,transparent 1px,transparent 8px);}
 
 /* ══ APP ══ */
 #app{display:none;min-height:100vh;flex-direction:column;position:relative;z-index:1;}
@@ -122,7 +120,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 /* ══ TOPBAR ══ */
 .topbar{background:rgba(17,24,39,.95);border-bottom:1px solid var(--br);padding:0;height:52px;display:flex;align-items:stretch;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
 .tb-l{padding:0 1rem;flex-shrink:0;}
-.tb-nav{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;}
+.tb-nav{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;justify-content:center;}
 .tb-nav::-webkit-scrollbar{display:none;}
 .tb-nav .nb{padding:0 12px;height:100%;border-bottom:3px solid transparent;border-top:none;display:flex;align-items:center;font-size:13px;}
 .tb-nav .nb.active{background:rgba(91,141,238,.08);color:var(--ac-t);border-bottom-color:var(--ac);}
@@ -359,7 +357,7 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
 .orb-khazin{background:rgba(16,212,142,.12);color:var(--gn-t);border:1px solid rgba(16,212,142,.25);}
 .org-role-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.3px;}
 
-@media print{.topbar,.nav,.fb,.btn,.mc-ac,.sh-a,#readonly-banner,#undo-bar,.sheet-banner{display:none!important;}.main{padding:0;max-width:100%;}.tw{box-shadow:none;}}
+@media print{.topbar,.nav,.fb,.btn,.mc-ac,.sh-a,#undo-bar,.sheet-banner{display:none!important;}.main{padding:0;max-width:100%;}.tw{box-shadow:none;}}
 
 /* ══ THEME: LIGHT ══ */
 body.theme-light{
@@ -582,10 +580,6 @@ Sign in with Google
 
 <!-- APP -->
 <div id="app">
-  <div id="readonly-banner">
-    <span style="background:rgba(157,122,250,.2);color:var(--pu-t);padding:2px 10px;border-radius:99px;font-weight:700;font-size:11px;">👁 VIEW ONLY</span>
-    You are browsing as a viewer — editing is disabled.
-  </div>
 
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:8px;padding:0 .75rem;flex-shrink:0;">
@@ -597,11 +591,12 @@ Sign in with Google
       <button class="nb" onclick="showTab('table',this)">Overview</button>
       <button class="nb" onclick="showTab('members',this)">Members</button>
       <button class="nb" onclick="showTab('projects',this)">Projects</button>
-      <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('notices',this)">Notice Board</button><span class="notif-dot" id="notice-dot" style="display:none;"></span></div>
+      <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('notices',this)">Announcements</button><span class="notif-dot" id="notice-dot" style="display:none;"></span></div>
       <button class="nb" onclick="showTab('nizam',this)">Nizam</button>
       <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('chat',this)">Chat</button><span class="notif-dot" id="chat-dot" style="display:none;"></span></div>
       <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('activity',this)">🔔 Notifs</button><span class="notif-dot" id="notif-dot" style="display:none;"></span></div>
       <button class="nb" onclick="showTab('about',this)">About Us</button>
+      <button class="nb" id="bkash-nav-btn" onclick="showBkashInfo()" style="color:#e2136e;font-weight:700;display:none;">📱 bKash</button>
     </div>
     <div style="display:flex;align-items:center;gap:4px;padding:0 .5rem;flex-shrink:0;">
       <div id="sync-status" class="sync-ok" style="margin-right:2px;"><span class="sync-dot"></span><span id="sync-txt" style="font-size:10px;color:var(--tx3);"></span></div>
@@ -684,10 +679,7 @@ Sign in with Google
         <div class="sh-t">About Us</div>
         <button class="btn btn-p" id="edit-about-btn" style="display:none;" onclick="guardEdit(openAboutEdit)">✏️ Edit</button>
       </div>
-      <div id="about-content" style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:1.5rem;min-height:200px;">
-        <pre id="about-text" style="font-family:var(--fn);font-size:14px;color:var(--tx2);line-height:1.9;white-space:pre-wrap;margin:0;"></pre>
-        <div class="empty" id="about-empty"><div class="ei">🏢</div><div>No information added yet.</div></div>
-      </div>
+      <div id="about-content" style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:1.5rem;min-height:200px;"></div>
     </div>
 
     <div id="tab-activity" class="tab-panel">
@@ -717,15 +709,15 @@ Sign in with Google
     <!-- NOTICE BOARD TAB -->
     <div id="tab-notices" class="tab-panel">
       <div class="sh">
-        <div class="sh-t">Notice Board</div>
+        <div class="sh-t">Announcements</div>
         <div class="sh-a">
-          <button class="btn btn-p" id="add-notice-btn" style="display:none;" onclick="guardEdit(()=>openNoticeMo())">+ Post Notice</button>
+          <button class="btn btn-p" id="add-notice-btn" style="display:none;" onclick="guardEdit(()=>openNoticeMo())">+ Post</button>
           <button class="btn" id="send-pnotice-btn" style="display:none;" onclick="guardEdit(openPrivateNoticeMo)">📨 Private</button>
         </div>
       </div>
       <div class="notice-list" id="notice-list"></div>
       <div id="private-notices-wrap" style="margin-top:1.5rem;display:none;">
-        <div class="sh"><div class="sh-t" style="font-size:13px;color:var(--tx3);">📬 Private Notices for You</div></div>
+        <div class="sh"><div class="sh-t" style="font-size:13px;color:var(--tx3);">📬 Private Messages for You</div></div>
         <div id="private-notices-list"></div>
       </div>
     </div>
@@ -896,10 +888,21 @@ Sign in with Google
     <div class="mo-f"><button class="btn" onclick="closeMo()">Close</button></div>
   </div>
   <div class="mo-b" id="mo-notice" style="display:none;">
-    <div class="mo-t"><span id="mo-notice-t">Post Notice</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <div class="mo-t"><span id="mo-notice-t">Post Announcement</span><button class="mo-x" onclick="closeMo()">✕</button></div>
     <input type="hidden" id="notice-edit-idx" value="-1"/>
-    <div class="fr"><label>Title</label><input id="notice-title-inp" placeholder="Notice title…"/></div>
+    <div class="fr"><label>Photo (optional)</label>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img id="notice-photo-preview" style="display:none;width:60px;height:60px;object-fit:cover;border-radius:var(--r);">
+        <label style="cursor:pointer;padding:7px 12px;background:var(--sf3);border-radius:var(--r);font-size:12px;color:var(--tx2);">📷 Photo<input type="file" accept="image/*" style="display:none;" onchange="previewNoticePhoto(this)"></label>
+        <input type="hidden" id="notice-photo-data">
+      </div>
+    </div>
+    <div class="fr"><label>Title</label><input id="notice-title-inp" placeholder="Announcement title…"/></div>
     <div class="fr"><label>Body</label><textarea id="notice-body-inp" placeholder="Write the announcement…" style="min-height:110px;"></textarea></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+      <input type="checkbox" id="notice-pin-inp" style="width:16px;height:16px;cursor:pointer;">
+      <label for="notice-pin-inp" style="font-size:13px;cursor:pointer;color:var(--tx);">📌 Pin this announcement</label>
+    </div>
     <div class="mo-f">
       <button class="btn" onclick="closeMo()">Cancel</button>
       <button class="btn btn-p" onclick="saveNotice()">Post</button>
@@ -920,7 +923,16 @@ Sign in with Google
   <!-- ABOUT US MODAL -->
   <div class="mo-b" id="mo-about" style="display:none;">
     <div class="mo-t"><span>Edit About Us</span><button class="mo-x" onclick="closeMo()">✕</button></div>
-    <div class="fr"><label>Content</label><textarea id="about-inp" placeholder="Write about Fityahal organisation…" style="min-height:220px;"></textarea></div>
+    <div class="fr"><label>Cover Photo</label>
+      <div style="text-align:center;margin-bottom:6px;">
+        <img id="about-photo-preview" style="display:none;width:100%;max-height:140px;object-fit:cover;border-radius:var(--r);margin-bottom:6px;">
+        <label style="cursor:pointer;display:inline-block;padding:7px 14px;background:var(--sf3);border-radius:var(--r);font-size:12px;color:var(--tx2);">📷 Upload Photo<input type="file" accept="image/*" style="display:none;" onchange="previewAboutPhoto(this)"></label>
+      </div>
+    </div>
+    <div class="fr"><label>Headline</label><input id="about-headline-inp" placeholder="e.g. Fityahal — Since 2020"/></div>
+    <div class="fr"><label>About / Description</label><textarea id="about-inp" placeholder="Write about Fityahal organisation…" style="min-height:140px;"></textarea></div>
+    <div class="fr"><label>Facebook Page Link</label><input id="about-fbpage-inp" type="url" placeholder="https://facebook.com/..."/></div>
+    <div class="fr"><label>Facebook Group Link</label><input id="about-fbgroup-inp" type="url" placeholder="https://facebook.com/groups/..."/></div>
     <div class="mo-f">
       <button class="btn" onclick="closeMo()">Cancel</button>
       <button class="btn btn-p" onclick="saveAbout()">Save</button>
@@ -1258,7 +1270,6 @@ function doLogout(){
   document.getElementById('app').classList.remove('show');
   document.getElementById('picker-screen').style.display='none';
   document.getElementById('login-screen').style.display='flex';
-  document.getElementById('readonly-banner').style.display='none';
   const btn=document.getElementById('google-signin-btn');
   if(btn){btn.disabled=false;btn.innerHTML=_gBtnHtml();}
   // Also revoke current Google session so next login shows account picker
@@ -1308,8 +1319,8 @@ async function handleToken(resp){
     // Supreme admin always gets admin role regardless of saved session role
     if(CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase()) CURRENT_ROLE='admin';
     // tb-em removed
-    if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
-    else document.getElementById('readonly-banner').style.display='none';
+    if(CURRENT_ROLE==='viewer')
+    else
     bootApp();return;
   }
 
@@ -1330,7 +1341,7 @@ async function handleToken(resp){
       sessionStorage.setItem('bft_auth','1');
       document.getElementById('login-screen').style.display='none';
       // tb-em removed
-      if(CURRENT_ROLE==='viewer')document.getElementById('readonly-banner').style.display='flex';
+      if(CURRENT_ROLE==='viewer')
       bootApp();return;
     }
 
@@ -1347,7 +1358,6 @@ async function handleToken(resp){
         sessionStorage.setItem('bft_auth','1');
         document.getElementById('login-screen').style.display='none';
         // tb-em removed
-        document.getElementById('readonly-banner').style.display='flex';
         bootApp();return;
       }
     }
@@ -1389,7 +1399,7 @@ async function initSheetHeaders(){
   await sheetsUpdate(`${CONFIG.SHEET_COSTS}!A1:C1`,[['month','amount','description']]);
   // Create extra tabs for shared data
   await ensureSheetTabs();
-  await sheetsUpdate(`${CONFIG.SHEET_NOTICES}!A1:E1`,[['title','body','by','time','private_to']]);
+  await sheetsUpdate(`${CONFIG.SHEET_NOTICES}!A1:G1`,[['title','body','by','time','private_to','pinned','photo']]);
   await sheetsUpdate(`${CONFIG.SHEET_CHAT}!A1:D1`,[['name','email','time','message']]);
   await sheetsUpdate(`${CONFIG.SHEET_NIZAM}!A1:A1`,[['content']]);
   await sheetsUpdate(`${CONFIG.SHEET_PROJECTS}!A1:A1`,[['json']]);
@@ -1441,8 +1451,15 @@ async function loadSharedData(){
     PRIVATE_NOTICES={};
     allNotices.filter(r=>r[4]).forEach(r=>{const to=r[4];if(!PRIVATE_NOTICES[to])PRIVATE_NOTICES[to]=[];PRIVATE_NOTICES[to].push({body:r[1]||'',time:r[3]||''});});
     // Nizam
-    const nizr=await sheetsGet(`${CONFIG.SHEET_NIZAM}!A2:A2`);
-    NIZAM=((nizr.values||[])[0]||[''])[0]||'';
+    const nizr=await sheetsGet(`${CONFIG.SHEET_NIZAM}!A2:C2`);
+    const nizRow=(nizr.values||[])[0]||[];
+    NIZAM=nizRow[0]||'';
+    // Load About Us from col B
+    const aboutStr=nizRow[1]||'';
+    loadAboutFromStr(aboutStr||localStorage.getItem('bft_about')||'');
+    // Load CHAT_MUTED from col C
+    const mutedStr=nizRow[2]||'';
+    if(mutedStr)try{CHAT_MUTED=JSON.parse(mutedStr);}catch(e){}
     // Chat - last 200 msgs
     const chatr=await sheetsGet(`${CONFIG.SHEET_CHAT}!A2:D10000`);
     CHAT_MSGS=((chatr.values||[]).filter(r=>r[0]&&r[3]).map(r=>({name:r[0]||'',email:r[1]||'',time:r[2]||'',txt:r[3]||''}))).slice(-200);
@@ -1476,11 +1493,11 @@ async function saveToSheet(){
 async function saveNotices(){
   if(CURRENT_ROLE!=='admin'){toast('Admin only','t-err');return;}
   try{
-    await sheetsClear(`${CONFIG.SHEET_NOTICES}!A2:E10000`);
+    await sheetsClear(`${CONFIG.SHEET_NOTICES}!A2:G10000`);
     const rows=[];
-    NOTICES.forEach(n=>rows.push([n.title||'',n.body||'',n.by||'',n.time||'','']));
+    NOTICES.forEach(n=>rows.push([n.title||'',n.body||'',n.by||'',n.time||'','',n.pinned?'1':'',n.photo||'']));
     Object.entries(PRIVATE_NOTICES).forEach(([email,msgs])=>{msgs.forEach(m=>rows.push(['Private',''+m.body,'Admin',m.time||'',email]));});
-    if(rows.length)await sheetsUpdate(`${CONFIG.SHEET_NOTICES}!A2:E${1+rows.length}`,rows);
+    if(rows.length)await sheetsUpdate(`${CONFIG.SHEET_NOTICES}!A2:G${1+rows.length}`,rows);
   }catch(e){console.error('saveNotices',e);toast('Notice save failed','t-err');}
 }
 
@@ -1579,7 +1596,6 @@ async function bootApp(){
   // Enforce supreme admin — always admin, never readonly
   if(CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase()){
     CURRENT_ROLE='admin';
-    document.getElementById('readonly-banner').style.display='none';
     sessionStorage.setItem('bft_role','admin');
   }
   // Auto-poll ALL shared data every 15 seconds from Sheets
@@ -1599,8 +1615,18 @@ async function bootApp(){
   startChatPoll();
   // Profile
   renderProfile();
-  // About Us - load from local first, then try sheet
-  ABOUT_US=localStorage.getItem('bft_about')||'';
+  requestNotifPermission();
+  // Show pending payment alert for admins
+  setTimeout(()=>{
+    const pending=PENDING_PAYS.filter(p=>p.status==='pending');
+    if(pending.length&&CURRENT_ROLE==='admin'){
+      pushNotif('⏳',`${pending.length} pending payment${pending.length>1?'s':''} await your approval`);
+    }
+  },2000);
+  // Show bKash in nav for non-supreme members
+  const bkBtn=document.getElementById('bkash-nav-btn');
+  if(bkBtn)bkBtn.style.display=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase()?'none':'';
+  // About Us - loaded via loadSharedData → loadAboutFromStr
   renderAbout();
   // First login nizam
   const loginKey='bft_first_login_'+CURRENT_EMAIL;
@@ -1735,7 +1761,10 @@ function renderMC(){
   const allKeys=activeMonthKeys();
   const currentEmail=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
   let h='';
-  MEM.forEach((r,i)=>{
+  MEM.filter(r=>!(r.email&&r.email.toLowerCase()===SUPREME_ADMIN.toLowerCase())).forEach((r,i)=>{
+    // Re-index: get original index
+    const origIdx=MEM.findIndex(m=>m.name===r.name);
+    const i=origIdx;
     const mp=gp(r.name);let tm=0,tb=0,act=0;
     Object.values(mp).forEach(p=>{tm+=p.m;tb+=p.b;if(p.m>0||p.b>0)act++;});
     const badge=act>0?`<span class="badge b-par">${act} mo</span>`:`<span class="badge b-none">—</span>`;
@@ -1936,7 +1965,7 @@ function savePay(){
   const mi=document.getElementById('pay-mem').value,mk=getPayKey();
   if(mi===''||!mk){toast('Select member, year and month','t-err');return;}
   const m=parseFloat(document.getElementById('pay-m').value)||0,b=parseFloat(document.getElementById('pay-b').value)||0;
-  if(!m&&!b){toast('Enter at least one amount','t-err');return;}
+  // Allow zero amounts (to clear/reset a payment entry)
   const name=MEM[parseInt(mi)].name;
   snapshot('Payment: '+name+' '+keyToFull(mk));
   ep(name);PAY[name][mk]={m,b};
@@ -2101,25 +2130,43 @@ function openNoticeMo(editIdx=-1){
     const n=NOTICES[editIdx];
     document.getElementById('notice-title-inp').value=n.title;
     document.getElementById('notice-body-inp').value=n.body;
-    document.getElementById('mo-notice-t').textContent='Edit Notice';
+    document.getElementById('mo-notice-t').textContent='Edit Announcement';
   } else {
     document.getElementById('notice-title-inp').value='';
     document.getElementById('notice-body-inp').value='';
-    document.getElementById('mo-notice-t').textContent='Post Notice';
+    document.getElementById('mo-notice-t').textContent='Post Announcement';
   }
   openMo('mo-notice');
+}
+
+function previewNoticePhoto(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const d=e.target.result;
+    document.getElementById('notice-photo-data').value=d;
+    const prev=document.getElementById('notice-photo-preview');
+    prev.src=d;prev.style.display='';
+  };
+  reader.readAsDataURL(file);
 }
 function saveNotice(){
   const title=document.getElementById('notice-title-inp').value.trim();
   const body=document.getElementById('notice-body-inp').value.trim();
   if(!title||!body){toast('Title and message required','t-err');return;}
   const idx=parseInt(document.getElementById('notice-edit-idx').value);
-  const entry={title,body,by:CURRENT_EMAIL||'Admin',time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})};
+  const pinned=document.getElementById('notice-pin-inp')?.checked||false;
+  const photo=document.getElementById('notice-photo-data')?.value||'';
+  const entry={title,body,by:CURRENT_EMAIL||'Admin',
+    time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+    pinned,photo:(idx>=0&&!photo)?(NOTICES[idx]?.photo||''):photo};
   if(idx>=0) NOTICES[idx]=entry;
   else NOTICES.unshift(entry);
+  // Re-sort after adding
+  NOTICES.sort((a,b)=>{if(a.pinned&&!b.pinned)return -1;if(!a.pinned&&b.pinned)return 1;return b.time.localeCompare(a.time);});
   saveNotices().then(()=>{
     logActivity('📢','Notice posted: '+title);
-    toast('Notice posted!');closeMo();renderNoticeBoard();
+    toast('Announcement posted!');closeMo();renderNoticeBoard();
     pushNotif('📢','New notice: '+title);
   });
 }
@@ -2128,35 +2175,48 @@ async function deleteNotice(idx){
   if(!ok)return;
   NOTICES.splice(idx,1);
   await saveNotices();
-  renderNoticeBoard();toast('Notice removed');
+  renderNoticeBoard();toast('Announcement removed');
 }
 function renderNoticeBoard(){
   const isAdmin=CURRENT_ROLE==='admin';
+  const isSupreme=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
   const addBtn=document.getElementById('add-notice-btn');
   const pnBtn=document.getElementById('send-pnotice-btn');
   if(addBtn)addBtn.style.display=isAdmin?'':'none';
   if(pnBtn)pnBtn.style.display=isAdmin?'':'none';
   const el=document.getElementById('notice-list');
-  if(!NOTICES.length){el.innerHTML='<div class="empty"><div class="ei">📢</div><div>No notices yet.</div></div>';}
+  if(!NOTICES.length){el.innerHTML='<div class="empty"><div class="ei">📢</div><div>No announcements yet.</div></div>';}
   else{
-    el.innerHTML=NOTICES.map((n,i)=>`<div class="notice-item">
+    el.innerHTML=NOTICES.map((n,i)=>`<div class="notice-item" style="${n.pinned?'border:1.5px solid var(--am);':''}">
+      ${n.pinned?'<div style="font-size:10px;font-weight:800;color:var(--am-t);margin-bottom:6px;letter-spacing:.5px;">📌 PINNED</div>':''}
+      ${n.photo?`<img src="${n.photo}" style="width:100%;max-height:180px;object-fit:cover;border-radius:var(--r);margin-bottom:10px;">`:''}
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
         <div class="ni-title">${n.title}</div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">${isAdmin?`<button class="btn btn-sm btn-gh" onclick="openNoticeMo(${i})">Edit</button><button class="btn btn-sm btn-d" onclick="deleteNotice(${i})">✕</button>`:''}</div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">${isAdmin?`<button class="btn btn-sm btn-gh" onclick="openNoticeMo(${i})" title="${n.pinned?'Unpin':'Pin'}">📌</button><button class="btn btn-sm btn-gh" onclick="openNoticeMo(${i})">Edit</button><button class="btn btn-sm btn-d" onclick="deleteNotice(${i})">✕</button>`:''}</div>
       </div>
       <div class="ni-body">${n.body}</div>
       <div class="ni-meta"><span class="ni-tag">📢 ${n.by||'Admin'}</span><span>${n.time}</span></div>
     </div>`).join('');
   }
-  // Private notices
+  // Private notices — supreme admin sees all, others see their own
   const email=(CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'').toLowerCase();
-  const myPN=(PRIVATE_NOTICES[email]||[]);
+  let myPN=[];
+  if(isSupreme){
+    // Supreme admin sees all private notices
+    Object.entries(PRIVATE_NOTICES).forEach(([to,msgs])=>{
+      msgs.forEach(m=>myPN.push({...m,to}));
+    });
+    myPN.sort((a,b)=>b.time.localeCompare(a.time));
+  } else {
+    myPN=PRIVATE_NOTICES[email]||[];
+  }
   const pnWrap=document.getElementById('private-notices-wrap');
   const pnList=document.getElementById('private-notices-list');
   if(pnWrap){
     if(myPN.length){
       pnWrap.style.display='';
       if(pnList)pnList.innerHTML=myPN.map(n=>`<div class="notice-item" style="border-left:3px solid var(--pu);">
+        ${isSupreme&&n.to?`<div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">To: ${n.to}</div>`:''}
         <div class="pn-badge">Private Notice</div>
         <div class="pn-msg">${n.body}</div>
         <div class="pn-time">${n.time}</div>
@@ -2322,62 +2382,122 @@ function openMuteModal(){
   MEM.forEach(r=>{if(r.email){const o=document.createElement('option');o.value=r.email;o.textContent=r.name+(CHAT_MUTED[r.email]?' ('+CHAT_MUTED[r.email]+')':'');sel.appendChild(o);}});
   openMo('mo-mute');
 }
-function applyMute(){
+async function applyMute(){
   const email=document.getElementById('mute-mem').value;
   const action=document.getElementById('mute-action').value;
   if(!email){toast('Select a member','t-err');return;}
-  // Supreme admin cannot be moderated by regular admins
   if(email.toLowerCase()===SUPREME_ADMIN.toLowerCase()&&CURRENT_EMAIL.toLowerCase()!==SUPREME_ADMIN.toLowerCase()){
     toast('⚠ Cannot moderate the supreme admin','t-err');return;
   }
   if(action==='unmute') delete CHAT_MUTED[email];
   else CHAT_MUTED[email]=action;
   localStorage.setItem('bft_muted',JSON.stringify(CHAT_MUTED));
+  // Also persist to Sheets so it works across browsers
+  try{
+    await sheetsClear(`${CONFIG.SHEET_NIZAM}!C2:C2`);
+    await sheetsUpdate(`${CONFIG.SHEET_NIZAM}!C2:C2`,[[JSON.stringify(CHAT_MUTED)]]);
+  }catch(e){}
   logActivity('💬','Chat moderation: '+email+' → '+action);
-  toast(action==='unmute'?'Restriction removed':'Moderation applied!');
+  toast(action==='unmute'?'✅ Restriction removed':'🔇 Moderation applied!');
   closeMo();renderChat();
-  // Show popup notification for the moderated action
   const actionLabel=action==='ban'?'permanently banned':action==='suspend'?'suspended':action==='mute'?'muted':'unrestricted';
-  pushNotif('🔇',`Member ${email} is now ${actionLabel}`);
+  pushNotif('🔇',`${email} is now ${actionLabel}`);
 }
 
 // ══ ABOUT US ══════════════════════════════════════════════════════════════════
-let ABOUT_US=localStorage.getItem('bft_about')||'';
+// ABOUT_US stored in Sheets (SHEET_NIZAM col B) + localStorage fallback
+let ABOUT_US = {
+  headline: '',
+  body: '',
+  fbPage: '',
+  fbGroup: '',
+  photo: ''
+};
 
-function renderAbout(){
-  const isAdmin=CURRENT_ROLE==='admin';
-  const btn=document.getElementById('edit-about-btn');
-  if(btn)btn.style.display=isAdmin?'':'none';
-  const textEl=document.getElementById('about-text');
-  const emptyEl=document.getElementById('about-empty');
-  if(ABOUT_US){
-    if(textEl){textEl.textContent=ABOUT_US;textEl.style.display='';}
-    if(emptyEl)emptyEl.style.display='none';
-  } else {
-    if(textEl)textEl.style.display='none';
-    if(emptyEl)emptyEl.style.display='';
+function loadAboutFromStr(str) {
+  if (!str) return;
+  try { ABOUT_US = JSON.parse(str); }
+  catch(e) {
+    // legacy plain text
+    ABOUT_US = { headline: 'Fityahal', body: str, fbPage: '', fbGroup: '', photo: '' };
   }
 }
 
-function openAboutEdit(){
-  document.getElementById('about-inp').value=ABOUT_US;
+function renderAbout() {
+  const isAdmin = CURRENT_ROLE === 'admin';
+  const btn = document.getElementById('edit-about-btn');
+  if (btn) btn.style.display = isAdmin ? '' : 'none';
+  const container = document.getElementById('about-content');
+  if (!container) return;
+  const a = ABOUT_US;
+  const hasContent = a.headline || a.body || a.fbPage || a.fbGroup || a.photo;
+  // Supreme admin card
+  const supremeMem = MEM.find(m=>m.email&&m.email.toLowerCase()===SUPREME_ADMIN.toLowerCase());
+  const supremeSection = supremeMem ? `<div style="margin-bottom:1.5rem;background:linear-gradient(135deg,rgba(255,200,40,.08),rgba(157,122,250,.08));border:1.5px solid rgba(255,200,40,.3);border-radius:var(--rxl);padding:1.5rem;display:flex;align-items:center;gap:1rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,200,40,.03),transparent);pointer-events:none;"></div>
+    <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ffd94d,#9d7afa);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 4px 20px rgba(200,160,255,.4);">${supremeMem.photo?`<img src="${MEMBER_PHOTOS[supremeMem.name]||supremeMem.photo}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;">`:ini(supremeMem.name)}</div>
+    <div>
+      <div style="font-size:11px;font-weight:800;color:#ffd94d;letter-spacing:1px;margin-bottom:4px;">👑 SUPREME ADMIN</div>
+      <div style="font-size:16px;font-weight:800;color:var(--tx);">${supremeMem.name}</div>
+      ${supremeMem.phone?`<div style="font-size:12px;color:var(--tx3);margin-top:2px;">📞 ${supremeMem.phone}</div>`:''}
+    </div>
+  </div>` : '';
+  if (!hasContent) {
+    container.innerHTML = supremeSection + '<div class="empty"><div class="ei">🏢</div><div>No information added yet.</div></div>';
+    return;
+  }
+  let html = supremeSection;
+  if (a.photo) html += `<img src="${a.photo}" style="width:100%;max-height:220px;object-fit:cover;border-radius:var(--rl);margin-bottom:1rem;">`;
+  if (a.headline) html += `<h2 style="font-size:20px;font-weight:800;color:var(--tx);margin-bottom:.75rem;">${a.headline}</h2>`;
+  if (a.body) html += `<p style="font-size:14px;color:var(--tx2);line-height:1.9;white-space:pre-wrap;margin-bottom:1rem;">${a.body}</p>`;
+  if (a.fbPage || a.fbGroup) {
+    html += '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:.5rem;">';
+    if (a.fbPage) html += `<a href="${a.fbPage}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:#1877f2;color:#fff;border-radius:var(--r);text-decoration:none;font-size:13px;font-weight:600;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook Page</a>`;
+    if (a.fbGroup) html += `<a href="${a.fbGroup}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:#1877f2;color:#fff;border-radius:var(--r);text-decoration:none;font-size:13px;font-weight:600;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook Group</a>`;
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function openAboutEdit() {
+  const a = ABOUT_US;
+  document.getElementById('about-headline-inp').value = a.headline || '';
+  document.getElementById('about-inp').value = a.body || '';
+  document.getElementById('about-fbpage-inp').value = a.fbPage || '';
+  document.getElementById('about-fbgroup-inp').value = a.fbGroup || '';
+  document.getElementById('about-photo-preview').src = a.photo || '';
+  document.getElementById('about-photo-preview').style.display = a.photo ? '' : 'none';
   openMo('mo-about');
 }
 
-async function saveAbout(){
-  ABOUT_US=document.getElementById('about-inp').value;
-  localStorage.setItem('bft_about',ABOUT_US);
-  // Also save to a sheet cell if possible
-  try{
+function previewAboutPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    ABOUT_US.photo = e.target.result;
+    const prev = document.getElementById('about-photo-preview');
+    prev.src = e.target.result; prev.style.display = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveAbout() {
+  ABOUT_US.headline = document.getElementById('about-headline-inp').value.trim();
+  ABOUT_US.body = document.getElementById('about-inp').value.trim();
+  ABOUT_US.fbPage = document.getElementById('about-fbpage-inp').value.trim();
+  ABOUT_US.fbGroup = document.getElementById('about-fbgroup-inp').value.trim();
+  const str = JSON.stringify(ABOUT_US);
+  localStorage.setItem('bft_about', str);
+  try {
     await sheetsClear(`${CONFIG.SHEET_NIZAM}!B2:B2`);
-    await sheetsUpdate(`${CONFIG.SHEET_NIZAM}!B2:B2`,[[ABOUT_US]]);
-  }catch(e){/* ok, local only */}
+    await sheetsUpdate(`${CONFIG.SHEET_NIZAM}!B2:B2`, [[str]]);
+  } catch(e) { /* local only ok */ }
   logActivity('🏢','About Us updated');
-  toast('About Us saved!');closeMo();renderAbout();
+  toast('About Us saved!'); closeMo(); renderAbout();
 }
 
 // ══ BKASH PAYMENT ════════════════════════════════════════════════════════════
-const BKASH_NUMBER='01785853252'; // update this number
+const BKASH_NUMBER='01785853252';
 
 function openBkashModal(memberName){
   const myMem=MEM.find(r=>r.name===memberName)||MEM.find(r=>r.email&&r.email.toLowerCase()===CURRENT_EMAIL.toLowerCase());
@@ -2637,6 +2757,16 @@ function renderProfile(){
 function pushNotif(icon,txt){
   toast(icon+' '+txt,'t-info');
   logActivity(icon,txt);
+  // Browser notification if permission granted
+  if(Notification&&Notification.permission==='granted'){
+    try{new Notification('Fityahal — '+icon,{body:txt,icon:'https://instasize.com/api/image/b991d8a9d15515996e724e5b54e9429bbdecce49b0f2a2eeed7aa2e5142987a1.png'});}catch(e){}
+  }
+}
+// Request notification permission on boot
+function requestNotifPermission(){
+  if(Notification&&Notification.permission==='default'){
+    Notification.requestPermission().catch(()=>{});
+  }
 }
 
 
@@ -2689,7 +2819,7 @@ async function submitMemberPayment(){
   if(!y||mo===''){toast('Select year and month','t-err');return;}
   const m=parseFloat(document.getElementById('mempay-m').value)||0;
   const b=parseFloat(document.getElementById('mempay-b').value)||0;
-  if(!m&&!b){toast('Enter at least one amount','t-err');return;}
+  // Allow zero amounts (to clear/reset a payment entry)
   const note=document.getElementById('mempay-note').value.trim();
   const key=mkKey(parseInt(y),parseInt(mo));
   const myMem=MEM.find(r=>r.email&&r.email.toLowerCase()===CURRENT_EMAIL.toLowerCase());
