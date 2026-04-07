@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Account Book — Fityahal</title>
 <script src="https://accounts.google.com/gsi/client"></script>
 <style>
@@ -118,9 +121,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #app.show{display:flex;}
 
 /* ══ TOPBAR ══ */
-.topbar{background:rgba(17,24,39,.95);border-bottom:1px solid var(--br);padding:0;height:52px;display:flex;align-items:stretch;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.topbar{background:rgba(17,24,39,.95);border-bottom:1px solid var(--br);padding:0;height:52px;display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
 .tb-l{padding:0 1rem;flex-shrink:0;}
-.tb-nav{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;justify-content:center;}
+.tb-nav{display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;justify-content:center;}
 .tb-nav::-webkit-scrollbar{display:none;}
 .tb-nav .nb{padding:0 12px;height:100%;border-bottom:3px solid transparent;border-top:none;display:flex;align-items:center;font-size:13px;}
 .tb-nav .nb.active{background:rgba(91,141,238,.08);color:var(--ac-t);border-bottom-color:var(--ac);}
@@ -827,9 +830,10 @@ Sign in with Google
     </div>
     <div id="pay-existing" style="min-height:18px;margin-bottom:4px;padding:0 2px;"></div>
     <div class="fg">
-      <div class="fr"><label>Monthly Fee (৳)</label><input id="pay-m" type="number" min="0" step="0.01" placeholder="0.00"/></div>
-      <div class="fr"><label>Book Fund (৳)</label><input id="pay-b" type="number" min="0" step="0.01" placeholder="0.00"/></div>
+      <div class="fr"><label>Monthly Fee (৳)</label><input id="pay-m" type="number" min="0" step="0.01" placeholder="0"/></div>
+      <div class="fr"><label>Book Fund (৳)</label><input id="pay-b" type="number" min="0" step="0.01" placeholder="0"/></div>
     </div>
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:.75rem;padding:0 2px;">Tip: You can enter 0 for either field. Leave both as 0 to record a ৳0 payment.</div>
     <div class="mo-f">
       <button class="btn" onclick="closeMo()">Cancel</button>
       <button class="btn btn-p" onclick="savePay()">Save Payment</button>
@@ -871,8 +875,8 @@ Sign in with Google
       <div class="fr"><label>Month</label><select id="mempay-mo"></select></div>
     </div>
     <div class="fg">
-      <div class="fr"><label>Monthly Fee (৳)</label><input id="mempay-m" type="number" min="0" step="0.01" placeholder="0.00"/></div>
-      <div class="fr"><label>Book Fund (৳)</label><input id="mempay-b" type="number" min="0" step="0.01" placeholder="0.00"/></div>
+      <div class="fr"><label>Monthly Fee (৳)</label><input id="mempay-m" type="number" min="0" step="0.01" placeholder="0"/></div>
+      <div class="fr"><label>Book Fund (৳)</label><input id="mempay-b" type="number" min="0" step="0.01" placeholder="0"/></div>
     </div>
     <div class="fr"><label>Note (optional)</label><input id="mempay-note" placeholder="Any details…"/></div>
     <div class="mo-f">
