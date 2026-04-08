@@ -1255,7 +1255,7 @@ function startGoogleLogin(){
     showLoginError('Google services not loaded. Check internet connection and refresh the page.');return;
   }
   if(!tokenClient){
-    showLoginError('OAuth not ready. Your domain <strong>'+location.hostname+'</strong> may not be authorised in Google Cloud Console → Credentials → OAuth Client → Authorized JavaScript Origins.');return;
+    showLoginError('Sign-in not ready. If you just deployed this app, add <strong>'+location.origin+'</strong> to your Google Cloud Console OAuth Client → Authorized JavaScript Origins. Then wait 5 min and refresh.');return;
   }
   const btn=document.getElementById('google-signin-btn');
   btn.disabled=true;
@@ -1263,7 +1263,9 @@ function startGoogleLogin(){
   try{
     tokenClient.requestAccessToken({prompt:'select_account'});
   }catch(e){
-    showLoginError('Sign-in failed: '+e.message+'. Allow pop-ups for this site and try again.');
+    const b=document.getElementById('google-signin-btn');
+    if(b){b.disabled=false;b.innerHTML=_gBtnHtml();}
+    showLoginError('Sign-in failed: '+e.message);
   }
 }
 
@@ -1288,9 +1290,15 @@ function initGoogleAuth(){
       scope:CONFIG.SCOPES,
       callback:handleToken,
       error_callback:(err)=>{
-        console.error('OAuth error_callback:',err);
-        const type=(err&&err.type)?err.type:'unknown';
-        showLoginError('OAuth error ('+type+'). Add <strong>'+location.origin+'</strong> to Google Cloud Console → Credentials → OAuth 2.0 Client → Authorized JavaScript Origins, then refresh.');
+        console.error('OAuth error:',err);
+        const type=(err&&err.type)?err.type:'';
+        if(type==='popup_closed'||type==='popup_failed_to_open'){
+          // User closed popup or popup blocked - just re-enable button
+          const b=document.getElementById('google-signin-btn');
+          if(b){b.disabled=false;b.innerHTML=_gBtnHtml();}
+        } else {
+          showLoginError('Google sign-in error. Make sure <strong>'+location.origin+'</strong> is added to your OAuth Client Authorized JavaScript Origins in Google Cloud Console.');
+        }
       }
     });
     if(sessionStorage.getItem('bft_auth')==='1'){
@@ -2902,19 +2910,17 @@ function toggleBookBorrow(name){
 }
 
 window.addEventListener('load',()=>{
-  // Set button HTML (needs _gBtnHtml to be defined first)
   const btn=document.getElementById('google-signin-btn');
   if(btn) btn.innerHTML=_gBtnHtml();
-
-  // Show current domain in hint for easier setup
-  const hint=document.querySelector('.l-hint');
   let tries=0;
   const wait=setInterval(()=>{
     tries++;
-    if(window.google&&google.accounts&&google.accounts.oauth2){clearInterval(wait);initGoogleAuth();}
-    else if(tries>60){
+    if(window.google&&google.accounts&&google.accounts.oauth2){
       clearInterval(wait);
-      showLoginError('Google services failed to load after 6 seconds. Check internet connection and refresh.');
+      initGoogleAuth();
+    } else if(tries>60){
+      clearInterval(wait);
+      showLoginError('Google services could not load. Please check your internet connection and refresh.');
     }
   },100);
 });
