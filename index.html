@@ -1331,8 +1331,6 @@ async function handleToken(resp){
     // Supreme admin always gets admin role regardless of saved session role
     if(CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase()) CURRENT_ROLE='admin';
     // tb-em removed
-    if(CURRENT_ROLE==='viewer')
-    else
     bootApp();return;
   }
 
@@ -1773,10 +1771,9 @@ function renderMC(){
   const allKeys=activeMonthKeys();
   const currentEmail=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
   let h='';
-  MEM.filter(r=>!(r.email&&r.email.toLowerCase()===SUPREME_ADMIN.toLowerCase())).forEach((r,i)=>{
-    // Re-index: get original index
-    const origIdx=MEM.findIndex(m=>m.name===r.name);
-    const i=origIdx;
+  MEM.filter(r=>!(r.email&&r.email.toLowerCase()===SUPREME_ADMIN.toLowerCase())).forEach((r,_idx)=>{
+    // Get original index for button actions
+    const i=MEM.findIndex(m=>m.name===r.name);
     const mp=gp(r.name);let tm=0,tb=0,act=0;
     Object.values(mp).forEach(p=>{tm+=p.m;tb+=p.b;if(p.m>0||p.b>0)act++;});
     const badge=act>0?`<span class="badge b-par">${act} mo</span>`:`<span class="badge b-none">—</span>`;
