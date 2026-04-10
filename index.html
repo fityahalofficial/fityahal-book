@@ -750,8 +750,8 @@ Sign in with Google
       </div>
       <div id="chat-msgs" style="height:calc(100vh - 200px);max-height:520px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;"></div>
       <div id="chat-footer" style="display:flex;gap:8px;padding:10px 1rem;border-top:1px solid var(--br);background:var(--sf2);">
-        <input class="chat-input" id="chat-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatMsg()"/>
-        <button class="chat-send" onclick="sendChatMsg()">Send</button>
+        <input class="chat-input" id="chat-input" placeholder="Type a message…"/>
+        <button class="chat-send" id="chat-send-btn" onclick="sendChatMsg()">Send</button>
       </div>
     </div>
 
@@ -1455,9 +1455,9 @@ async function loadFromSheet(){
 async function loadSharedData(){
   try{
     // Notices: title,body,by,time,private_to
-    const nr=await sheetsGet(`${CONFIG.SHEET_NOTICES}!A2:E2000`);
+    const nr=await sheetsGet(`${CONFIG.SHEET_NOTICES}!A2:G2000`);
     const allNotices=(nr.values||[]).filter(r=>r[0]);
-    NOTICES=allNotices.filter(r=>!r[4]).map(r=>({title:r[0]||'',body:r[1]||'',by:r[2]||'',time:r[3]||''}));
+    NOTICES=allNotices.filter(r=>!r[4]).map(r=>({title:r[0]||'',body:r[1]||'',by:r[2]||'',time:r[3]||'',pinned:r[5]==='1',photo:r[6]||''}));
     PRIVATE_NOTICES={};
     allNotices.filter(r=>r[4]).forEach(r=>{const to=r[4];if(!PRIVATE_NOTICES[to])PRIVATE_NOTICES[to]=[];PRIVATE_NOTICES[to].push({body:r[1]||'',time:r[3]||''});});
     // Nizam
@@ -2308,10 +2308,17 @@ function renderNizam(){
 
 // ══ CHAT ═════════════════════════════════════════════════════════════════════
 let _chatLastCount=0;
+function initChatInput(){
+  const inp=document.getElementById('chat-input');
+  if(inp&&!inp._listenerAttached){
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMsg();}});
+    inp._listenerAttached=true;
+  }
+}
 async function sendChatMsg(){
   const el=document.getElementById('chat-input');
   if(!el)return;
-  const txt=el.value.trim();if(!txt)return;
+  const txt=el.value.trim();if(!txt){el.focus();return;}
   const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'unknown';
   const muted=CHAT_MUTED[email];
   if(muted==='ban'){toast('You are permanently banned from chat','t-err');return;}
@@ -2346,9 +2353,16 @@ function renderChat(){
   const muted=CHAT_MUTED[email];
   const footer=document.getElementById('chat-footer');
   if(muted&&muted!=='unmute'){
-    footer.innerHTML=`<div style="flex:1;text-align:center;color:var(--rd-t);font-size:13px;padding:8px;">🚫 You are ${muted==='ban'?'permanently banned':muted==='suspend'?'suspended':'muted'} from this chat.</div>`;
+    if(!footer.querySelector('.muted-notice')){
+      footer.innerHTML=`<div class="muted-notice" style="flex:1;text-align:center;color:var(--rd-t);font-size:13px;padding:8px;">🚫 You are ${muted==='ban'?'permanently banned':muted==='suspend'?'suspended':'muted'} from this chat.</div>`;
+    }
   } else {
-    footer.innerHTML=`<input class="chat-input" id="chat-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatMsg()"/><button class="chat-send" onclick="sendChatMsg()">Send</button>`;
+    // Only rebuild footer if input doesn't exist yet
+    if(!document.getElementById('chat-input')){
+      footer.innerHTML=`<input class="chat-input" id="chat-input" placeholder="Type a message…"/><button class="chat-send" onclick="sendChatMsg()">Send</button>`;
+      const inp=document.getElementById('chat-input');
+      inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMsg();}});
+    }
   }
   const el=document.getElementById('chat-msgs');
   if(!CHAT_MSGS.length){el.innerHTML='<div class="empty"><div class="ei">💬</div><div>No messages yet. Say hello!</div></div>';return;}
@@ -2361,7 +2375,10 @@ function renderChat(){
     const avatarHtml=photo
       ?`<img src="${photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">`
       :`<div style="width:28px;height:28px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">${ini(m.name)}</div>`;
-    const delBtn=isAdmin&&!mine?`<button title="Delete" onclick="deleteChatMsg('${m.time}','${m.email}')" style="background:none;border:none;color:var(--rd-t);cursor:pointer;font-size:10px;padding:0 3px;opacity:.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">✕</button>`:'';
+    const senderIsSupreme=m.email&&m.email.toLowerCase()===SUPREME_ADMIN.toLowerCase();
+    const isSupremeUser=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
+    const canDelete=(!senderIsSupreme||isSupremeUser)&&(mine||(isAdmin&&!mine));
+    const delBtn=canDelete?`<button title="Delete for everyone" onclick="deleteChatMsg('${m.time}','${m.email}')" style="background:none;border:none;color:var(--rd-t);cursor:pointer;font-size:11px;padding:0 4px;opacity:.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">✕</button>`:'';
     return `<div class="chat-msg ${mine?'msg-mine':'msg-other'}" style="display:flex;gap:7px;align-items:flex-end;${mine?'flex-direction:row-reverse;':''}">
       ${!mine?avatarHtml:''}
       <div style="max-width:72%;">
@@ -2372,6 +2389,7 @@ function renderChat(){
     </div>`;
   }).join('');
   if(wasAtBottom||CHAT_MSGS.length<=3)el.scrollTop=el.scrollHeight;
+  initChatInput();
 }
 
 
