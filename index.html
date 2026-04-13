@@ -8,7 +8,7 @@
 <meta http-equiv="Expires" content="0">
 <title>Account Book — Fityahal</title>
 <script src="https://accounts.google.com/gsi/client"></script>
-<style>
+<style><style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -121,16 +121,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #app.show{display:flex;}
 
 /* ══ TOPBAR ══ */
-.tb-nav{display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;justify-content:center;}
-.tb-nav::-webkit-scrollbar{display:none;}
-.tb-nav .nb{padding:0 12px;height:100%;border-bottom:3px solid transparent;border-top:none;display:flex;align-items:center;font-size:13px;}
-.tb-nav .nb.active{background:rgba(91,141,238,.08);color:var(--ac-t);border-bottom-color:var(--ac);}
-.tb-nav .nb:hover{color:var(--tx);background:rgba(255,255,255,.04);}
+
 .tb-logo{width:34px;height:34px;background:var(--g1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 12px rgba(91,141,238,.35);overflow:hidden;flex-shrink:0;}
 .tb-logo img{width:100%;height:100%;object-fit:cover;}
 .tb-ttl{font-size:15px;font-weight:800;letter-spacing:-.4px;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .tb-r{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;}
-@media(max-width:600px){.tb-ttl{font-size:13px;}}
 .tb-btn{font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--br2);cursor:pointer;background:transparent;color:var(--tx2);font-family:var(--fn);transition:all .18s;font-weight:500;white-space:nowrap;}
 .tb-btn:hover{background:var(--sf2);color:var(--tx);border-color:var(--br3);}
 .tb-btn:disabled{opacity:.2;cursor:not-allowed;}
@@ -479,15 +474,15 @@ body.theme-night{
 /* ══ TOPBAR ══ */
 .topbar{background:rgba(17,24,39,.95);border-bottom:1px solid var(--br);height:52px;display:flex;align-items:stretch;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
 .tb-brand{display:flex;align-items:center;gap:8px;padding:0 .75rem;flex-shrink:0;}
+.tb-profile-btn{display:flex;flex-direction:column;align-items:center;font-size:10px;padding:5px 10px;gap:1px;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);cursor:pointer;color:var(--tx2);min-width:46px;transition:background .18s;font-family:var(--fn);}
+.tb-profile-btn:hover{background:var(--sf3);}
+
 .tb-nav{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;justify-content:center;}
 .tb-nav::-webkit-scrollbar{display:none;}
 .tb-nav .nb{padding:0 12px;height:100%;border-bottom:3px solid transparent;border-top:none;display:flex;align-items:center;font-size:13px;}
 .tb-nav .nb.active{background:rgba(91,141,238,.08);color:var(--ac-t);border-bottom-color:var(--ac);}
 .tb-nav .nb:hover{color:var(--tx);background:rgba(255,255,255,.04);}
 .tb-actions{display:flex;align-items:center;gap:4px;padding:0 .5rem;flex-shrink:0;}
-.tb-profile-btn{display:flex;flex-direction:column;align-items:center;font-size:10px;padding:5px 10px;gap:1px;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);cursor:pointer;color:var(--tx2);min-width:46px;transition:background .18s;font-family:var(--fn);}
-.tb-profile-btn:hover{background:var(--sf3);}
-
 /* ══ HAMBURGER + MOBILE MENU ══ */
 #hamburger-btn{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:52px;padding:0;cursor:pointer;background:none;border:none;border-left:1px solid var(--br);flex-shrink:0;}
 #hamburger-btn span{display:block;width:20px;height:2px;background:var(--tx);border-radius:2px;transition:all .25s;}
@@ -2403,7 +2398,7 @@ function renderChat(){
   if(!CHAT_MSGS.length){el.innerHTML='<div class="empty"><div class="ei">💬</div><div>No messages yet. Say hello!</div></div>';return;}
   const wasAtBottom=el.scrollTop+el.clientHeight>=el.scrollHeight-20;
   el.innerHTML=CHAT_MSGS.map(m=>{
-    const mine=m.email===email;
+    const mine=m.email&&m.email.toLowerCase()===email.toLowerCase();
     const ts=formatChatTime(m.time);
     const memberObj=MEM.find(r=>r.email&&r.email.toLowerCase()===m.email.toLowerCase());
     const photo=memberObj?MEMBER_PHOTOS[memberObj.name]||memberObj.photo||'':'';
@@ -2412,8 +2407,9 @@ function renderChat(){
       :`<div style="width:28px;height:28px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">${ini(m.name)}</div>`;
     const senderIsSupreme=m.email&&m.email.toLowerCase()===SUPREME_ADMIN.toLowerCase();
     const isSupremeUser=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
-    const canDelete=(!senderIsSupreme||isSupremeUser)&&(mine||(isAdmin&&!mine));
-    const delBtn=canDelete?`<button title="Delete for everyone" onclick="deleteChatMsg('${m.time}','${m.email}')" style="background:none;border:none;color:var(--rd-t);cursor:pointer;font-size:11px;padding:0 4px;opacity:.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">✕</button>`:'';
+    // Delete rules: own msg always deletable; admin can delete others (not supreme); supreme can delete all
+    const canDelete=mine||(isAdmin&&(!senderIsSupreme||isSupremeUser));
+    const delBtn=canDelete?`<button title="Delete" onclick="deleteChatMsg('${m.time}','${m.email}')" style="background:none;border:none;color:var(--rd-t);cursor:pointer;font-size:13px;padding:2px 6px;opacity:0;transition:opacity .2s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0'" ontouchstart="this.style.opacity='1'">🗑</button>`:'';
     return `<div class="chat-msg ${mine?'msg-mine':'msg-other'}" style="display:flex;gap:7px;align-items:flex-end;${mine?'flex-direction:row-reverse;':''}">
       ${!mine?avatarHtml:''}
       <div style="max-width:72%;">
@@ -2429,7 +2425,12 @@ function renderChat(){
 
 
 async function deleteChatMsg(time,senderEmail){
-  if(CURRENT_ROLE!=='admin'&&CURRENT_EMAIL!==senderEmail){toast('Not allowed','t-err');return;}
+  const isAdmin=CURRENT_ROLE==='admin';
+  const isSupreme=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
+  const isOwn=CURRENT_EMAIL.toLowerCase()===(senderEmail||'').toLowerCase();
+  const senderIsSupreme=(senderEmail||'').toLowerCase()===SUPREME_ADMIN.toLowerCase();
+  if(!isOwn&&!isAdmin&&!isSupreme){toast('Not allowed','t-err');return;}
+  if(senderIsSupreme&&!isSupreme){toast('Cannot delete supreme admin messages','t-err');return;}
   CHAT_MSGS=CHAT_MSGS.filter(m=>!(m.time===time&&m.email===senderEmail));
   // Re-save all chat to sheet
   try{
