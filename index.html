@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Account Book — Fityahal</title>
+<title>Account Book — Fityahal v1776147776</title>
 <script src="https://accounts.google.com/gsi/client"></script>
 <style><style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -508,9 +508,9 @@ body.theme-light .topbar{border-bottom-color:var(--br);}
 
 /* ══ CHAT 3-DOT MENU ══ */
 .chat-menu-wrap{position:relative;display:inline-block;}
-.chat-menu-btn{background:none;border:none;cursor:pointer;font-size:16px;color:var(--tx3);padding:2px 6px;opacity:0;transition:opacity .2s;line-height:1;}
-.chat-msg:hover .chat-menu-btn,.chat-menu-btn:focus{opacity:1;}
-.chat-menu-btn:focus{opacity:1;outline:none;}
+.chat-menu-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--tx3);padding:4px 8px;line-height:1;border-radius:var(--r);}
+.chat-menu-btn:hover,.chat-menu-btn:active{background:var(--sf2);color:var(--tx);}
+.chat-menu-btn:focus{outline:none;}
 .chat-dropdown{position:absolute;background:var(--sf);border:1px solid var(--br2);border-radius:var(--rl);box-shadow:var(--sh-m);z-index:1000;min-width:140px;overflow:hidden;display:none;animation:tabIn .15s ease;}
 .chat-dropdown.open{display:block;}
 .msg-mine .chat-dropdown{right:0;}
@@ -1670,6 +1670,7 @@ async function bootApp(){
   // Profile
   renderProfile();
   requestNotifPermission();
+  enforceMobileLayout();
   // Show pending payment alert for admins
   setTimeout(()=>{
     const pending=PENDING_PAYS.filter(p=>p.status==='pending');
@@ -2704,15 +2705,31 @@ function showBkashInfo(){
       if(!p||(!p.m&&!p.b))unpaid.push(keyToFull(k));
     });
   }
-  const unpaidText=unpaid.length>0?`Unpaid months: ${unpaid.slice(-3).join(', ')}${unpaid.length>3?' + more':''}.\n`:'All payments up to date! ✅\n';
-  // Show bKash send button
   const amountOwed=unpaid.length*100;
-  const confirmed=window.confirm(`📱 bKash Payment\n\n${unpaidText}Send to: ${BKASH_NUMBER}\nAmount: ৳${amountOwed||'[enter amount]'}\n\nClick OK to open bKash app.`);
-  if(confirmed){
-    const bkashUrl=`bkash://send?number=${BKASH_NUMBER}`;
-    window.location.href=bkashUrl;
-    setTimeout(()=>window.open('https://www.bkash.com','_blank'),1500);
-  }
+  const unpaidLabel=unpaid.length>0?`${unpaid.length} unpaid month${unpaid.length>1?'s':''}. Amount: ৳${amountOwed}`:'All payments up to date ✅';
+  // Create a modal-style overlay with a real link (not window.confirm which blocks intent)
+  const existing=document.getElementById('bkash-overlay');
+  if(existing)existing.remove();
+  const ov=document.createElement('div');
+  ov.id='bkash-overlay';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem;';
+  ov.innerHTML=`<div style="background:#1a0520;border:2px solid #e2136e;border-radius:20px;padding:2rem;width:min(340px,100%);text-align:center;color:#fff;">
+    <div style="font-size:40px;margin-bottom:.5rem;">📱</div>
+    <div style="font-size:18px;font-weight:800;color:#e2136e;margin-bottom:.5rem;">bKash Payment</div>
+    <div style="font-size:14px;margin-bottom:.25rem;opacity:.8;">${unpaidLabel}</div>
+    <div style="font-size:22px;font-weight:800;margin:1rem 0;color:#fff;">📲 ${BKASH_NUMBER}</div>
+    <a href="bkash://send?number=${BKASH_NUMBER}&amount=${amountOwed||''}" 
+       style="display:block;background:#e2136e;color:#fff;padding:14px;border-radius:12px;text-decoration:none;font-size:16px;font-weight:700;margin-bottom:10px;"
+       onclick="setTimeout(()=>{const ov=document.getElementById('bkash-overlay');if(ov)ov.remove();},500);">
+      Open bKash App
+    </a>
+    <button onclick="document.getElementById('bkash-overlay').remove();" 
+      style="background:rgba(255,255,255,.1);border:none;color:#fff;padding:10px 24px;border-radius:10px;font-size:14px;cursor:pointer;width:100%;">
+      Cancel
+    </button>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
 }
 async function saveProjects(){await saveProjectsToSheet();}
 function openProjectMo(editIdx=-1){
@@ -3117,6 +3134,30 @@ function mobileNav(tabId){
   let target=null;
   btns.forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+tabId+"'"))target=b;});
   showTab(tabId,target);
+}
+
+// ══ MOBILE LAYOUT ENFORCER ══
+function enforceMobileLayout(){
+  const isMobile=window.innerWidth<=719;
+  const nav=document.querySelector('.tb-nav');
+  const actions=document.querySelector('.tb-actions');
+  const ham=document.getElementById('hamburger-btn');
+  if(nav)nav.style.display=isMobile?'none':'';
+  if(actions)actions.style.display=isMobile?'none':'';
+  if(ham)ham.style.display=isMobile?'flex':'none';
+  // Also close mobile menu if resized to desktop
+  if(!isMobile){
+    const menu=document.getElementById('mobile-menu');
+    if(menu)menu.classList.remove('open');
+    document.body.classList.remove('menu-open');
+  }
+}
+window.addEventListener('resize',enforceMobileLayout);
+// Run immediately when DOM is ready
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',enforceMobileLayout);
+} else {
+  enforceMobileLayout();
 }
 
 </script>
