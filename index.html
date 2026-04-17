@@ -137,7 +137,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 /* ══ TABS ══ */
 .tab-panel{display:none;animation:tabIn .25s cubic-bezier(.16,1,.3,1);}
-.tab-panel.active{display:block;}
+.tab-panel.active{display:block;}.tab-panel.active#tab-chat{display:flex;padding:0;}
 @keyframes tabIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
 /* ══ STATS — portrait 2x2 ══ */
@@ -402,7 +402,7 @@ body.theme-night{
 .chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;}
 .chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:80%;}
 .chat-msg.mine{flex-direction:row-reverse;align-self:flex-end;}
-.chat-msg.mine .chat-msg:not(.mine) .chat-msg:not(.mine) .chat-input{flex:1;padding:9px 13px;border:1px solid var(--br2);border-radius:20px;font-family:var(--fn);font-size:13px;color:var(--tx);background:var(--sf);outline:none;transition:border .2s;}
+.chat-input{width:100%;flex:1;min-width:0;padding:10px 14px;border:1px solid var(--br2);border-radius:20px;font-family:var(--fn);font-size:14px;color:var(--tx);background:var(--sf);outline:none;transition:border .2s;box-sizing:border-box;}
 .chat-input:focus{border-color:var(--ac);}
 .chat-send{padding:9px 16px;background:var(--ac);color:#fff;border:none;border-radius:20px;font-family:var(--fn);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
 .chat-send:hover{opacity:.85;}
@@ -462,65 +462,43 @@ body.theme-night{
 .profile-pay-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;}
 .ppc-paid{background:var(--gn-s);color:var(--gn-t);border:1px solid rgba(16,212,142,.2);}
 .ppc-unpaid{background:var(--sf3);color:var(--tx3);border:1px solid var(--br2);}
-
-/* ══ TOPBAR & NAV ══ */
-.topbar{background:rgba(17,24,39,.95);border-bottom:1px solid var(--br);height:52px;display:flex;align-items:stretch;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
-.tb-brand{display:flex;align-items:center;gap:8px;padding:0 .75rem;flex-shrink:0;}
-.tb-ttl{font-size:15px;font-weight:800;letter-spacing:-.4px;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.tb-nav{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;justify-content:center;}
+/* ══ TOPBAR ══ */
+.topbar{background:rgba(17,24,39,.95);border-bottom:1px solid var(--br);height:52px;display:flex;align-items:stretch;position:sticky;top:0;z-index:200;backdrop-filter:blur(12px);overflow:hidden;}
+body.theme-light .topbar{background:rgba(255,255,255,.95);}
+.tb-brand{display:flex;align-items:center;gap:8px;padding:0 .75rem;flex-shrink:0;min-width:0;}
+.tb-ttl{font-size:15px;font-weight:800;letter-spacing:-.4px;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+.tb-nav{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;align-items:stretch;justify-content:center;min-width:0;}
 .tb-nav::-webkit-scrollbar{display:none;}
-.tb-nav .nb{padding:0 12px;height:100%;border-bottom:3px solid transparent;border-top:none;display:flex;align-items:center;font-size:13px;}
+.tb-nav .nb{padding:0 12px;height:100%;border-bottom:3px solid transparent;border-top:none;display:flex;align-items:center;font-size:13px;white-space:nowrap;}
 .tb-nav .nb.active{background:rgba(91,141,238,.08);color:var(--ac-t);border-bottom-color:var(--ac);}
-.tb-nav .nb:hover{color:var(--tx);background:rgba(255,255,255,.04);}
+.tb-nav .nb:hover{background:rgba(255,255,255,.04);}
 .tb-actions{display:flex;align-items:center;gap:4px;padding:0 .5rem;flex-shrink:0;}
-.tb-btn{font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--br2);cursor:pointer;background:transparent;color:var(--tx2);font-family:var(--fn);transition:all .18s;font-weight:500;white-space:nowrap;}
-.tb-btn:hover{background:var(--sf2);color:var(--tx);}
-.tb-btn:disabled{opacity:.2;cursor:not-allowed;}
-.theme-btn{font-size:16px;padding:5px 8px;cursor:pointer;border-radius:var(--r);border:1px solid var(--br2);background:var(--sf2);transition:all .18s;line-height:1;}
-.theme-btn:hover{background:var(--sf3);}
-.tb-profile-btn{display:flex;flex-direction:column;align-items:center;font-size:10px;padding:5px 10px;gap:1px;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);cursor:pointer;color:var(--tx2);min-width:46px;transition:background .18s;font-family:var(--fn);}
-.tb-profile-btn:hover{background:var(--sf3);}
-
-/* ══ HAMBURGER ══ */
-#hamburger-btn{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:48px;height:52px;cursor:pointer;background:none;border:none;border-left:1px solid var(--br);flex-shrink:0;padding:0;}
-#hamburger-btn span{display:block;width:22px;height:2px;background:var(--tx);border-radius:2px;}
+.tb-btn{font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--br2);cursor:pointer;background:transparent;color:var(--tx2);font-family:var(--fn);transition:all .18s;}
+.tb-btn:hover{background:var(--sf2);}
+.tb-btn:disabled{opacity:.25;cursor:not-allowed;}
+.theme-btn{font-size:16px;padding:5px 8px;cursor:pointer;border-radius:var(--r);border:1px solid var(--br2);background:var(--sf2);line-height:1;}
+.tb-profile-btn{display:flex;flex-direction:column;align-items:center;font-size:10px;padding:5px 10px;gap:1px;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);cursor:pointer;color:var(--tx2);min-width:46px;font-family:var(--fn);}
+.tb-ham-wrap{display:none;align-items:center;justify-content:flex-end;padding:0 .75rem 0 0;flex-shrink:0;}
+#hamburger-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;cursor:pointer;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);padding:0;align-items:center;}
+#hamburger-btn span{display:block;width:20px;height:2px;background:var(--tx);border-radius:2px;}
 
 /* ══ MOBILE MENU ══ */
 #mobile-menu{display:none;position:fixed;top:52px;left:0;right:0;bottom:0;background:var(--bg);z-index:9999;overflow-y:auto;flex-direction:column;padding:.5rem 0 2rem;}
 #mobile-menu.open{display:flex;}
 .mm-btn{display:flex;align-items:center;gap:14px;padding:16px 1.25rem;border:none;background:transparent;color:var(--tx);font-family:var(--fn);font-size:15px;font-weight:500;cursor:pointer;text-align:left;width:100%;position:relative;}
-.mm-btn:active,.mm-btn.mm-active{background:var(--sf2);}
+.mm-btn:active{background:var(--sf2);}
 .mm-dot{position:absolute;right:1.25rem;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--rd);display:none;}
 .mm-divider{height:1px;background:var(--br2);margin:.25rem 0;}
 .mm-section{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;padding:14px 1.25rem 6px;}
 
 /* ══ MOBILE BREAKPOINT ══ */
-@media(max-width:719px){
+@media(max-width:700px){
   .tb-nav{display:none!important;}
   .tb-actions{display:none!important;}
-  #hamburger-btn{display:flex!important;}
+  .tb-ham-wrap{display:flex!important;}
+  .topbar{overflow:visible;}
   body.menu-open{overflow:hidden;}
 }
-
-/* ══ LIGHT THEME TOPBAR ══ */
-body.theme-light .topbar{background:rgba(255,255,255,.95);}
-body.theme-light .topbar{border-bottom-color:var(--br);}
-
-/* ══ CHAT 3-DOT MENU ══ */
-.chat-menu-wrap{position:relative;display:inline-block;}
-.chat-menu-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--tx3);padding:4px 8px;line-height:1;border-radius:var(--r);}
-.chat-menu-btn:hover,.chat-menu-btn:active{background:var(--sf2);color:var(--tx);}
-.chat-menu-btn:focus{outline:none;}
-.chat-dropdown{position:absolute;background:var(--sf);border:1px solid var(--br2);border-radius:var(--rl);box-shadow:var(--sh-m);z-index:1000;min-width:140px;overflow:hidden;display:none;animation:tabIn .15s ease;}
-.chat-dropdown.open{display:block;}
-.msg-mine .chat-dropdown{right:0;}
-.msg-other .chat-dropdown{left:0;}
-.chat-dd-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:none;background:none;color:var(--tx);font-family:var(--fn);font-size:13px;cursor:pointer;width:100%;text-align:left;transition:background .15s;}
-.chat-dd-item:hover{background:var(--sf2);}
-.chat-dd-item.danger{color:var(--rd-t);}
-.chat-dd-item.danger:hover{background:var(--rd-s);}
-.chat-reply-preview{background:var(--sf2);border-left:3px solid var(--ac);border-radius:var(--r);padding:6px 10px;margin-bottom:6px;font-size:12px;color:var(--tx3);display:none;}
-.chat-reply-preview.active{display:block;}
 </style>
 </head>
 <body>
@@ -602,6 +580,7 @@ Sign in with Google
       <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('chat',this)">Chat</button><span class="notif-dot" id="chat-dot" style="display:none;"></span></div>
       <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('activity',this)">🔔 Notifs</button><span class="notif-dot" id="notif-dot" style="display:none;"></span></div>
       <button class="nb" onclick="showTab('about',this)">About Us</button>
+      <button class="nb" onclick="showTab('memories',this)">📸 Memories</button>
       <button class="nb" id="bkash-nav-btn" onclick="showBkashInfo()" style="color:#e2136e;font-weight:700;display:none;">📱 bKash</button>
     </div>
     <div class="tb-actions">
@@ -612,10 +591,13 @@ Sign in with Google
       <button class="tb-btn" onclick="syncNow()" title="Sync">↻</button>
       <button onclick="goToProfile()" class="tb-profile-btn"><span style="font-size:18px;line-height:1.2;">👤</span><span>Profile</span></button>
     </div>
-    <button id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="tb-ham-wrap">
+      <button id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
+
 
   <!-- MOBILE MENU -->
   <div id="mobile-menu">
@@ -629,6 +611,7 @@ Sign in with Google
     <button class="mm-btn" onclick="mobileNav('chat')">💬 Chat<span class="mm-dot" id="mm-chat-dot"></span></button>
     <button class="mm-btn" onclick="mobileNav('activity')">🔔 Notifications<span class="mm-dot" id="mm-notif-dot"></span></button>
     <button class="mm-btn" onclick="mobileNav('about')">🏢 About Us</button>
+    <button class="mm-btn" onclick="mobileNav('memories')">📸 Memories</button>
     <div class="mm-divider"></div>
     <div class="mm-section">Account</div>
     <button class="mm-btn" id="mm-bkash-btn" onclick="closeMobileMenu();showBkashInfo();" style="display:none;">📱 bKash</button>
@@ -775,18 +758,34 @@ Sign in with Google
       </div>
     </div>
 
+    <!-- MEMORIES TAB -->
+    <div id="tab-memories" class="tab-panel">
+      <div class="sh">
+        <div class="sh-t">📸 Memories</div>
+        <button class="btn btn-p" id="add-memory-btn" style="display:none;" onclick="guardEdit(openMemoryMo)">+ Add</button>
+      </div>
+      <div id="memories-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;"></div>
+    </div>
+
     <!-- CHAT TAB -->
-    <div id="tab-chat" class="tab-panel" style="padding:0;">
-      <div style="padding:.75rem 1.25rem;background:var(--sf2);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <span style="font-size:13px;font-weight:600;color:var(--tx2);">💬 Member Chat</span>
+    <div id="tab-chat" class="tab-panel" style="padding:0;display:flex;flex-direction:column;height:calc(100vh - 52px);overflow:hidden;">
+      <div style="padding:.75rem 1.25rem;background:var(--sf2);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;">
+        <span style="font-size:14px;font-weight:700;color:var(--tx);">💬 Member Chat</span>
         <div id="chat-admin-controls" style="display:none;">
           <button class="btn btn-sm" onclick="guardEdit(openMuteModal)">🔇 Moderate</button>
         </div>
       </div>
-      <div id="chat-msgs" style="height:calc(100vh - 200px);max-height:520px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;"></div>
-      <div id="chat-footer" style="display:flex;gap:8px;padding:10px 1rem;border-top:1px solid var(--br);background:var(--sf2);">
-        <input class="chat-input" id="chat-input" placeholder="Type a message…"/>
-        <button class="chat-send" id="chat-send-btn" onclick="sendChatMsg()">Send</button>
+      <div id="chat-msgs" style="flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;"></div>
+      <div id="chat-footer" style="flex-shrink:0;border-top:1px solid var(--br);background:var(--sf2);">
+        <div id="chat-reply-bar" style="display:none;flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 1rem;background:var(--sf3);border-bottom:1px solid var(--br);">
+          <span style="font-size:12px;color:var(--ac-t);">↩</span>
+          <span id="chat-reply-txt" style="font-size:12px;color:var(--tx2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+          <button onclick="cancelReply()" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:20px;line-height:1;padding:0 4px;flex-shrink:0;">✕</button>
+        </div>
+        <div style="display:flex;gap:8px;padding:10px 1rem;align-items:center;">
+          <input class="chat-input" id="chat-input" placeholder="Type a message…"/>
+          <button class="chat-send" onclick="sendChatMsg()">↑</button>
+        </div>
       </div>
     </div>
 
@@ -978,6 +977,27 @@ Sign in with Google
     </div>
   </div>
 
+
+  <!-- MEMORIES MODAL -->
+  <div class="mo-b" id="mo-memory" style="display:none;">
+    <div class="mo-t"><span id="mo-memory-t">Add Memory</span><button class="mo-x" onclick="closeMo()">✕</button></div>
+    <input type="hidden" id="memory-edit-idx" value="-1"/>
+    <div class="fr"><label>Photo/Thumbnail</label>
+      <div style="text-align:center;margin-bottom:6px;">
+        <img id="memory-photo-preview" style="display:none;width:100%;max-height:180px;object-fit:cover;border-radius:var(--r);margin-bottom:6px;">
+        <label style="cursor:pointer;display:inline-block;padding:8px 16px;background:var(--sf3);border-radius:var(--r);font-size:13px;color:var(--tx2);">📷 Upload Photo<input type="file" accept="image/*,video/*" style="display:none;" onchange="previewMemoryFile(this)"></label>
+        <input type="hidden" id="memory-file-data">
+        <input type="hidden" id="memory-file-type">
+      </div>
+    </div>
+    <div class="fr"><label>Video URL (YouTube/Facebook — optional)</label><input id="memory-video-url" placeholder="https://youtube.com/watch?v=..."/></div>
+    <div class="fr"><label>Caption</label><input id="memory-caption" placeholder="What's this memory about?"/></div>
+    <div class="fr"><label>Date</label><input id="memory-date" type="date"/></div>
+    <div class="mo-f">
+      <button class="btn" onclick="closeMo()">Cancel</button>
+      <button class="btn btn-p" onclick="saveMemory()">Save</button>
+    </div>
+  </div>
   <!-- NIZAM MODAL -->
   <div class="mo-b" id="mo-nizam" style="display:none;">
     <div class="mo-t"><span>Edit Rulebook</span><button class="mo-x" onclick="closeMo()">✕</button></div>
@@ -1714,6 +1734,7 @@ function showTab(id,btn){
   else if(id==='projects'){loadSharedData().then(()=>renderProjects());}
   else if(id==='profile')renderProfile();
   else if(id==='about')renderAbout();
+  else if(id==='memories')renderMemories();
   else renderAll();
 }
 
@@ -2360,6 +2381,10 @@ function initChatInput(){
     inp._listenerAttached=true;
   }
 }
+function initChatTab(){
+  // Always attach event listener to static input
+  initChatInput();
+}
 async function sendChatMsg(){
   const el=document.getElementById('chat-input');
   if(!el)return;
@@ -2442,7 +2467,7 @@ function renderChat(){
       canDelete?`<button class="chat-dd-item danger" onclick="deleteChatMsg('${m.time}','${m.email}');closeChatMenu('${menuId}')">🗑 Delete</button>`:'',
     ].filter(Boolean).join('');
     const dotMenu=`<div class="chat-menu-wrap">
-      <button class="chat-menu-btn" onclick="toggleChatMenu('${menuId}')" ontouchstart="toggleChatMenu('${menuId}')">⋮</button>
+      <button class="chat-menu-btn" onclick="toggleChatMenu('${menuId}',event)" ontouchend="toggleChatMenu('${menuId}',event)">⋮</button>
       <div class="chat-dropdown" id="${menuId}">${menuItems}</div>
     </div>`;
     return `<div class="chat-msg ${mine?'msg-mine':'msg-other'}" style="display:flex;gap:7px;align-items:flex-end;${mine?'flex-direction:row-reverse;':''}">
@@ -2480,17 +2505,18 @@ async function deleteChatMsg(time,senderEmail){
 }
 
 
-function toggleChatMenu(id){
-  // Close all other menus first
-  document.querySelectorAll('.chat-dropdown.open').forEach(m=>{if(m.id!==id)m.classList.remove('open');});
-  const m=document.getElementById(id);
-  if(m)m.classList.toggle('open');
+function toggleChatMenu(id,evt){
+  if(evt){evt.stopPropagation();evt.preventDefault();}
+  const menu=document.getElementById(id);
+  if(!menu)return;
+  const isOpen=menu.classList.contains('open');
+  document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
+  if(!isOpen)menu.classList.add('open');
 }
 function closeChatMenu(id){
   const m=document.getElementById(id);
   if(m)m.classList.remove('open');
 }
-// Close menus when clicking outside
 document.addEventListener('click',e=>{
   if(!e.target.closest('.chat-menu-wrap')){
     document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
@@ -2502,16 +2528,18 @@ function replyToMsg(msgIdx){
   _replyingTo=CHAT_MSGS[msgIdx];
   const preview=document.getElementById('chat-reply-preview');
   if(preview){
-    const rtxt=document.getElementById('chat-reply-txt');if(rtxt)rtxt.textContent='↩ '+_replyingTo.name+': '+_replyingTo.txt.slice(0,60);
-    preview.style.display='block';
+    const bar=document.getElementById('chat-reply-bar');
+    const rtxt=document.getElementById('chat-reply-txt');
+    if(rtxt)rtxt.textContent=_replyingTo.name+': '+_replyingTo.txt.slice(0,60);
+    if(bar)bar.style.display='flex';
   }
   const inp=document.getElementById('chat-input');
   if(inp)inp.focus();
 }
 function cancelReply(){
   _replyingTo=null;
-  const preview=document.getElementById('chat-reply-preview');
-  if(preview)preview.style.display='none';
+  const bar=document.getElementById('chat-reply-bar');
+  if(bar)bar.style.display='none';
 }
 
 let _editingTime=null;
@@ -2592,6 +2620,129 @@ async function applyMute(){
   closeMo();renderChat();
   const actionLabel=action==='ban'?'permanently banned':action==='suspend'?'suspended':action==='mute'?'muted':'unrestricted';
   pushNotif('🔇',`${email} is now ${actionLabel}`);
+}
+
+// ══ MEMORIES ══════════════════════════════════════════════════════════════════
+let MEMORIES = JSON.parse(localStorage.getItem('bft_memories')||'[]');
+
+function renderMemories(){
+  const isAdmin=CURRENT_ROLE==='admin';
+  const addBtn=document.getElementById('add-memory-btn');
+  if(addBtn)addBtn.style.display=isAdmin?'':'none';
+  const grid=document.getElementById('memories-grid');
+  if(!grid)return;
+  if(!MEMORIES.length){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="ei">📸</div><div>No memories yet. Admin can add photos and videos.</div></div>';
+    return;
+  }
+  grid.innerHTML=MEMORIES.map((m,i)=>{
+    const isVideo=m.videoUrl||(m.fileType&&m.fileType.startsWith('video'));
+    let mediaHtml='';
+    if(m.videoUrl){
+      // Embed YouTube/Facebook
+      let embedSrc='';
+      const ytMatch=m.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+      const fbMatch=m.videoUrl.includes('facebook.com');
+      if(ytMatch){
+        embedSrc=`https://www.youtube.com/embed/${ytMatch[1]}`;
+        mediaHtml=`<iframe src="${embedSrc}" style="width:100%;aspect-ratio:16/9;border:none;border-radius:var(--r);" allowfullscreen loading="lazy"></iframe>`;
+      } else if(fbMatch){
+        mediaHtml=`<a href="${m.videoUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:var(--sf2);border-radius:var(--r);color:var(--ac-t);font-size:14px;gap:8px;text-decoration:none;">▶ Open Facebook Video</a>`;
+      } else {
+        mediaHtml=`<video controls src="${m.videoUrl}" style="width:100%;border-radius:var(--r);" loading="lazy"></video>`;
+      }
+    } else if(m.fileData){
+      if(m.fileType&&m.fileType.startsWith('video')){
+        mediaHtml=`<video controls src="${m.fileData}" style="width:100%;border-radius:var(--r);"></video>`;
+      } else {
+        mediaHtml=`<img src="${m.fileData}" style="width:100%;border-radius:var(--r);object-fit:cover;max-height:240px;cursor:pointer;" onclick="openLightbox('${i}')">`;
+      }
+    }
+    return `<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;">
+      ${mediaHtml}
+      <div style="padding:10px 14px;">
+        ${m.caption?`<div style="font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px;">${m.caption}</div>`:''}
+        ${m.date?`<div style="font-size:12px;color:var(--tx3);">📅 ${m.date}</div>`:''}
+        ${isAdmin?`<div style="margin-top:8px;display:flex;gap:6px;">
+          <button class="btn btn-sm btn-gh" onclick="openMemoryMo(${i})">Edit</button>
+          <button class="btn btn-sm btn-d" onclick="deleteMemory(${i})">Delete</button>
+        </div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openLightbox(idx){
+  const m=MEMORIES[idx];if(!m||!m.fileData)return;
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer;';
+  ov.innerHTML=`<img src="${m.fileData}" style="max-width:96vw;max-height:96vh;border-radius:8px;">`;
+  ov.onclick=()=>ov.remove();
+  document.body.appendChild(ov);
+}
+
+function previewMemoryFile(input){
+  const file=input.files[0];if(!file)return;
+  document.getElementById('memory-file-type').value=file.type;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('memory-file-data').value=e.target.result;
+    const prev=document.getElementById('memory-photo-preview');
+    if(file.type.startsWith('image')){prev.src=e.target.result;prev.style.display='';}
+    else prev.style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function openMemoryMo(editIdx=-1){
+  document.getElementById('memory-edit-idx').value=editIdx;
+  const captionInp=document.getElementById('memory-caption');
+  const dateInp=document.getElementById('memory-date');
+  const videoInp=document.getElementById('memory-video-url');
+  const fileData=document.getElementById('memory-file-data');
+  const fileType=document.getElementById('memory-file-type');
+  const prev=document.getElementById('memory-photo-preview');
+  if(editIdx>=0){
+    const m=MEMORIES[editIdx];
+    captionInp.value=m.caption||'';
+    dateInp.value=m.date||'';
+    videoInp.value=m.videoUrl||'';
+    fileData.value=m.fileData||'';
+    fileType.value=m.fileType||'';
+    if(m.fileData&&m.fileType&&m.fileType.startsWith('image')){prev.src=m.fileData;prev.style.display='';}
+    else prev.style.display='none';
+    document.getElementById('mo-memory-t').textContent='Edit Memory';
+  } else {
+    captionInp.value='';dateInp.value=new Date().toISOString().slice(0,10);
+    videoInp.value='';fileData.value='';fileType.value='';
+    prev.src='';prev.style.display='none';
+    document.getElementById('mo-memory-t').textContent='Add Memory';
+  }
+  openMo('mo-memory');
+}
+
+function saveMemory(){
+  const idx=parseInt(document.getElementById('memory-edit-idx').value);
+  const entry={
+    caption:document.getElementById('memory-caption').value.trim(),
+    date:document.getElementById('memory-date').value,
+    videoUrl:document.getElementById('memory-video-url').value.trim(),
+    fileData:document.getElementById('memory-file-data').value,
+    fileType:document.getElementById('memory-file-type').value,
+    by:CURRENT_EMAIL,
+    time:new Date().toISOString(),
+  };
+  if(!entry.caption&&!entry.fileData&&!entry.videoUrl){toast('Add a photo, video, or caption','t-err');return;}
+  if(idx>=0)MEMORIES[idx]=entry;else MEMORIES.unshift(entry);
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  logActivity('📸','Memory saved: '+(entry.caption||'photo'));
+  toast('Memory saved!');closeMo();renderMemories();
+}
+
+function deleteMemory(idx){
+  MEMORIES.splice(idx,1);
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  renderMemories();toast('Deleted');
 }
 
 // ══ ABOUT US ══════════════════════════════════════════════════════════════════
@@ -2693,44 +2844,52 @@ const BKASH_NUMBER='01785853252';
 function showBkashInfo(){
   const myMem=MEM.find(r=>r.email&&r.email.toLowerCase()===CURRENT_EMAIL.toLowerCase());
   const allKeys=activeMonthKeys();
-  let unpaid=[];
-  const now=new Date();
+  let unpaid=[]; const now=new Date();
   if(myMem){
     const mp=gp(myMem.name);
     allKeys.forEach(k=>{
       const[y,mo]=k.split('-').map(Number);
-      const d=new Date(y,mo-1,1);
-      if(d>now)return;
-      const p=mp[k];
-      if(!p||(!p.m&&!p.b))unpaid.push(keyToFull(k));
+      if(new Date(y,mo-1,1)>now)return;
+      const p=mp[k];if(!p||(!p.m&&!p.b))unpaid.push(keyToFull(k));
     });
   }
-  const amountOwed=unpaid.length*100;
-  const unpaidLabel=unpaid.length>0?`${unpaid.length} unpaid month${unpaid.length>1?'s':''}. Amount: ৳${amountOwed}`:'All payments up to date ✅';
-  // Create a modal-style overlay with a real link (not window.confirm which blocks intent)
-  const existing=document.getElementById('bkash-overlay');
-  if(existing)existing.remove();
-  const ov=document.createElement('div');
-  ov.id='bkash-overlay';
-  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem;';
-  ov.innerHTML=`<div style="background:#1a0520;border:2px solid #e2136e;border-radius:20px;padding:2rem;width:min(340px,100%);text-align:center;color:#fff;">
-    <div style="font-size:40px;margin-bottom:.5rem;">📱</div>
-    <div style="font-size:18px;font-weight:800;color:#e2136e;margin-bottom:.5rem;">bKash Payment</div>
-    <div style="font-size:14px;margin-bottom:.25rem;opacity:.8;">${unpaidLabel}</div>
-    <div style="font-size:22px;font-weight:800;margin:1rem 0;color:#fff;">📲 ${BKASH_NUMBER}</div>
-    <a href="bkash://send?number=${BKASH_NUMBER}&amount=${amountOwed||''}" 
-       style="display:block;background:#e2136e;color:#fff;padding:14px;border-radius:12px;text-decoration:none;font-size:16px;font-weight:700;margin-bottom:10px;"
-       onclick="setTimeout(()=>{const ov=document.getElementById('bkash-overlay');if(ov)ov.remove();},500);">
-      Open bKash App
-    </a>
-    <button onclick="document.getElementById('bkash-overlay').remove();" 
-      style="background:rgba(255,255,255,.1);border:none;color:#fff;padding:10px 24px;border-radius:10px;font-size:14px;cursor:pointer;width:100%;">
+  const amt=unpaid.length*100;
+  const unpaidTxt=unpaid.length?`⚠️ ${unpaid.length} unpaid month${unpaid.length>1?'s':''}. Total: ৳${amt}`:'✅ All payments up to date';
+  // Show a bottom sheet style modal
+  const old=document.getElementById('bkash-sheet');if(old)old.remove();
+  const sheet=document.createElement('div');
+  sheet.id='bkash-sheet';
+  sheet.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:flex-end;justify-content:center;';
+  sheet.innerHTML=`<div style="background:#1a0530;border-radius:24px 24px 0 0;padding:1.5rem;width:100%;max-width:480px;color:#fff;font-family:system-ui,sans-serif;">
+    <div style="width:40px;height:4px;background:rgba(255,255,255,.3);border-radius:2px;margin:0 auto 1.25rem;"></div>
+    <div style="text-align:center;margin-bottom:1.25rem;">
+      <div style="font-size:36px;margin-bottom:.5rem;">💳</div>
+      <div style="font-size:18px;font-weight:800;color:#e2136e;">bKash Payment</div>
+      <div style="font-size:13px;margin-top:.5rem;opacity:.8;">${unpaidTxt}</div>
+    </div>
+    <div style="background:rgba(255,255,255,.08);border-radius:12px;padding:1rem;margin-bottom:1rem;text-align:center;">
+      <div style="font-size:12px;opacity:.6;margin-bottom:4px;">Send Money To</div>
+      <div style="font-size:28px;font-weight:800;letter-spacing:2px;">${BKASH_NUMBER}</div>
+    </div>
+    <button id="bkash-open-btn" style="display:block;width:100%;background:#e2136e;color:#fff;border:none;border-radius:14px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;margin-bottom:10px;">
+      📱 Open bKash App
+    </button>
+    <button onclick="document.getElementById('bkash-sheet').remove();" style="display:block;width:100%;background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:14px;padding:14px;font-size:15px;cursor:pointer;">
       Cancel
     </button>
   </div>`;
-  document.body.appendChild(ov);
-  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+  document.body.appendChild(sheet);
+  sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.remove();});
+  // Attach bKash open — direct location change on button click
+  document.getElementById('bkash-open-btn').addEventListener('click',()=>{
+    window.location.href='bkash://send?number='+BKASH_NUMBER+(amt?'&amount='+amt:'');
+    // Fallback: if app not installed, open web after 2s
+    setTimeout(()=>{
+      try{window.open('https://www.bkash.com/send-money','_blank');}catch(e){}
+    },2000);
+  });
 }
+
 async function saveProjects(){await saveProjectsToSheet();}
 function openProjectMo(editIdx=-1){
   document.getElementById('proj-edit-idx').value=editIdx;
@@ -3138,14 +3297,13 @@ function mobileNav(tabId){
 
 // ══ MOBILE LAYOUT ENFORCER ══
 function enforceMobileLayout(){
-  const isMobile=window.innerWidth<=719;
+  const isMobile=window.innerWidth<=700;
   const nav=document.querySelector('.tb-nav');
   const actions=document.querySelector('.tb-actions');
-  const ham=document.getElementById('hamburger-btn');
-  if(nav)nav.style.display=isMobile?'none':'';
-  if(actions)actions.style.display=isMobile?'none':'';
-  if(ham)ham.style.display=isMobile?'flex':'none';
-  // Also close mobile menu if resized to desktop
+  const hamWrap=document.querySelector('.tb-ham-wrap');
+  if(nav)nav.style.display=isMobile?'none':'flex';
+  if(actions)actions.style.display=isMobile?'none':'flex';
+  if(hamWrap)hamWrap.style.display=isMobile?'flex':'none';
   if(!isMobile){
     const menu=document.getElementById('mobile-menu');
     if(menu)menu.classList.remove('open');
