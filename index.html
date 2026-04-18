@@ -581,6 +581,7 @@ Sign in with Google
       <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('activity',this)">🔔 Notifs</button><span class="notif-dot" id="notif-dot" style="display:none;"></span></div>
       <button class="nb" onclick="showTab('about',this)">About Us</button>
       <button class="nb" onclick="showTab('memories',this)">📸 Memories</button>
+      <button class="nb" onclick="showTab('memories',this)">📸 Memories</button>
       <button class="nb" id="bkash-nav-btn" onclick="showBkashInfo()" style="color:#e2136e;font-weight:700;display:none;">📱 bKash</button>
     </div>
     <div class="tb-actions">
@@ -611,6 +612,7 @@ Sign in with Google
     <button class="mm-btn" onclick="mobileNav('chat')">💬 Chat<span class="mm-dot" id="mm-chat-dot"></span></button>
     <button class="mm-btn" onclick="mobileNav('activity')">🔔 Notifications<span class="mm-dot" id="mm-notif-dot"></span></button>
     <button class="mm-btn" onclick="mobileNav('about')">🏢 About Us</button>
+    <button class="mm-btn" onclick="mobileNav('memories')">📸 Memories</button>
     <button class="mm-btn" onclick="mobileNav('memories')">📸 Memories</button>
     <div class="mm-divider"></div>
     <div class="mm-section">Account</div>
@@ -692,6 +694,15 @@ Sign in with Google
       </div>
       <div id="mc-grid" class="mg"></div>
       <div id="ic-grid" class="ig" style="display:none;"></div>
+    </div>
+
+    <!-- MEMORIES TAB -->
+    <div id="tab-memories" class="tab-panel">
+      <div class="sh">
+        <div class="sh-t">📸 Memories</div>
+        <button class="btn btn-p" id="add-memory-btn" style="display:none;" onclick="guardEdit(()=>openMemoryMo())">+ Add Memory</button>
+      </div>
+      <div id="memories-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;"></div>
     </div>
 
     <!-- ABOUT US TAB -->
@@ -2439,12 +2450,8 @@ function renderChat(){
       footer.innerHTML=`<div class="muted-notice" style="flex:1;text-align:center;color:var(--rd-t);font-size:13px;padding:8px;">🚫 You are ${muted==='ban'?'permanently banned':muted==='suspend'?'suspended':'muted'} from this chat.</div>`;
     }
   } else {
-    // Only rebuild footer if input doesn't exist yet
-    if(!document.getElementById('chat-input')){
-      footer.innerHTML=`<input class="chat-input" id="chat-input" placeholder="Type a message…"/><button class="chat-send" onclick="sendChatMsg()">Send</button>`;
-      const inp=document.getElementById('chat-input');
-      inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMsg();}});
-    }
+    // Footer is static HTML - just ensure input listener is attached
+    initChatInput();
   }
   const el=document.getElementById('chat-msgs');
   if(!CHAT_MSGS.length){el.innerHTML='<div class="empty"><div class="ei">💬</div><div>No messages yet. Say hello!</div></div>';return;}
@@ -2511,7 +2518,10 @@ function toggleChatMenu(id,evt){
   if(!menu)return;
   const isOpen=menu.classList.contains('open');
   document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
-  if(!isOpen)menu.classList.add('open');
+  if(!isOpen){
+    // Use requestAnimationFrame to ensure this runs AFTER document click handler
+    requestAnimationFrame(()=>menu.classList.add('open'));
+  }
 }
 function closeChatMenu(id){
   const m=document.getElementById(id);
@@ -2521,7 +2531,7 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.chat-menu-wrap')){
     document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
   }
-});
+},true);
 
 let _replyingTo=null;
 function replyToMsg(msgIdx){
@@ -2871,9 +2881,9 @@ function showBkashInfo(){
       <div style="font-size:12px;opacity:.6;margin-bottom:4px;">Send Money To</div>
       <div style="font-size:28px;font-weight:800;letter-spacing:2px;">${BKASH_NUMBER}</div>
     </div>
-    <button id="bkash-open-btn" style="display:block;width:100%;background:#e2136e;color:#fff;border:none;border-radius:14px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;margin-bottom:10px;">
+    <a id="bkash-open-btn" href="bkash://send?number=${BKASH_NUMBER}" style="display:block;width:100%;background:#e2136e;color:#fff;border:none;border-radius:14px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;margin-bottom:10px;text-align:center;text-decoration:none;">
       📱 Open bKash App
-    </button>
+    </a>
     <button onclick="document.getElementById('bkash-sheet').remove();" style="display:block;width:100%;background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:14px;padding:14px;font-size:15px;cursor:pointer;">
       Cancel
     </button>
@@ -2881,13 +2891,14 @@ function showBkashInfo(){
   document.body.appendChild(sheet);
   sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.remove();});
   // Attach bKash open — direct location change on button click
-  document.getElementById('bkash-open-btn').addEventListener('click',()=>{
-    window.location.href='bkash://send?number='+BKASH_NUMBER+(amt?'&amount='+amt:'');
-    // Fallback: if app not installed, open web after 2s
-    setTimeout(()=>{
-      try{window.open('https://www.bkash.com/send-money','_blank');}catch(e){}
-    },2000);
-  });
+  const bkBtn=document.getElementById('bkash-open-btn');
+  if(bkBtn){
+    const url='bkash://send?number='+BKASH_NUMBER+(amt?'&amount='+amt:'');
+    bkBtn.href=url;
+    bkBtn.onclick=()=>{
+      setTimeout(()=>{try{window.open('https://www.bkash.com/send-money','_blank');}catch(e){}},2000);
+    };
+  }
 }
 
 async function saveProjects(){await saveProjectsToSheet();}
@@ -3300,10 +3311,10 @@ function enforceMobileLayout(){
   const isMobile=window.innerWidth<=700;
   const nav=document.querySelector('.tb-nav');
   const actions=document.querySelector('.tb-actions');
-  const hamWrap=document.querySelector('.tb-ham-wrap');
+  const ham=document.getElementById('hamburger-btn');
   if(nav)nav.style.display=isMobile?'none':'flex';
   if(actions)actions.style.display=isMobile?'none':'flex';
-  if(hamWrap)hamWrap.style.display=isMobile?'flex':'none';
+  if(ham)ham.style.display=isMobile?'flex':'none';
   if(!isMobile){
     const menu=document.getElementById('mobile-menu');
     if(menu)menu.classList.remove('open');
