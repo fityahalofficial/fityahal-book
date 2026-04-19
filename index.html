@@ -27,7 +27,7 @@
   --g2:linear-gradient(135deg,#10d48e,#5b8dee);
   --g3:linear-gradient(135deg,#ff5c6c,#ff8c42);
 }
-html,body{height:100%;font-family:var(--fn);font-size:14px;color:var(--tx);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+html,body{height:100%;overflow-x:hidden;max-width:100vw;font-family:var(--fn);font-size:14px;color:var(--tx);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 ::-webkit-scrollbar{width:7px;height:7px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--sf3);border-radius:99px;}
@@ -402,11 +402,16 @@ body.theme-night{
 .chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;}
 .chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:80%;}
 .chat-msg.mine{flex-direction:row-reverse;align-self:flex-end;}
-.chat-input{width:100%;flex:1;min-width:0;padding:10px 14px;border:1px solid var(--br2);border-radius:20px;font-family:var(--fn);font-size:14px;color:var(--tx);background:var(--sf);outline:none;transition:border .2s;box-sizing:border-box;}
+.chat-input{width:0;flex:1;min-width:0;padding:10px 14px;border:1px solid var(--br2);border-radius:20px;font-family:var(--fn);font-size:14px;color:var(--tx);background:var(--sf);outline:none;transition:border .2s;box-sizing:border-box;}
 .chat-input:focus{border-color:var(--ac);}
 .chat-send{padding:9px 16px;background:var(--ac);color:#fff;border:none;border-radius:20px;font-family:var(--fn);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
 .chat-send:hover{opacity:.85;}
 
+.chat-menu-wrap{position:relative;display:inline-flex;}
+.chat-dropdown{position:absolute;top:100%;right:0;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);box-shadow:var(--sh-l);min-width:130px;z-index:900;display:none;flex-direction:column;overflow:hidden;}
+.chat-dropdown.open{display:flex;}
+.chat-dropdown button{display:flex;align-items:center;gap:8px;padding:10px 14px;border:none;background:transparent;color:var(--tx);font-size:13px;font-family:var(--fn);cursor:pointer;text-align:left;width:100%;transition:background .15s;}
+.chat-dropdown button:hover{background:var(--sf3);}
 /* ══ PROJECT TRACKER ══ */
 .proj-card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;margin-bottom:12px;}
 .proj-desc{font-size:12px;color:var(--tx3);margin-top:2px;}
@@ -791,7 +796,7 @@ Sign in with Google
           <span id="chat-reply-txt" style="font-size:12px;color:var(--tx2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
           <button onclick="cancelReply()" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:20px;line-height:1;padding:0 4px;flex-shrink:0;">✕</button>
         </div>
-        <div style="display:flex;gap:8px;padding:10px 1rem;align-items:center;">
+        <div style="display:flex;gap:8px;padding:10px 1rem;align-items:center;width:100%;">
           <input class="chat-input" id="chat-input" placeholder="Type a message…"/>
           <button class="chat-send" onclick="sendChatMsg()">↑</button>
         </div>
@@ -2510,6 +2515,7 @@ async function deleteChatMsg(time,senderEmail){
 }
 
 
+let _chatMenuOpenTime=0;
 function toggleChatMenu(id,evt){
   if(evt){evt.stopPropagation();evt.preventDefault();}
   const menu=document.getElementById(id);
@@ -2517,8 +2523,8 @@ function toggleChatMenu(id,evt){
   const isOpen=menu.classList.contains('open');
   document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
   if(!isOpen){
-    // Use requestAnimationFrame to ensure this runs AFTER document click handler
-    requestAnimationFrame(()=>menu.classList.add('open'));
+    menu.classList.add('open');
+    _chatMenuOpenTime=Date.now();
   }
 }
 function closeChatMenu(id){
@@ -2527,9 +2533,12 @@ function closeChatMenu(id){
 }
 document.addEventListener('click',e=>{
   if(!e.target.closest('.chat-menu-wrap')){
-    document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
+    // Only close if menu has been open for at least 200ms (prevents instant close on mobile)
+    if(Date.now()-_chatMenuOpenTime>200){
+      document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
+    }
   }
-},true);
+});
 
 let _replyingTo=null;
 function replyToMsg(msgIdx){
@@ -2643,41 +2652,96 @@ function renderMemories(){
     grid.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="ei">📸</div><div>No memories yet. Admin can add photos and videos.</div></div>';
     return;
   }
+  const me=CURRENT_EMAIL||'';
   grid.innerHTML=MEMORIES.map((m,i)=>{
+    if(!m.likes)m.likes=[];
+    if(!m.comments)m.comments=[];
+    const liked=m.likes.includes(me);
     const isVideo=m.videoUrl||(m.fileType&&m.fileType.startsWith('video'));
     let mediaHtml='';
     if(m.videoUrl){
-      // Embed YouTube/Facebook
-      let embedSrc='';
       const ytMatch=m.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-      const fbMatch=m.videoUrl.includes('facebook.com');
       if(ytMatch){
-        embedSrc=`https://www.youtube.com/embed/${ytMatch[1]}`;
-        mediaHtml=`<iframe src="${embedSrc}" style="width:100%;aspect-ratio:16/9;border:none;border-radius:var(--r);" allowfullscreen loading="lazy"></iframe>`;
-      } else if(fbMatch){
-        mediaHtml=`<a href="${m.videoUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:var(--sf2);border-radius:var(--r);color:var(--ac-t);font-size:14px;gap:8px;text-decoration:none;">▶ Open Facebook Video</a>`;
+        mediaHtml=`<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="width:100%;aspect-ratio:16/9;border:none;" allowfullscreen loading="lazy"></iframe>`;
+      } else if(m.videoUrl.includes('facebook.com')){
+        mediaHtml=`<a href="${m.videoUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:var(--sf2);color:var(--ac-t);font-size:14px;gap:8px;text-decoration:none;">▶ Open Video</a>`;
       } else {
-        mediaHtml=`<video controls src="${m.videoUrl}" style="width:100%;border-radius:var(--r);" loading="lazy"></video>`;
+        mediaHtml=`<video controls src="${m.videoUrl}" style="width:100%;" loading="lazy"></video>`;
       }
     } else if(m.fileData){
       if(m.fileType&&m.fileType.startsWith('video')){
-        mediaHtml=`<video controls src="${m.fileData}" style="width:100%;border-radius:var(--r);"></video>`;
+        mediaHtml=`<video controls src="${m.fileData}" style="width:100%;"></video>`;
       } else {
-        mediaHtml=`<img src="${m.fileData}" style="width:100%;border-radius:var(--r);object-fit:cover;max-height:240px;cursor:pointer;" onclick="openLightbox('${i}')">`;
+        mediaHtml=`<img src="${m.fileData}" style="width:100%;object-fit:cover;max-height:280px;cursor:pointer;" onclick="openLightbox(${i})">`;
       }
     }
-    return `<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;">
+    const commentsHtml=m.comments.map((c,ci)=>`
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--br);">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;">${ini(c.name||'?')}</div>
+        <div style="flex:1;min-width:0;">
+          <span style="font-size:11px;font-weight:700;color:var(--ac-t);">${c.name||'Unknown'}</span>
+          <span style="font-size:12px;color:var(--tx2);margin-left:6px;">${c.text}</span>
+          ${isAdmin||c.email===me?`<button onclick="deleteMemoryComment(${i},${ci})" style="float:right;background:none;border:none;color:var(--rd-t);font-size:10px;cursor:pointer;opacity:.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">✕</button>`:''}
+        </div>
+      </div>`).join('');
+    return `<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;margin-bottom:4px;">
       ${mediaHtml}
       <div style="padding:10px 14px;">
-        ${m.caption?`<div style="font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px;">${m.caption}</div>`:''}
-        ${m.date?`<div style="font-size:12px;color:var(--tx3);">📅 ${m.date}</div>`:''}
-        ${isAdmin?`<div style="margin-top:8px;display:flex;gap:6px;">
-          <button class="btn btn-sm btn-gh" onclick="openMemoryMo(${i})">Edit</button>
-          <button class="btn btn-sm btn-d" onclick="deleteMemory(${i})">Delete</button>
-        </div>`:''}
+        ${m.caption?`<div style="font-size:14px;font-weight:600;color:var(--tx);margin-bottom:2px;">${m.caption}</div>`:''}
+        ${m.date?`<div style="font-size:11px;color:var(--tx3);margin-bottom:8px;">📅 ${m.date}</div>`:''}
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <button onclick="toggleMemoryLike(${i})" style="background:none;border:none;cursor:pointer;font-size:14px;color:${liked?'var(--rd-t)':'var(--tx3)'};display:flex;align-items:center;gap:4px;padding:0;">
+            ${liked?'❤️':'🤍'} <span style="font-size:12px;">${m.likes.length||0}</span>
+          </button>
+          <span style="font-size:12px;color:var(--tx3);">💬 ${m.comments.length}</span>
+          ${isAdmin?`<div style="margin-left:auto;display:flex;gap:6px;">
+            <button class="btn btn-sm btn-gh" onclick="openMemoryMo(${i})">Edit</button>
+            <button class="btn btn-sm btn-d" onclick="deleteMemory(${i})">Delete</button>
+          </div>`:''}
+        </div>
+        ${m.comments.length?`<div style="margin-bottom:8px;">${commentsHtml}</div>`:''}
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input placeholder="Write a comment…" id="mem-cmt-${i}" style="flex:1;min-width:0;padding:7px 12px;border:1px solid var(--br2);border-radius:20px;font-size:12px;background:var(--sf2);color:var(--tx);font-family:var(--fn);outline:none;" onkeydown="if(event.key==='Enter')addMemoryComment(${i})">
+          <button onclick="addMemoryComment(${i})" style="background:var(--ac);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-size:12px;cursor:pointer;">Send</button>
+        </div>
       </div>
     </div>`;
   }).join('');
+}
+
+function toggleMemoryLike(idx){
+  const me=CURRENT_EMAIL||'';
+  if(!me)return;
+  if(!MEMORIES[idx].likes)MEMORIES[idx].likes=[];
+  const pos=MEMORIES[idx].likes.indexOf(me);
+  if(pos>=0)MEMORIES[idx].likes.splice(pos,1);
+  else MEMORIES[idx].likes.push(me);
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  renderMemories();
+}
+
+function addMemoryComment(idx){
+  const inp=document.getElementById('mem-cmt-'+idx);
+  if(!inp)return;
+  const text=inp.value.trim();
+  if(!text)return;
+  const me=MEM.find(r=>r.email&&r.email.toLowerCase()===(CURRENT_EMAIL||'').toLowerCase());
+  if(!MEMORIES[idx].comments)MEMORIES[idx].comments=[];
+  MEMORIES[idx].comments.push({
+    name:me?me.name:CURRENT_EMAIL,
+    email:CURRENT_EMAIL,
+    text,
+    time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})
+  });
+  inp.value='';
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  renderMemories();
+}
+
+function deleteMemoryComment(memIdx,cmtIdx){
+  MEMORIES[memIdx].comments.splice(cmtIdx,1);
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  renderMemories();
 }
 
 function openLightbox(idx){
@@ -2869,27 +2933,29 @@ function showBkashInfo(){
   const ov=document.createElement('div');
   ov.id='bkash-overlay';
   ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:1.5rem;';
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
   ov.innerHTML=`
     <div style="background:#1a0520;border:2px solid #e2136e;border-radius:20px;padding:2rem;width:min(320px,100%);text-align:center;">
       <div style="font-size:36px;margin-bottom:.5rem;">📱</div>
       <div style="font-size:18px;font-weight:800;color:#e2136e;margin-bottom:.5rem;">bKash Payment</div>
       <div style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:1rem;">${label}</div>
-      <div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:1.25rem;">01785853252</div>
-      <a href="bkash://send?number=01785853252&amount=${amt||''}"
-         style="display:block;background:#e2136e;color:#fff;padding:14px;border-radius:12px;text-decoration:none;font-size:16px;font-weight:700;margin-bottom:.75rem;"
-         onclick="setTimeout(()=>document.getElementById('bkash-overlay')?.remove(),800)">
-        Open bKash App
-      </a>
-      <button onclick="document.getElementById('bkash-overlay').remove();"
-        style="background:rgba(255,255,255,.12);border:none;color:rgba(255,255,255,.8);padding:11px 24px;border-radius:10px;font-size:14px;cursor:pointer;width:100%;">
-        Cancel
-      </button>
+      <div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:1.25rem;letter-spacing:2px;">01785853252</div>
+      <button onclick="
+        const num='01785853252';
+        const a=document.createElement('a');
+        a.href='bkash://send?number='+num;
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+        setTimeout(()=>{
+          const b=document.createElement('a');
+          b.href='intent://send?number='+num+'#Intent;scheme=bkash;package=com.bKash.customer;end';
+          document.body.appendChild(b);b.click();document.body.removeChild(b);
+        },300);
+      " style="display:block;width:100%;background:#e2136e;color:#fff;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px;">Open bKash App</button>
+      <button onclick="document.getElementById('bkash-overlay').remove()" style="display:block;width:100%;padding:10px;border:1px solid rgba(255,255,255,.2);border-radius:10px;color:rgba(255,255,255,.6);font-size:12px;cursor:pointer;background:transparent;">Close</button>
     </div>`;
   document.body.appendChild(ov);
-  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
 }
 
-async function saveProjects(){await saveProjectsToSheet();}
 function openProjectMo(editIdx=-1){
   document.getElementById('proj-edit-idx').value=editIdx;
   if(editIdx>=0){
