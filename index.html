@@ -2879,6 +2879,173 @@ if(document.readyState==='loading'){
   enforceMobileLayout();
 }
 
+
+// ══ MEMORIES ═════════════════════════════════════════════════════════════════
+let MEMORIES=JSON.parse(localStorage.getItem('bft_memories')||'[]');
+
+function renderMemories(){
+  const isAdmin=CURRENT_ROLE==='admin';
+  const addBtn=document.getElementById('add-memory-btn');
+  if(addBtn)addBtn.style.display=isAdmin?'':'none';
+  const grid=document.getElementById('memories-grid');
+  if(!grid)return;
+  if(!MEMORIES.length){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="ei">📸</div><div>No memories yet.</div></div>';
+    return;
+  }
+  const me=CURRENT_EMAIL||'';
+  grid.innerHTML=MEMORIES.map((m,i)=>{
+    if(!m.likes)m.likes=[];
+    if(!m.comments)m.comments=[];
+    const liked=m.likes.includes(me);
+    let mediaHtml='';
+    if(m.videoUrl){
+      const ytMatch=m.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+      if(ytMatch){
+        mediaHtml=`<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="width:100%;aspect-ratio:16/9;border:none;" allowfullscreen loading="lazy"></iframe>`;
+      } else if(m.videoUrl.includes('facebook.com')){
+        mediaHtml=`<a href="${m.videoUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:var(--sf2);color:var(--ac-t);font-size:14px;gap:8px;text-decoration:none;">▶ Open Video</a>`;
+      } else {
+        mediaHtml=`<video controls src="${m.videoUrl}" style="width:100%;" loading="lazy"></video>`;
+      }
+    } else if(m.fileData){
+      if(m.fileType&&m.fileType.startsWith('video')){
+        mediaHtml=`<video controls src="${m.fileData}" style="width:100%;"></video>`;
+      } else {
+        mediaHtml=`<img src="${m.fileData}" style="width:100%;object-fit:cover;max-height:280px;cursor:pointer;" onclick="openLightbox(${i})">`;
+      }
+    }
+    const commentsHtml=m.comments.map((c,ci)=>`
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--br);">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;">${ini(c.name||'?')}</div>
+        <div style="flex:1;min-width:0;">
+          <span style="font-size:11px;font-weight:700;color:var(--ac-t);">${c.name||'Unknown'}</span>
+          <span style="font-size:12px;color:var(--tx2);margin-left:6px;">${c.text}</span>
+          ${isAdmin||c.email===me?`<button onclick="deleteMemoryComment(${i},${ci})" style="float:right;background:none;border:none;color:var(--rd-t);font-size:10px;cursor:pointer;opacity:.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">✕</button>`:''}
+        </div>
+      </div>`).join('');
+    return `<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;margin-bottom:4px;">
+      ${mediaHtml}
+      <div style="padding:10px 14px;">
+        ${m.caption?`<div style="font-size:14px;font-weight:600;color:var(--tx);margin-bottom:2px;">${m.caption}</div>`:''}
+        ${m.date?`<div style="font-size:11px;color:var(--tx3);margin-bottom:8px;">📅 ${m.date}</div>`:''}
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <button onclick="toggleMemoryLike(${i})" style="background:none;border:none;cursor:pointer;font-size:14px;color:${liked?'var(--rd-t)':'var(--tx3)'};display:flex;align-items:center;gap:4px;padding:0;">
+            ${liked?'❤️':'🤍'} <span style="font-size:12px;">${m.likes.length||0}</span>
+          </button>
+          <span style="font-size:12px;color:var(--tx3);">💬 ${m.comments.length}</span>
+          ${isAdmin?`<div style="margin-left:auto;display:flex;gap:6px;">
+            <button class="btn btn-sm btn-gh" onclick="openMemoryMo(${i})">Edit</button>
+            <button class="btn btn-sm btn-d" onclick="deleteMemory(${i})">Delete</button>
+          </div>`:''}
+        </div>
+        ${m.comments.length?`<div style="margin-bottom:8px;">${commentsHtml}</div>`:''}
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input placeholder="Write a comment…" id="mem-cmt-${i}" style="flex:1;min-width:0;padding:7px 12px;border:1px solid var(--br2);border-radius:20px;font-size:12px;background:var(--sf2);color:var(--tx);font-family:var(--fn);outline:none;" onkeydown="if(event.key==='Enter')addMemoryComment(${i})">
+          <button onclick="addMemoryComment(${i})" style="background:var(--ac);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-size:12px;cursor:pointer;">Send</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleMemoryLike(idx){
+  const me=CURRENT_EMAIL||'';if(!me)return;
+  if(!MEMORIES[idx].likes)MEMORIES[idx].likes=[];
+  const pos=MEMORIES[idx].likes.indexOf(me);
+  if(pos>=0)MEMORIES[idx].likes.splice(pos,1);else MEMORIES[idx].likes.push(me);
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  renderMemories();
+}
+
+function addMemoryComment(idx){
+  const inp=document.getElementById('mem-cmt-'+idx);
+  if(!inp)return;
+  const text=inp.value.trim();if(!text)return;
+  const me=MEM.find(r=>r.email&&r.email.toLowerCase()===(CURRENT_EMAIL||'').toLowerCase());
+  if(!MEMORIES[idx].comments)MEMORIES[idx].comments=[];
+  MEMORIES[idx].comments.push({name:me?me.name:CURRENT_EMAIL,email:CURRENT_EMAIL,text,
+    time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})});
+  inp.value='';
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  renderMemories();
+}
+
+function deleteMemoryComment(memIdx,cmtIdx){
+  MEMORIES[memIdx].comments.splice(cmtIdx,1);
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  renderMemories();
+}
+
+function openMemoryMo(editIdx=-1){
+  document.getElementById('memory-edit-idx').value=editIdx;
+  const fd=document.getElementById('memory-file-data');
+  const fp=document.getElementById('memory-file-preview');
+  const vu=document.getElementById('memory-video-url');
+  const cap=document.getElementById('memory-caption');
+  const dt=document.getElementById('memory-date');
+  if(editIdx>=0){
+    const m=MEMORIES[editIdx];
+    if(cap)cap.value=m.caption||'';
+    if(dt)dt.value=m.date||'';
+    if(vu)vu.value=m.videoUrl||'';
+    if(fd)fd.value=m.fileData||'';
+    if(fp){fp.src=m.fileData||'';fp.style.display=m.fileData?'':'none';}
+  } else {
+    if(cap)cap.value='';if(dt)dt.value='';if(vu)vu.value='';
+    if(fd)fd.value='';if(fp){fp.src='';fp.style.display='none';}
+  }
+  openMo('mo-memory');
+}
+
+function previewMemoryFile(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('memory-file-data').value=e.target.result;
+    document.getElementById('memory-file-type').value=file.type;
+    const fp=document.getElementById('memory-file-preview');
+    if(fp){fp.src=e.target.result;fp.style.display='';}
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveMemory(){
+  const idx=parseInt(document.getElementById('memory-edit-idx').value);
+  const entry={
+    caption:document.getElementById('memory-caption').value.trim(),
+    date:document.getElementById('memory-date').value,
+    videoUrl:document.getElementById('memory-video-url').value.trim(),
+    fileData:document.getElementById('memory-file-data').value,
+    fileType:document.getElementById('memory-file-type').value,
+    likes:idx>=0?(MEMORIES[idx].likes||[]):[],
+    comments:idx>=0?(MEMORIES[idx].comments||[]):[],
+    time:new Date().toISOString()
+  };
+  if(idx>=0)MEMORIES[idx]=entry;else MEMORIES.unshift(entry);
+  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+  logActivity('📸','Memory '+(idx>=0?'updated':'added'));
+  toast('Saved!');closeMo();renderMemories();
+}
+
+function deleteMemory(idx){
+  confirm2('Delete memory?','This cannot be undone.','🗑').then(ok=>{
+    if(!ok)return;
+    MEMORIES.splice(idx,1);
+    localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
+    renderMemories();toast('Deleted');
+  });
+}
+
+function openLightbox(idx){
+  const m=MEMORIES[idx];if(!m||!m.fileData)return;
+  const lb=document.createElement('div');
+  lb.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer;';
+  lb.onclick=()=>lb.remove();
+  lb.innerHTML=`<img src="${m.fileData}" style="max-width:95vw;max-height:95vh;object-fit:contain;border-radius:var(--r);">`;
+  document.body.appendChild(lb);
+}
 </script>
 </body>
 </html>
+
