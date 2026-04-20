@@ -137,7 +137,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 /* ══ TABS ══ */
 .tab-panel{display:none;animation:tabIn .25s cubic-bezier(.16,1,.3,1);}
-.tab-panel.active{display:block;}.tab-panel.active#tab-chat{display:flex;padding:0;}
+.tab-panel.active{display:block;}
 @keyframes tabIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
 /* ══ STATS — portrait 2x2 ══ */
@@ -326,10 +326,6 @@ tfoot td.sk{text-align:left;font-family:var(--fn);font-size:12px;font-weight:600
 .proj-row-del{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:11px;padding:1px 4px;transition:color .15s;}
 .proj-row-del:hover{color:var(--rd-t);}
 
-/* ══ CHAT MESSAGES ══ */
-.msg-mine{align-self:flex-end;align-items:flex-end;}
-.msg-other{align-self:flex-start;align-items:flex-start;}
-.msg-meta{font-size:10px;color:var(--tx3);margin-top:3px;padding:0 4px;}
 
 /* ══ ORG ROLE BADGE COLOURS ══ */
 .orb-alif{background:rgba(255,200,40,.12);color:#ffd94d;border:1px solid rgba(255,200,40,.25);}
@@ -397,21 +393,7 @@ body.theme-night{
 .pn-time{font-size:10px;color:var(--tx3);margin-top:6px;}
 .pn-badge{background:var(--pu-s);color:var(--pu-t);border:1px solid rgba(157,122,250,.2);font-size:10px;font-weight:700;padding:1px 8px;border-radius:99px;display:inline-block;margin-bottom:6px;}
 
-/* ══ CHAT ══ */
-#chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 160px);max-height:600px;}
-.chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;}
-.chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:80%;}
-.chat-msg.mine{flex-direction:row-reverse;align-self:flex-end;}
-.chat-input{width:0;flex:1;min-width:0;padding:10px 14px;border:1px solid var(--br2);border-radius:20px;font-family:var(--fn);font-size:14px;color:var(--tx);background:var(--sf);outline:none;transition:border .2s;box-sizing:border-box;}
-.chat-input:focus{border-color:var(--ac);}
-.chat-send{padding:9px 16px;background:var(--ac);color:#fff;border:none;border-radius:20px;font-family:var(--fn);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
-.chat-send:hover{opacity:.85;}
 
-.chat-menu-wrap{position:relative;display:inline-flex;}
-.chat-dropdown{position:absolute;top:100%;right:0;background:var(--sf2);border:1px solid var(--br2);border-radius:var(--r);box-shadow:var(--sh-l);min-width:130px;z-index:900;display:none;flex-direction:column;overflow:hidden;}
-.chat-dropdown.open{display:flex;}
-.chat-dropdown button{display:flex;align-items:center;gap:8px;padding:10px 14px;border:none;background:transparent;color:var(--tx);font-size:13px;font-family:var(--fn);cursor:pointer;text-align:left;width:100%;transition:background .15s;}
-.chat-dropdown button:hover{background:var(--sf3);}
 /* ══ PROJECT TRACKER ══ */
 .proj-card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;margin-bottom:12px;}
 .proj-desc{font-size:12px;color:var(--tx3);margin-top:2px;}
@@ -583,7 +565,6 @@ Sign in with Google
       <button class="nb" onclick="showTab('projects',this)">Projects</button>
       <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('notices',this)">Announcements</button><span class="notif-dot" id="notice-dot" style="display:none;"></span></div>
       <button class="nb" onclick="showTab('nizam',this)">Nizam</button>
-      <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('chat',this)">Chat</button><span class="notif-dot" id="chat-dot" style="display:none;"></span></div>
       <div style="position:relative;display:flex;"><button class="nb" onclick="showTab('activity',this)">🔔 Notifs</button><span class="notif-dot" id="notif-dot" style="display:none;"></span></div>
       <button class="nb" onclick="showTab('about',this)">About Us</button>
       <button class="nb" onclick="showTab('memories',this)">📸 Memories</button>
@@ -612,7 +593,6 @@ Sign in with Google
     <button class="mm-btn" onclick="mobileNav('projects')">📁 Projects</button>
     <button class="mm-btn" onclick="mobileNav('notices')">📢 Announcements<span class="mm-dot" id="mm-notice-dot"></span></button>
     <button class="mm-btn" onclick="mobileNav('nizam')">📖 Nizam</button>
-    <button class="mm-btn" onclick="mobileNav('chat')">💬 Chat<span class="mm-dot" id="mm-chat-dot"></span></button>
     <button class="mm-btn" onclick="mobileNav('activity')">🔔 Notifications<span class="mm-dot" id="mm-notif-dot"></span></button>
     <button class="mm-btn" onclick="mobileNav('about')">🏢 About Us</button>
     <button class="mm-btn" onclick="mobileNav('memories')">📸 Memories</button>
@@ -781,24 +761,7 @@ Sign in with Google
       <div id="memories-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;"></div>
     </div>
 
-    <!-- CHAT TAB -->
-    <div id="tab-chat" class="tab-panel" style="padding:0;display:flex;flex-direction:column;height:calc(100vh - 52px);overflow:hidden;">
-      <div style="padding:.75rem 1.25rem;background:var(--sf2);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;">
-        <span style="font-size:14px;font-weight:700;color:var(--tx);">💬 Member Chat</span>
-        <div id="chat-admin-controls" style="display:none;">
-          <button class="btn btn-sm" onclick="guardEdit(openMuteModal)">🔇 Moderate</button>
-        </div>
-      </div>
-      <div id="chat-msgs" style="flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;"></div>
-      <div id="chat-footer" style="flex-shrink:0;border-top:1px solid var(--br);background:var(--sf2);">
-        <div id="chat-reply-bar" style="display:none;flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 1rem;background:var(--sf3);border-bottom:1px solid var(--br);">
-          <span style="font-size:12px;color:var(--ac-t);">↩</span>
-          <span id="chat-reply-txt" style="font-size:12px;color:var(--tx2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-          <button onclick="cancelReply()" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:20px;line-height:1;padding:0 4px;flex-shrink:0;">✕</button>
-        </div>
         <div style="display:flex;gap:8px;padding:10px 1rem;align-items:center;width:100%;">
-          <input class="chat-input" id="chat-input" placeholder="Type a message…"/>
-          <button class="chat-send" onclick="sendChatMsg()">↑</button>
         </div>
       </div>
     </div>
@@ -1040,9 +1003,6 @@ Sign in with Google
     </div>
   </div>
 
-  <!-- CHAT MUTE MODAL -->
-  <div class="mo-b" id="mo-mute" style="display:none;">
-    <div class="mo-t"><span>Chat Moderation</span><button class="mo-x" onclick="closeMo()">✕</button></div>
     <div class="fr"><label>Member</label><select id="mute-mem"><option value="">Select member…</option></select></div>
     <div class="fr"><label>Action</label>
       <select id="mute-action">
@@ -1109,7 +1069,7 @@ const CONFIG={
   API_KEY:'AIzaSyCziWiqTJOKll1k4u8or9uRdoQ_H7VWWHU',
   SCOPES:'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email',
   SHEET_MEMBERS:'Members',SHEET_PAYMENTS:'Payments',SHEET_COSTS:'Costs',
-  SHEET_NOTICES:'Notices',SHEET_CHAT:'Chat',SHEET_NIZAM:'Nizam',
+  SHEET_NOTICES:'Notices',SHEET_NIZAM:'Nizam',
   SHEET_PROJECTS:'Projects',SHEET_ORGROLES:'OrgRoles',SHEET_PENDING:'PendingPays',
   ACCOUNTS:[
     {email:'fityahalofficial@gmail.com', pass:'fityahalonduty', role:'admin'},
@@ -1131,15 +1091,13 @@ let ACCESS_TOKEN=null, SHEET_ID='1_bEe_QbRq02bbJ_gHpw5DiGjXE_2rmznJpo98h5-cac';
 localStorage.setItem('bft_sheet_id',SHEET_ID);
 let MEM=[],PAY={},COSTS={};
 // Shared data - loaded FROM Google Sheets, not localStorage
-let NOTICES=[],PRIVATE_NOTICES={},NIZAM='',CHAT_MSGS=[],PROJECTS=[],ORG_ROLES={},PENDING_PAYS=[];
+let NOTICES=[],PRIVATE_NOTICES={},NIZAM='',PROJECTS=[],ORG_ROLES={},PENDING_PAYS=[];
 // Local-only data
 let ACTIVITY=JSON.parse(localStorage.getItem('bft_activity')||'[]');
-let CHAT_MUTED=JSON.parse(localStorage.getItem('bft_muted')||'{}');
 let BORROWED_BOOKS=JSON.parse(localStorage.getItem('bft_books')||'{}');
 let MEMBER_PHOTOS=JSON.parse(localStorage.getItem('bft_member_photos')||'{}');
 let CURRENT_ROLE='viewer', syncTimer=null;
 let CURRENT_EMAIL='';
-let _chatPollTimer=null;
 const SUPREME_ADMIN='fityahalofficial@gmail.com';
 
 // ══ UNDO/REDO ════════════════════════════════════════════════════════════════
@@ -1242,17 +1200,7 @@ function guardEdit(fn,...args){
 }
 
 
-function checkNotRestricted(){
-  const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
-  const status=CHAT_MUTED[email];
-  if(status==='ban'){toast('🚫 You are permanently banned','t-err');return false;}
-  if(status==='suspend'){toast('⏸ You are suspended — contact admin','t-warn');return false;}
-  return true;
-}
 
-// ══ MONTH HELPERS ════════════════════════════════════════════════════════════
-const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function mkKey(y,m){return `${y}-${String(m+1).padStart(2,'0')}`;}
 function keyToFull(k){const[y,m]=k.split('-');return `${MN[parseInt(m)-1]} ${y}`;}
 function keyToShort(k){const[y,m]=k.split('-');return `${MS[parseInt(m)-1]} ${y.slice(2)}`;}
@@ -1348,7 +1296,6 @@ function startGoogleLogin(){
 function doLogout(){
   ACCESS_TOKEN=null;sessionStorage.clear();HISTORY=[];FUTURE=[];
   if(typeof _autoSyncInterval!=='undefined'&&_autoSyncInterval)clearInterval(_autoSyncInterval);
-  if(typeof _chatPollTimer!=='undefined'&&_chatPollTimer)clearInterval(_chatPollTimer);
   document.getElementById('app').classList.remove('show');
   document.getElementById('picker-screen').style.display='none';
   document.getElementById('login-screen').style.display='flex';
@@ -1486,7 +1433,7 @@ async function initSheetHeaders(){
   // Create extra tabs for shared data
   await ensureSheetTabs();
   await sheetsUpdate(`${CONFIG.SHEET_NOTICES}!A1:G1`,[['title','body','by','time','private_to','pinned','photo']]);
-  await sheetsUpdate(`${CONFIG.SHEET_CHAT}!A1:D1`,[['name','email','time','message']]);
+
   await sheetsUpdate(`${CONFIG.SHEET_NIZAM}!A1:A1`,[['content']]);
   await sheetsUpdate(`${CONFIG.SHEET_PROJECTS}!A1:A1`,[['json']]);
   await sheetsUpdate(`${CONFIG.SHEET_ORGROLES}!A1:B1`,[['member','role']]);
@@ -1498,7 +1445,7 @@ async function ensureSheetTabs(){
     const meta=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`,{headers:{Authorization:`Bearer ${ACCESS_TOKEN}`}});
     const data=await meta.json();
     const existing=(data.sheets||[]).map(s=>s.properties.title);
-    const needed=[CONFIG.SHEET_NOTICES,CONFIG.SHEET_CHAT,CONFIG.SHEET_NIZAM,CONFIG.SHEET_PROJECTS,CONFIG.SHEET_ORGROLES,CONFIG.SHEET_PENDING];
+    const needed=[CONFIG.SHEET_NOTICES,CONFIG.SHEET_NIZAM,CONFIG.SHEET_PROJECTS,CONFIG.SHEET_ORGROLES,CONFIG.SHEET_PENDING];
     const toAdd=needed.filter(n=>!existing.includes(n));
     if(!toAdd.length)return;
     const requests=toAdd.map(title=>({addSheet:{properties:{title}}}));
@@ -1543,12 +1490,8 @@ async function loadSharedData(){
     // Load About Us from col B
     const aboutStr=nizRow[1]||'';
     loadAboutFromStr(aboutStr||localStorage.getItem('bft_about')||'');
-    // Load CHAT_MUTED from col C
     const mutedStr=nizRow[2]||'';
-    if(mutedStr)try{CHAT_MUTED=JSON.parse(mutedStr);}catch(e){}
-    // Chat - last 200 msgs
-    const chatr=await sheetsGet(`${CONFIG.SHEET_CHAT}!A2:D10000`);
-    CHAT_MSGS=((chatr.values||[]).filter(r=>r[0]&&r[3]).map(r=>({name:r[0]||'',email:r[1]||'',time:r[2]||'',txt:r[3]||''}))).slice(-200);
+
     // Projects - stored as JSON in one cell
     const projr=await sheetsGet(`${CONFIG.SHEET_PROJECTS}!A2:A2`);
     try{PROJECTS=JSON.parse(((projr.values||[])[0]||['[]'])[0]);}catch(e){PROJECTS=[];}
@@ -1595,16 +1538,6 @@ async function saveNizamToSheet(){
   }catch(e){console.error('saveNizam',e);toast('Nizam save failed','t-err');}
 }
 
-async function saveChatMsg(msg){
-  // All members can send chat — no role restriction
-  try{
-    const res=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(CONFIG.SHEET_CHAT+'!A:D')}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,{
-      method:'POST',headers:{Authorization:`Bearer ${ACCESS_TOKEN}`,'Content-Type':'application/json'},
-      body:JSON.stringify({values:[[msg.name,msg.email,msg.time,msg.txt,msg.replyTo||'']]})
-    });
-    if(!res.ok)throw new Error('chat append failed '+res.status);
-  }catch(e){console.error('saveChatMsg',e);toast('Message failed to send','t-err');}
-}
 
 async function saveProjectsToSheet(){
   if(CURRENT_ROLE!=='admin'){toast('Admin only','t-err');return;}
@@ -1638,7 +1571,7 @@ async function syncNow(){
   showLoad('Syncing…');
   await loadFromSheet();
   hideLoad();setupMthFilter();renderAll();
-  renderNoticeBoard();renderNizam();renderProjects();renderChat();
+  renderNoticeBoard();renderNizam();renderProjects();
   toast('Synced!');
 }
 function openSheetInBrowser(){window.open(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`,'_blank');}
@@ -1669,7 +1602,7 @@ async function bootApp(){
   const ok=await loadFromSheet();hideLoad();
   document.getElementById('app').classList.add('show');
   setupMthFilter();renderAll();updateUndoUI();
-  renderNoticeBoard();renderNizam();renderProjects();renderChat();
+  renderNoticeBoard();renderNizam();renderProjects();
   if(!ok)toast('Loaded with errors','t-err');
   const main=document.querySelector('.main');
   const existingBanner=document.getElementById('sheet-banner');
@@ -1684,23 +1617,21 @@ async function bootApp(){
     CURRENT_ROLE='admin';
     sessionStorage.setItem('bft_role','admin');
   }
-  // Auto-poll ALL shared data every 15 seconds from Sheets
+  // Auto-poll ALL shared data every 5 seconds from Sheets
   if(_autoSyncInterval)clearInterval(_autoSyncInterval);
   _autoSyncInterval=setInterval(async()=>{
     if(syncTimer)return;
     await loadSharedData();
     const activeTab=document.querySelector('.tab-panel.active');
     const activeId=activeTab?activeTab.id:'';
-    if(activeId==='tab-chat')renderChat();
-    else if(activeId==='tab-notices')renderNoticeBoard();
+    if(activeId==='tab-notices')renderNoticeBoard();
     else if(activeId==='tab-nizam')renderNizam();
     else if(activeId==='tab-projects')renderProjects();
     renderMC();
   },5000);
-  // Chat polls faster (every 5s)
-  _lastChatLen=CHAT_MSGS.length;
+
   _lastNoticeLen=NOTICES.filter(n=>!n.private_to).length;
-  startChatPoll();
+  
   // Profile
   renderProfile();
   requestNotifPermission();
@@ -1741,10 +1672,6 @@ function showTab(id,btn){
   }
   else if(id==='notices'){loadSharedData().then(()=>renderNoticeBoard());}
   else if(id==='nizam'){loadSharedData().then(()=>renderNizam());}
-  else if(id==='chat'){
-    document.getElementById('chat-dot').style.display='none';
-    loadSharedData().then(()=>renderChat());
-  }
   else if(id==='projects'){loadSharedData().then(()=>renderProjects());}
   else if(id==='profile')renderProfile();
   else if(id==='about')renderAbout();
@@ -2386,437 +2313,6 @@ function renderNizam(){
   }
 }
 
-// ══ CHAT ═════════════════════════════════════════════════════════════════════
-let _chatLastCount=0;
-function initChatInput(){
-  const inp=document.getElementById('chat-input');
-  if(inp&&!inp._listenerAttached){
-    inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMsg();}});
-    inp._listenerAttached=true;
-  }
-}
-function initChatTab(){
-  // Always attach event listener to static input
-  initChatInput();
-}
-async function sendChatMsg(){
-  const el=document.getElementById('chat-input');
-  if(!el)return;
-  const txt=el.value.trim();if(!txt){el.focus();return;}
-  const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'unknown';
-  const muted=CHAT_MUTED[email];
-  if(muted==='ban'){toast('You are permanently banned from chat','t-err');return;}
-  if(muted==='suspend'){toast('You are temporarily suspended from chat','t-warn');return;}
-  if(muted==='mute'){toast('You have been muted','t-warn');return;}
-  // Handle edit mode
-  if(_editingTime){
-    const idx=CHAT_MSGS.findIndex(m=>m.time===_editingTime);
-    if(idx>=0){CHAT_MSGS[idx].txt=txt+' ✏️';}
-    _editingTime=null;
-    el.value='';
-    try{
-      await sheetsClear(`${CONFIG.SHEET_CHAT}!A2:D100000`);
-      if(CHAT_MSGS.length){const rows=CHAT_MSGS.map(m=>[m.name,m.email,m.time,m.txt]);await sheetsUpdate(`${CONFIG.SHEET_CHAT}!A2:D${1+rows.length}`,rows);}
-    }catch(e){}
-    renderChat();return;
-  }
-  const me=MEM.find(r=>r.email&&r.email.toLowerCase()===email.toLowerCase());
-  const displayName=me?me.nick||me.name:email;
-  const replySnippet=_replyingTo?_replyingTo.name+': '+_replyingTo.txt.slice(0,40):null;
-  const msg={name:displayName,email,time:new Date().toISOString(),txt,replyTo:replySnippet};
-  el.value='';
-  cancelReply();
-  CHAT_MSGS.push(msg);
-  renderChat();
-  await saveChatMsg(msg);
-}
-
-function formatChatTime(isoStr){
-  const d=new Date(isoStr);
-  const date=d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-  const time=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  return `${time} · ${date}`;
-}
-
-function renderChat(){
-  const email=CURRENT_EMAIL||sessionStorage.getItem('bft_email')||'';
-  const isAdmin=CURRENT_ROLE==='admin';
-  const myMem=MEM.find(r=>r.email&&r.email.toLowerCase()===email.toLowerCase());
-  const myOrgRole=myMem?ORG_ROLES[myMem.name]:'';
-  // Header controls
-  document.getElementById('chat-admin-controls').style.display=isAdmin?'':'none';
-  // Mute check
-  const muted=CHAT_MUTED[email];
-  const footer=document.getElementById('chat-footer');
-  if(muted&&muted!=='unmute'){
-    if(!footer.querySelector('.muted-notice')){
-      footer.innerHTML=`<div class="muted-notice" style="flex:1;text-align:center;color:var(--rd-t);font-size:13px;padding:8px;">🚫 You are ${muted==='ban'?'permanently banned':muted==='suspend'?'suspended':'muted'} from this chat.</div>`;
-    }
-  } else {
-    // Footer is static HTML - just ensure input listener is attached
-    initChatInput();
-  }
-  const el=document.getElementById('chat-msgs');
-  if(!CHAT_MSGS.length){el.innerHTML='<div class="empty"><div class="ei">💬</div><div>No messages yet. Say hello!</div></div>';return;}
-  const wasAtBottom=el.scrollTop+el.clientHeight>=el.scrollHeight-20;
-  const isSupremeUser=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
-  el.innerHTML=CHAT_MSGS.map((m,mi)=>{
-    const mine=m.email&&m.email.toLowerCase()===email.toLowerCase();
-    const ts=formatChatTime(m.time);
-    const memberObj=MEM.find(r=>r.email&&r.email.toLowerCase()===m.email.toLowerCase());
-    const photo=memberObj?MEMBER_PHOTOS[memberObj.name]||memberObj.photo||'':'';
-    const avatarHtml=photo
-      ?`<img src="${photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">`
-      :`<div style="width:28px;height:28px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">${ini(m.name)}</div>`;
-    const senderIsSupreme=m.email&&m.email.toLowerCase()===SUPREME_ADMIN.toLowerCase();
-    const canDelete=mine||(isAdmin&&(!senderIsSupreme||isSupremeUser));
-    const menuId=`cmenu-${mi}`;
-    const menuItems=[
-      `<button class="chat-dd-item" onclick="event.stopPropagation();replyToMsg(${mi});">↩ Reply</button>`,
-      mine?`<button class="chat-dd-item" onclick="event.stopPropagation();editChatMsg(${mi});">✏️ Edit</button>`:'',
-      canDelete?`<button class="chat-dd-item danger" onclick="event.stopPropagation();deleteChatMsg('${m.time}','${m.email}');">🗑 Delete</button>`:'',
-    ].filter(Boolean).join('');
-    const dotMenu=`<div class="chat-menu-wrap">
-      <button class="chat-menu-btn" onclick="toggleChatMenu('${menuId}',event)" ontouchend="toggleChatMenu('${menuId}',event)">⋮</button>
-      <div class="chat-dropdown" id="${menuId}">${menuItems}</div>
-    </div>`;
-    return `<div class="chat-msg ${mine?'msg-mine':'msg-other'}" style="display:flex;gap:7px;align-items:flex-end;${mine?'flex-direction:row-reverse;':''}">
-      ${!mine?avatarHtml:''}
-      <div style="max-width:72%;">
-        ${!mine?`<div style="font-size:10px;font-weight:700;color:var(--ac-t);margin-bottom:3px;">${m.name}</div>`:''}
-        ${m.replyTo?`<div style="background:var(--sf2);border-left:3px solid var(--ac);border-radius:var(--r);padding:5px 9px;margin-bottom:5px;font-size:11px;color:var(--tx3);">↩ ${m.replyTo}</div>`:''}
-        <div class="msg-bubble">${m.txt}</div>
-        <div class="msg-meta" style="display:flex;align-items:center;gap:4px;">${ts} ${dotMenu}</div>
-      </div>
-    </div>`;
-  }).join('');
-  if(wasAtBottom||CHAT_MSGS.length<=3)el.scrollTop=el.scrollHeight;
-  initChatInput();
-}
-
-
-async function deleteChatMsg(time,senderEmail){
-  const isAdmin=CURRENT_ROLE==='admin';
-  const isSupreme=CURRENT_EMAIL.toLowerCase()===SUPREME_ADMIN.toLowerCase();
-  const isOwn=CURRENT_EMAIL.toLowerCase()===(senderEmail||'').toLowerCase();
-  const senderIsSupreme=(senderEmail||'').toLowerCase()===SUPREME_ADMIN.toLowerCase();
-  if(!isOwn&&!isAdmin&&!isSupreme){toast('Not allowed','t-err');return;}
-  if(senderIsSupreme&&!isSupreme){toast('Cannot delete supreme admin messages','t-err');return;}
-  CHAT_MSGS=CHAT_MSGS.filter(m=>!(m.time===time&&m.email===senderEmail));
-  // Re-save all chat to sheet
-  try{
-    await sheetsClear(`${CONFIG.SHEET_CHAT}!A2:D100000`);
-    if(CHAT_MSGS.length){
-      const rows=CHAT_MSGS.map(m=>[m.name,m.email,m.time,m.txt]);
-      await sheetsUpdate(`${CONFIG.SHEET_CHAT}!A2:D${1+rows.length}`,rows);
-    }
-  }catch(e){console.error('deleteChatMsg',e);}
-  renderChat();
-}
-
-
-let _chatMenuOpenTime=0;
-function toggleChatMenu(id,evt){
-  if(evt){evt.stopPropagation();evt.preventDefault();}
-  const menu=document.getElementById(id);
-  if(!menu)return;
-  const isOpen=menu.classList.contains('open');
-  document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
-  if(!isOpen){
-    menu.classList.add('open');
-    _chatMenuOpenTime=Date.now();
-  }
-}
-function closeChatMenu(id){
-  const m=document.getElementById(id);
-  if(m)m.classList.remove('open');
-}
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.chat-menu-wrap')){
-    // Only close if menu has been open for at least 200ms (prevents instant close on mobile)
-    if(Date.now()-_chatMenuOpenTime>200){
-      document.querySelectorAll('.chat-dropdown.open').forEach(m=>m.classList.remove('open'));
-    }
-  }
-});
-
-let _replyingTo=null;
-function replyToMsg(msgIdx){
-  _replyingTo=CHAT_MSGS[msgIdx];
-  const preview=document.getElementById('chat-reply-preview');
-  if(preview){
-    const bar=document.getElementById('chat-reply-bar');
-    const rtxt=document.getElementById('chat-reply-txt');
-    if(rtxt)rtxt.textContent=_replyingTo.name+': '+_replyingTo.txt.slice(0,60);
-    if(bar)bar.style.display='flex';
-  }
-  const inp=document.getElementById('chat-input');
-  if(inp)inp.focus();
-}
-function cancelReply(){
-  _replyingTo=null;
-  const bar=document.getElementById('chat-reply-bar');
-  if(bar)bar.style.display='none';
-}
-
-let _editingTime=null;
-function editChatMsg(msgIdx){
-  const m=CHAT_MSGS[msgIdx];
-  if(!m)return;
-  _editingTime=m.time;
-  const inp=document.getElementById('chat-input');
-  if(inp){inp.value=m.txt;inp.focus();}
-  toast('✏️ Editing message — press Enter to save','t-info');
-}
-
-let _lastChatLen=0, _lastNoticeLen=0;
-function startChatPoll(){
-  if(_chatPollTimer)clearInterval(_chatPollTimer);
-  _chatPollTimer=setInterval(async()=>{
-    try{
-      // Poll chat messages
-      const chatr=await sheetsGet(`${CONFIG.SHEET_CHAT}!A2:D10000`);
-      const fresh=((chatr.values||[]).filter(r=>r[0]&&r[3]).map(r=>({name:r[0]||'',email:r[1]||'',time:r[2]||'',txt:r[3]||''}))).slice(-200);
-      if(fresh.length!==_lastChatLen){
-        const isNew=fresh.length>_lastChatLen&&_lastChatLen>0;
-        _lastChatLen=fresh.length;
-        CHAT_MSGS=fresh;
-        const chatTab=document.getElementById('tab-chat');
-        if(chatTab&&chatTab.classList.contains('active')){
-          renderChat();
-        } else {
-          document.getElementById('chat-dot').style.display='';
-          // Show popup for new messages from others
-          if(isNew){
-            const lastMsg=fresh[fresh.length-1];
-            if(lastMsg&&lastMsg.email!==CURRENT_EMAIL){
-              pushNotif('💬',lastMsg.name+': '+lastMsg.txt.slice(0,60));
-            }
-          }
-        }
-      }
-      // Poll notices for new announcements
-      const nr=await sheetsGet(`${CONFIG.SHEET_NOTICES}!A2:G2000`);
-      const allN=(nr.values||[]).filter(r=>r[0]&&!r[4]);
-      if(allN.length>_lastNoticeLen&&_lastNoticeLen>0){
-        const newest=allN[0];
-        pushNotif('📢','New announcement: '+(newest[0]||''));
-        // Reload notices
-        await loadSharedData();
-        const noticeTab=document.getElementById('tab-notices');
-        if(noticeTab&&noticeTab.classList.contains('active'))renderNoticeBoard();
-        else document.getElementById('notice-dot').style.display='';
-      }
-      _lastNoticeLen=allN.length;
-    }catch(e){}
-  },4000);
-}
-function openMuteModal(){
-  const sel=document.getElementById('mute-mem');
-  sel.innerHTML='<option value="">Select member…</option>';
-  MEM.forEach(r=>{if(r.email){const o=document.createElement('option');o.value=r.email;o.textContent=r.name+(CHAT_MUTED[r.email]?' ('+CHAT_MUTED[r.email]+')':'');sel.appendChild(o);}});
-  openMo('mo-mute');
-}
-async function applyMute(){
-  const email=document.getElementById('mute-mem').value;
-  const action=document.getElementById('mute-action').value;
-  if(!email){toast('Select a member','t-err');return;}
-  if(email.toLowerCase()===SUPREME_ADMIN.toLowerCase()&&CURRENT_EMAIL.toLowerCase()!==SUPREME_ADMIN.toLowerCase()){
-    toast('⚠ Cannot moderate the supreme admin','t-err');return;
-  }
-  if(action==='unmute') delete CHAT_MUTED[email];
-  else CHAT_MUTED[email]=action;
-  localStorage.setItem('bft_muted',JSON.stringify(CHAT_MUTED));
-  // Also persist to Sheets so it works across browsers
-  try{
-    await sheetsClear(`${CONFIG.SHEET_NIZAM}!C2:C2`);
-    await sheetsUpdate(`${CONFIG.SHEET_NIZAM}!C2:C2`,[[JSON.stringify(CHAT_MUTED)]]);
-  }catch(e){}
-  logActivity('💬','Chat moderation: '+email+' → '+action);
-  toast(action==='unmute'?'✅ Restriction removed':'🔇 Moderation applied!');
-  closeMo();renderChat();
-  const actionLabel=action==='ban'?'permanently banned':action==='suspend'?'suspended':action==='mute'?'muted':'unrestricted';
-  pushNotif('🔇',`${email} is now ${actionLabel}`);
-}
-
-// ══ MEMORIES ══════════════════════════════════════════════════════════════════
-let MEMORIES = JSON.parse(localStorage.getItem('bft_memories')||'[]');
-
-function renderMemories(){
-  const isAdmin=CURRENT_ROLE==='admin';
-  const addBtn=document.getElementById('add-memory-btn');
-  if(addBtn)addBtn.style.display=isAdmin?'':'none';
-  const grid=document.getElementById('memories-grid');
-  if(!grid)return;
-  if(!MEMORIES.length){
-    grid.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="ei">📸</div><div>No memories yet. Admin can add photos and videos.</div></div>';
-    return;
-  }
-  const me=CURRENT_EMAIL||'';
-  grid.innerHTML=MEMORIES.map((m,i)=>{
-    if(!m.likes)m.likes=[];
-    if(!m.comments)m.comments=[];
-    const liked=m.likes.includes(me);
-    const isVideo=m.videoUrl||(m.fileType&&m.fileType.startsWith('video'));
-    let mediaHtml='';
-    if(m.videoUrl){
-      const ytMatch=m.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-      if(ytMatch){
-        mediaHtml=`<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="width:100%;aspect-ratio:16/9;border:none;" allowfullscreen loading="lazy"></iframe>`;
-      } else if(m.videoUrl.includes('facebook.com')){
-        mediaHtml=`<a href="${m.videoUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:var(--sf2);color:var(--ac-t);font-size:14px;gap:8px;text-decoration:none;">▶ Open Video</a>`;
-      } else {
-        mediaHtml=`<video controls src="${m.videoUrl}" style="width:100%;" loading="lazy"></video>`;
-      }
-    } else if(m.fileData){
-      if(m.fileType&&m.fileType.startsWith('video')){
-        mediaHtml=`<video controls src="${m.fileData}" style="width:100%;"></video>`;
-      } else {
-        mediaHtml=`<img src="${m.fileData}" style="width:100%;object-fit:cover;max-height:280px;cursor:pointer;" onclick="openLightbox(${i})">`;
-      }
-    }
-    const commentsHtml=m.comments.map((c,ci)=>`
-      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--br);">
-        <div style="width:24px;height:24px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;">${ini(c.name||'?')}</div>
-        <div style="flex:1;min-width:0;">
-          <span style="font-size:11px;font-weight:700;color:var(--ac-t);">${c.name||'Unknown'}</span>
-          <span style="font-size:12px;color:var(--tx2);margin-left:6px;">${c.text}</span>
-          ${isAdmin||c.email===me?`<button onclick="deleteMemoryComment(${i},${ci})" style="float:right;background:none;border:none;color:var(--rd-t);font-size:10px;cursor:pointer;opacity:.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">✕</button>`:''}
-        </div>
-      </div>`).join('');
-    return `<div style="background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);overflow:hidden;margin-bottom:4px;">
-      ${mediaHtml}
-      <div style="padding:10px 14px;">
-        ${m.caption?`<div style="font-size:14px;font-weight:600;color:var(--tx);margin-bottom:2px;">${m.caption}</div>`:''}
-        ${m.date?`<div style="font-size:11px;color:var(--tx3);margin-bottom:8px;">📅 ${m.date}</div>`:''}
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-          <button onclick="toggleMemoryLike(${i})" style="background:none;border:none;cursor:pointer;font-size:14px;color:${liked?'var(--rd-t)':'var(--tx3)'};display:flex;align-items:center;gap:4px;padding:0;">
-            ${liked?'❤️':'🤍'} <span style="font-size:12px;">${m.likes.length||0}</span>
-          </button>
-          <span style="font-size:12px;color:var(--tx3);">💬 ${m.comments.length}</span>
-          ${isAdmin?`<div style="margin-left:auto;display:flex;gap:6px;">
-            <button class="btn btn-sm btn-gh" onclick="openMemoryMo(${i})">Edit</button>
-            <button class="btn btn-sm btn-d" onclick="deleteMemory(${i})">Delete</button>
-          </div>`:''}
-        </div>
-        ${m.comments.length?`<div style="margin-bottom:8px;">${commentsHtml}</div>`:''}
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input placeholder="Write a comment…" id="mem-cmt-${i}" style="flex:1;min-width:0;padding:7px 12px;border:1px solid var(--br2);border-radius:20px;font-size:12px;background:var(--sf2);color:var(--tx);font-family:var(--fn);outline:none;" onkeydown="if(event.key==='Enter')addMemoryComment(${i})">
-          <button onclick="addMemoryComment(${i})" style="background:var(--ac);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-size:12px;cursor:pointer;">Send</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function toggleMemoryLike(idx){
-  const me=CURRENT_EMAIL||'';
-  if(!me)return;
-  if(!MEMORIES[idx].likes)MEMORIES[idx].likes=[];
-  const pos=MEMORIES[idx].likes.indexOf(me);
-  if(pos>=0)MEMORIES[idx].likes.splice(pos,1);
-  else MEMORIES[idx].likes.push(me);
-  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
-  renderMemories();
-}
-
-function addMemoryComment(idx){
-  const inp=document.getElementById('mem-cmt-'+idx);
-  if(!inp)return;
-  const text=inp.value.trim();
-  if(!text)return;
-  const me=MEM.find(r=>r.email&&r.email.toLowerCase()===(CURRENT_EMAIL||'').toLowerCase());
-  if(!MEMORIES[idx].comments)MEMORIES[idx].comments=[];
-  MEMORIES[idx].comments.push({
-    name:me?me.name:CURRENT_EMAIL,
-    email:CURRENT_EMAIL,
-    text,
-    time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})
-  });
-  inp.value='';
-  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
-  renderMemories();
-}
-
-function deleteMemoryComment(memIdx,cmtIdx){
-  MEMORIES[memIdx].comments.splice(cmtIdx,1);
-  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
-  renderMemories();
-}
-
-function openLightbox(idx){
-  const m=MEMORIES[idx];if(!m||!m.fileData)return;
-  const ov=document.createElement('div');
-  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer;';
-  ov.innerHTML=`<img src="${m.fileData}" style="max-width:96vw;max-height:96vh;border-radius:8px;">`;
-  ov.onclick=()=>ov.remove();
-  document.body.appendChild(ov);
-}
-
-function previewMemoryFile(input){
-  const file=input.files[0];if(!file)return;
-  document.getElementById('memory-file-type').value=file.type;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    document.getElementById('memory-file-data').value=e.target.result;
-    const prev=document.getElementById('memory-photo-preview');
-    if(file.type.startsWith('image')){prev.src=e.target.result;prev.style.display='';}
-    else prev.style.display='none';
-  };
-  reader.readAsDataURL(file);
-}
-
-function openMemoryMo(editIdx=-1){
-  document.getElementById('memory-edit-idx').value=editIdx;
-  const captionInp=document.getElementById('memory-caption');
-  const dateInp=document.getElementById('memory-date');
-  const videoInp=document.getElementById('memory-video-url');
-  const fileData=document.getElementById('memory-file-data');
-  const fileType=document.getElementById('memory-file-type');
-  const prev=document.getElementById('memory-photo-preview');
-  if(editIdx>=0){
-    const m=MEMORIES[editIdx];
-    captionInp.value=m.caption||'';
-    dateInp.value=m.date||'';
-    videoInp.value=m.videoUrl||'';
-    fileData.value=m.fileData||'';
-    fileType.value=m.fileType||'';
-    if(m.fileData&&m.fileType&&m.fileType.startsWith('image')){prev.src=m.fileData;prev.style.display='';}
-    else prev.style.display='none';
-    document.getElementById('mo-memory-t').textContent='Edit Memory';
-  } else {
-    captionInp.value='';dateInp.value=new Date().toISOString().slice(0,10);
-    videoInp.value='';fileData.value='';fileType.value='';
-    prev.src='';prev.style.display='none';
-    document.getElementById('mo-memory-t').textContent='Add Memory';
-  }
-  openMo('mo-memory');
-}
-
-function saveMemory(){
-  const idx=parseInt(document.getElementById('memory-edit-idx').value);
-  const entry={
-    caption:document.getElementById('memory-caption').value.trim(),
-    date:document.getElementById('memory-date').value,
-    videoUrl:document.getElementById('memory-video-url').value.trim(),
-    fileData:document.getElementById('memory-file-data').value,
-    fileType:document.getElementById('memory-file-type').value,
-    by:CURRENT_EMAIL,
-    time:new Date().toISOString(),
-  };
-  if(!entry.caption&&!entry.fileData&&!entry.videoUrl){toast('Add a photo, video, or caption','t-err');return;}
-  if(idx>=0)MEMORIES[idx]=entry;else MEMORIES.unshift(entry);
-  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
-  logActivity('📸','Memory saved: '+(entry.caption||'photo'));
-  toast('Memory saved!');closeMo();renderMemories();
-}
-
-function deleteMemory(idx){
-  MEMORIES.splice(idx,1);
-  localStorage.setItem('bft_memories',JSON.stringify(MEMORIES));
-  renderMemories();toast('Deleted');
-}
-
 // ══ ABOUT US ══════════════════════════════════════════════════════════════════
 // ABOUT_US stored in Sheets (SHEET_NIZAM col B) + localStorage fallback
 let ABOUT_US = {
@@ -3323,7 +2819,7 @@ function toggleMobileMenu(){
   document.body.classList.toggle('menu-open',open);
   if(!open)return;
   // Sync notification dots
-  const dotMap={chat:'mm-chat-dot',notice:'mm-notice-dot',notif:'mm-notif-dot'};
+  const dotMap={notice:'mm-notice-dot',notif:'mm-notif-dot'};
   Object.entries(dotMap).forEach(([id,mmId])=>{
     const src=document.getElementById(id+'-dot');
     const dst=document.getElementById(mmId);
