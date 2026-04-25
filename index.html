@@ -466,7 +466,7 @@ function dashboardHTML(){
         <div class="mono" style="font-size:19px;font-weight:700;color:${c.color}">${c.value}</div>
       </div>`).join('')}
     </div>
-    ${overdue.length>0?`<div style="background:var(--rd-s);border:1px solid rgba(255,92,108,.2);color:var(--rd-t);padding:10px 14px;font-size:13px;border-radius:var(--r);cursor:pointer" onclick="S.tab='members';S.memberSearch='';render()">
+    ${overdue.length>0&&isAdmin()?`<div style="background:var(--rd-s);border:1px solid rgba(255,92,108,.2);color:var(--rd-t);padding:10px 14px;font-size:13px;border-radius:var(--r);cursor:pointer" onclick="S.tab='members';S.memberSearch='';render()">
       ⚠️ <strong>${overdue.length} member${overdue.length>1?'s':''}</strong> overdue (no payment in last 2 months) — click to view members
     </div>`:''}
     ${isAdmin()?`<div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -501,7 +501,13 @@ function membersHTML(){
           ${avHTML(m.name)}
           <div style="flex:1;min-width:0">
             <div style="font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.name)}</div>
-            <div style="margin-top:3px"><span class="badge ${m.role==='admin'?'b-admin':'b-viewer'}">${esc(org)}</span></div>
+            <div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap">
+              ${m.role==='admin'&&m.email===S.user?.email&&m.email==='fityahalofficial@gmail.com'?`<span class="badge" style="background:linear-gradient(135deg,#ffad2e,#ff8c42);color:#fff;border:none">👑 Supreme</span>`:''}
+              ${m.role==='admin'&&!(m.email==='fityahalofficial@gmail.com')?`<span class="badge b-admin">🔑 Admin</span>`:''}
+              ${m.role==='admin'&&m.email==='fityahalofficial@gmail.com'?`<span class="badge b-admin">🔑 Admin</span>`:''}
+              ${m.role!=='admin'?`<span class="badge b-viewer">👁 Viewer</span>`:''}
+              ${org&&org!=='General Member'?`<span class="badge b-pu">${esc(org)}</span>`:`<span class="badge" style="background:var(--sf3);color:var(--tx3);border:1px solid var(--br2)">General</span>`}
+            </div>
           </div>
           ${isAdmin()?`<div style="display:flex;gap:4px">
             <button class="btn btn-icon btn-sm" onclick="openMemberEdit(${i})" title="Edit">✏️</button>
@@ -1064,43 +1070,47 @@ async function fileToBase64(inputId){
 
 
 // ═══════════════════════════════════════════════════════
-// MESSAGES SCREEN (local simulation — wires to Firebase if configured)
+// MESSAGES SCREEN
 // ═══════════════════════════════════════════════════════
 function messagesHTML(){
   const gTab=S.msgTab||'group';
   let chatArea='';
 
   if(gTab==='group'){
-    const msgs=S.groupMsgs;
+    const msgs=S.groupMsgs||[];
+    const pinned=msgs.filter(m=>m.pinned&&!m.deleted);
     const rows=msgs.map((m,i)=>{
       const mine=m.email===S.user?.email;
+      const del=m.deleted;
       return `<div style="display:flex;gap:8px;flex-direction:${mine?'row-reverse':'row'};align-items:flex-end;margin-bottom:10px">
         ${avHTML(m.name||'?',28)}
         <div style="max-width:72%">
           ${!mine?`<div style="font-size:10px;color:var(--tx3);margin-bottom:2px">${esc(m.name)}</div>`:''}
-          <div style="background:${mine?'var(--ac)':'var(--sf2)'};color:${mine?'#fff':'var(--tx)'};border-radius:11px;padding:8px 12px;font-size:13px;line-height:1.5${m.deleted?';opacity:.5':''}">
-            ${m.deleted?'<em style="color:var(--tx3)">[deleted]</em>':esc(m.text)}
+          <div style="background:${mine?'var(--ac)':'var(--sf2)'};color:${mine?'#fff':'var(--tx)'};border-radius:11px;padding:8px 12px;font-size:13px;line-height:1.5${del?';opacity:.45':''}">
+            ${del?'<em style="opacity:.7">[deleted]</em>':esc(m.text)}
           </div>
-          <div style="font-size:10px;color:var(--tx3);margin-top:2px;text-align:${mine?'right':'left'}">
-            ${m.time?new Date(m.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):''}
-            ${isAdmin()&&!m.deleted?`<button onclick="deleteGroupMsg(${i})" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:10px;margin-left:5px">🗑</button>`:''}
-            ${isAdmin()&&!m.deleted?`<button onclick="pinGroupMsg(${i})" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:10px;margin-left:2px">${m.pinned?'📌':'📍'}</button>`:''}
+          <div style="font-size:10px;color:var(--tx3);margin-top:2px;text-align:${mine?'right':'left'};display:flex;gap:5px;justify-content:${mine?'flex-end':'flex-start'}">
+            <span>${m.time?new Date(m.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):''}</span>
+            ${(isAdmin()||m.email===S.user?.email)&&!del?`<button onclick="deleteGroupMsg(${i})" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:10px;padding:0">🗑</button>`:''}
+            ${isAdmin()&&!del?`<button onclick="pinGroupMsg(${i})" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:10px;padding:0">${m.pinned?'📌':'📍'}</button>`:''}
           </div>
         </div>
       </div>`;
     }).join('');
 
-    const pinned=msgs.filter(m=>m.pinned&&!m.deleted);
     chatArea=`
-      ${pinned.length?`<div class="pinned" style="margin:8px 8px 0">📌 ${esc(pinned.map(m=>m.text).join(' | '))}</div>`:''}
-      <div id="gchat-msgs" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column">${rows}<div id="gchat-bottom"></div></div>
-      <div style="padding:10px;border-top:1px solid var(--br2);display:flex;gap:8px">
+      ${pinned.length?`<div class="pinned" style="margin:8px 8px 0;flex-shrink:0">📌 ${esc(pinned.map(m=>m.text).join(' | '))}</div>`:''}
+      <div id="gchat-msgs" style="flex:1;overflow-y:auto;padding:14px">${rows}<div id="gchat-bottom"></div></div>
+      <div style="padding:10px;border-top:1px solid var(--br2);display:flex;gap:8px;flex-shrink:0">
         <input class="input" id="gchat-input" placeholder="Type a message…" style="flex:1" onkeydown="if(event.key==='Enter')sendGroupMsg()"/>
         <button class="btn btn-p" onclick="sendGroupMsg()">Send</button>
       </div>`;
   } else {
-    // DM tab
-    const contacts=S.dmContacts;
+    // DM tab — show all members as contacts automatically
+    const allContacts=[...new Set([
+      ...S.members.filter(m=>m.email&&m.email!==S.user?.email).map(m=>m.email),
+      ...S.dmContacts.filter(c=>c!==S.user?.email)
+    ])];
     const active=S.activeDM;
     const dmMsgs=active&&S.dmChats[active]?S.dmChats[active]:[];
     const dmRows=dmMsgs.map(m=>{
@@ -1110,30 +1120,46 @@ function messagesHTML(){
       </div>`;
     }).join('');
 
-    chatArea=`<div style="display:flex;flex:1;overflow:hidden">
-      <div style="width:190px;border-right:1px solid var(--br2);overflow-y:auto;flex-shrink:0">
-        <div style="padding:9px">
-          <input class="input" style="font-size:12px;margin-bottom:6px" placeholder="Email to message…" id="dm-new-email" onkeydown="if(event.key==='Enter')startDM()"/>
-          <button class="btn btn-sm btn-p" style="width:100%" onclick="startDM()">Start Chat</button>
+    const contactList=allContacts.map(c=>{
+      const mem=S.members.find(m=>m.email===c);
+      const displayName=mem?mem.name:c.split('@')[0];
+      const unread=(S.dmChats[c]||[]).filter(m=>m.email!==S.user?.email&&!m.read).length;
+      return `<div onclick="S.activeDM='${esc(c)}';S.msgTab='dm';render();setTimeout(()=>{const b=document.getElementById('dm-bottom');if(b)b.scrollIntoView();},80)" 
+        style="padding:9px 12px;cursor:pointer;background:${active===c?'var(--ac-s)':'transparent'};border-left:2px solid ${active===c?'var(--ac)':'transparent'};display:flex;align-items:center;gap:8px;transition:background .15s">
+        ${avHTML(displayName,30)}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(displayName)}</div>
+          ${mem?`<div style="font-size:10px;color:var(--tx3)">${esc(mem.nick||c.split('@')[0])}</div>`:''}
         </div>
-        ${contacts.map(c=>`<div onclick="S.activeDM='${esc(c)}';S.msgTab='dm';render()" style="padding:9px 12px;cursor:pointer;background:${active===c?'var(--sf2)':'transparent'};display:flex;align-items:center;gap:7px;font-size:13px">
-          ${avHTML(c.split('@')[0],26)}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.split('@')[0])}</span>
-        </div>`).join('')}
+        ${unread>0?`<span class="badge b-err" style="padding:2px 5px">${unread}</span>`:''}
+      </div>`;
+    }).join('');
+
+    chatArea=`<div style="display:flex;flex:1;overflow:hidden">
+      <div style="width:200px;border-right:1px solid var(--br2);overflow-y:auto;flex-shrink:0">
+        <div style="padding:8px 10px;border-bottom:1px solid var(--br2);font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px">Members (${allContacts.length})</div>
+        ${allContacts.length?contactList:`<div style="padding:16px;font-size:13px;color:var(--tx3);text-align:center">No members with emails found</div>`}
       </div>
       ${active?`<div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
-        <div style="padding:9px 15px;border-bottom:1px solid var(--br2);font-weight:600;font-size:13px">💬 ${esc(active)}</div>
+        <div style="padding:9px 15px;border-bottom:1px solid var(--br2);font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px">
+          ${avHTML(S.members.find(m=>m.email===active)?.name||active.split('@')[0],28)}
+          <span>${esc(S.members.find(m=>m.email===active)?.name||active)}</span>
+        </div>
         <div style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column">${dmRows}<div id="dm-bottom"></div></div>
-        <div style="padding:10px;border-top:1px solid var(--br2);display:flex;gap:8px">
+        <div style="padding:10px;border-top:1px solid var(--br2);display:flex;gap:8px;flex-shrink:0">
           <input class="input" id="dm-input" placeholder="Message…" style="flex:1" onkeydown="if(event.key==='Enter')sendDM()"/>
           <button class="btn btn-p" onclick="sendDM()">Send</button>
         </div>
-      </div>`:`<div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--tx3);font-size:14px">Select or start a conversation</div>`}
+      </div>`:`<div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--tx3)">
+        <span style="font-size:36px">💬</span>
+        <p style="font-size:14px">Select a member to start chatting</p>
+      </div>`}
     </div>`;
   }
 
-  return `<div style="display:flex;flex-direction:column;height:calc(100vh - 100px)">
+  return `<div style="display:flex;flex-direction:column;height:calc(100vh - 48px)">
     <div style="display:flex;border-bottom:1px solid var(--br2);flex-shrink:0">
-      <button class="nav-tab ${gTab==='group'?'active':''}" onclick="S.msgTab='group';render()">💬 Group Chat</button>
+      <button class="nav-tab ${gTab==='group'?'active':''}" onclick="S.msgTab='group';render();setTimeout(()=>{const b=document.getElementById('gchat-bottom');if(b)b.scrollIntoView();},80)">💬 Group Chat</button>
       <button class="nav-tab ${gTab==='dm'?'active':''}" onclick="S.msgTab='dm';render()">📩 Direct Messages</button>
     </div>
     <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">${chatArea}</div>
@@ -1143,35 +1169,51 @@ function messagesHTML(){
 function sendGroupMsg(){
   const inp=document.getElementById('gchat-input');
   if(!inp||!inp.value.trim()) return;
-  S.groupMsgs.push({email:S.user?.email,name:S.user?.email?.split('@')[0]||'User',text:inp.value.trim(),time:new Date().toISOString(),deleted:false,pinned:false});
+  const msg={email:S.user?.email,name:S.members.find(m=>m.email===S.user?.email)?.name||S.user?.email?.split('@')[0]||'User',text:inp.value.trim(),time:new Date().toISOString(),deleted:false,pinned:false};
+  if(!S.groupMsgs) S.groupMsgs=[];
+  S.groupMsgs.push(msg);
   saveGroupMsgs();
-  inp.value=''; renderScreen();
-  setTimeout(()=>{const b=document.getElementById('gchat-bottom');if(b)b.scrollIntoView({behavior:'smooth'});},80);
+  inp.value='';
+  // Re-render just chat area to preserve scroll
+  const chatMsgsEl=document.getElementById('gchat-msgs');
+  if(chatMsgsEl){
+    // append new message directly
+    const msgs=S.groupMsgs;
+    const i=msgs.length-1;
+    const m=msgs[i];
+    const mine=m.email===S.user?.email;
+    const div=document.createElement('div');
+    div.style.cssText=`display:flex;gap:8px;flex-direction:${mine?'row-reverse':'row'};align-items:flex-end;margin-bottom:10px`;
+    div.innerHTML=`${avHTML(m.name||'?',28)}<div style="max-width:72%"><div style="background:${mine?'var(--ac)':'var(--sf2)'};color:${mine?'#fff':'var(--tx)'};border-radius:11px;padding:8px 12px;font-size:13px">${esc(m.text)}</div><div style="font-size:10px;color:var(--tx3);margin-top:2px;text-align:${mine?'right':'left'}">${new Date(m.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div></div>`;
+    const bottom=document.getElementById('gchat-bottom');
+    if(bottom){ chatMsgsEl.insertBefore(div,bottom); bottom.scrollIntoView({behavior:'smooth'}); }
+  } else { renderScreen(); setTimeout(()=>{const b=document.getElementById('gchat-bottom');if(b)b.scrollIntoView();},80); }
 }
 
-function deleteGroupMsg(i){ S.groupMsgs[i].deleted=true; saveGroupMsgs(); renderScreen(); }
-function pinGroupMsg(i){ S.groupMsgs[i].pinned=!S.groupMsgs[i].pinned; saveGroupMsgs(); renderScreen(); }
-function saveGroupMsgs(){ try{localStorage.setItem('bft_gchat',JSON.stringify(S.groupMsgs.slice(-200)));}catch{} }
-
-function startDM(){
-  const inp=document.getElementById('dm-new-email');
-  if(!inp||!inp.value.trim()) return;
-  const email=inp.value.trim();
-  if(!S.dmContacts.includes(email)) S.dmContacts.push(email);
-  S.activeDM=email; inp.value='';
-  saveDMs(); renderScreen();
-}
+function deleteGroupMsg(i){ if(!S.groupMsgs[i]) return; S.groupMsgs[i].deleted=true; saveGroupMsgs(); renderScreen(); }
+function pinGroupMsg(i){ if(!S.groupMsgs[i]) return; S.groupMsgs[i].pinned=!S.groupMsgs[i].pinned; saveGroupMsgs(); renderScreen(); }
+function saveGroupMsgs(){ try{localStorage.setItem('bft_gchat',JSON.stringify((S.groupMsgs||[]).slice(-300)));}catch{} }
 
 function sendDM(){
   const inp=document.getElementById('dm-input');
   if(!inp||!inp.value.trim()||!S.activeDM) return;
   if(!S.dmChats[S.activeDM]) S.dmChats[S.activeDM]=[];
-  S.dmChats[S.activeDM].push({email:S.user?.email,text:inp.value.trim(),time:new Date().toISOString()});
-  inp.value=''; saveDMs(); renderScreen();
-  setTimeout(()=>{const b=document.getElementById('dm-bottom');if(b)b.scrollIntoView({behavior:'smooth'});},80);
+  S.dmChats[S.activeDM].push({email:S.user?.email,text:inp.value.trim(),time:new Date().toISOString(),read:false});
+  inp.value=''; saveDMs();
+  const bottom=document.getElementById('dm-bottom');
+  if(bottom){
+    const container=bottom.parentElement;
+    const mine=true;
+    const div=document.createElement('div');
+    div.style.cssText=`display:flex;gap:8px;flex-direction:row-reverse;margin-bottom:9px`;
+    div.innerHTML=`<div style="background:var(--ac);color:#fff;border-radius:11px;padding:8px 12px;font-size:13px;max-width:72%">${esc(S.dmChats[S.activeDM].slice(-1)[0].text)}</div>`;
+    container.insertBefore(div,bottom);
+    bottom.scrollIntoView({behavior:'smooth'});
+  } else { renderScreen(); setTimeout(()=>{const b=document.getElementById('dm-bottom');if(b)b.scrollIntoView();},80); }
 }
 
 function saveDMs(){ try{localStorage.setItem('bft_dms',JSON.stringify({chats:S.dmChats,contacts:S.dmContacts}));}catch{} }
+
 
 // ═══════════════════════════════════════════════════════
 // ORG ROLES SCREEN
@@ -1306,18 +1348,20 @@ function render(){
 
   app.innerHTML=`
     ${!S.online?`<div class="offline-bar">⚠️ You are offline — changes will sync when reconnected</div>`:''}
-    <div class="top-bar">
-      <div style="display:flex;align-items:center;gap:9px">
-        <span style="font-size:19px">📖</span>
-        <span style="font-weight:800;font-size:15px;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Fityahal</span>
-        ${S.loading?`<div class="spin" style="width:13px;height:13px;border:2px solid var(--br2);border-top-color:var(--ac);border-radius:50%"></div>`:''}
-      </div>
-      <div style="display:flex;align-items:center;gap:9px">
-        <span style="font-size:11px;color:var(--tx3)">${esc(S.role)}</span>
-        <button onclick="S.tab='profile';render()" style="width:30px;height:30px;border-radius:50%;background:var(--g1);border:none;color:#fff;font-size:12px;font-weight:800;cursor:pointer">${(S.user?.email?.[0]||'U').toUpperCase()}</button>
-      </div>
+    <div style="background:rgba(8,11,18,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--br2);position:sticky;top:0;z-index:200;flex-shrink:0">
+      <nav class="nav-bar" style="border-bottom:none;padding:0 8px">
+        <div style="display:flex;align-items:center;gap:8px;padding:0 6px;flex-shrink:0;border-right:1px solid var(--br2);margin-right:4px">
+          <span style="font-size:17px">📖</span>
+          <span style="font-weight:800;font-size:14px;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap">Fityahal</span>
+          ${S.loading?`<div class="spin" style="width:11px;height:11px;border:2px solid var(--br2);border-top-color:var(--ac);border-radius:50%"></div>`:''}
+        </div>
+        ${navHTML}
+        <div style="display:flex;align-items:center;gap:7px;padding:0 8px;flex-shrink:0;margin-left:auto;border-left:1px solid var(--br2)">
+          <span style="font-size:10px;color:var(--tx3);white-space:nowrap">${esc(S.role)}</span>
+          <button onclick="S.tab='profile';render()" style="width:28px;height:28px;border-radius:50%;background:var(--g1);border:none;color:#fff;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0">${(S.user?.email?.[0]||'U').toUpperCase()}</button>
+        </div>
+      </nav>
     </div>
-    <nav class="nav-bar">${navHTML}</nav>
     <main style="flex:1;overflow-y:auto">${content}</main>
     ${S.lastAction&&S.history.length?`<div class="undo-bar"><span style="color:var(--tx2);font-size:13px">↩ ${esc(S.lastAction)}</span><button class="btn btn-sm" onclick="doUndo()">Undo</button>${S.future.length?`<button class="btn btn-sm" onclick="doRedo()">Redo</button>`:''}<button class="btn btn-icon btn-sm" onclick="S.lastAction='';render()">✕</button></div>`:''}
   `;
